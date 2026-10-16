@@ -1,0 +1,30 @@
+{
+  "id": "demo",
+  "nom_entreprise": "Clinique Exemple",
+  "plan": "business",
+  "couleur": "#2F5BEA",
+  "domaines_autorises": [],
+  "langue": "français québécois",
+  "ton": "chaleureux, respectueux, vouvoiement",
+  "personnalite": "Rassurant et simple. Phrases courtes. Jamais de jargon. Termine par une offre d'aide.",
+  "heures": "Lundi au vendredi, 8 h à 17 h",
+  "infos": "Située au 123, rue Principale. Stationnement gratuit. Téléphone : 555-555-5555.",
+  "message_accueil": "Bonjour! Bienvenue à la Clinique Exemple. Comment puis-je vous aider?",
+  "message_inconnu": "Je n'ai pas cette information. Appelez-nous au 555-555-5555 et on vous répondra avec plaisir.",
+  "limite_messages_jour": 200,
+  "max_tokens": 400,
+  "faq": [
+    {
+      "mots_cles": ["heure", "ouvert", "horaire", "fermé"],
+      "reponse": "Nous sommes ouverts du lundi au vendredi, de 8 h à 17 h."
+    },
+    {
+      "mots_cles": ["rendez-vous", "rdv", "réserver", "prendre"],
+      "reponse": "Pour prendre rendez-vous, appelez-nous au 555-555-5555."
+    },
+    {
+      "mots_cles": ["adresse", "où", "stationnement", "trouver"],
+      "reponse": "Nous sommes au 123, rue Principale. Le stationnement est gratuit."
+    }
+  ]
+}
