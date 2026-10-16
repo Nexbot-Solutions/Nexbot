@@ -76,39 +76,4 @@
       ".envoyer{background:linear-gradient(135deg,#a47bff,#5b2fd6);color:#fff;border:0;border-radius:999px;padding:0 18px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(139,92,246,.35)}" +
       ".envoyer:hover{filter:brightness(1.1)}" +
       ".envoyer:disabled{opacity:.5;cursor:default}" +
-      ".pied{font-size:10.5px;color:#7d7399;text-align:center;padding:0 12px 10px;background:#120c22}"
-    });
-
-    var bulle = el("button", { "class": "bulle", "aria-label": "Ouvrir le clavardage" }, [
-      el("img", { src: LOGO, alt: "" })
-    ]);
-    var fermer = el("button", { "class": "fermer", "aria-label": "Fermer", text: "×" });
-    var entete = el("div", { "class": "entete" }, [
-      el("div", { "class": "avatar" }, [el("img", { src: LOGO, alt: "" })]),
-      el("div", {}, [
-        el("div", { "class": "titre", text: cfg.nom }),
-        el("div", { "class": "sous", text: "Assistant virtuel" })
-      ]),
-      fermer
-    ]);
-    var zoneMessages = el("div", { "class": "messages", "aria-live": "polite" });
-    var champ = el("input", { type: "text", placeholder: "Écrivez votre message…", maxlength: "1000", "aria-label": "Votre message" });
-    var envoyer = el("button", { "class": "envoyer", text: "Envoyer" });
-    var zone = el("form", { "class": "zone" }, [champ, envoyer]);
-    var pied = el("div", { "class": "pied", text: "Vous parlez à un assistant virtuel. Évitez de partager des renseignements personnels sensibles." });
-    var panneau = el("div", { "class": "panneau", role: "dialog", "aria-label": "Clavardage" }, [entete, zoneMessages, zone, pied]);
-
-    ombre.appendChild(css);
-    ombre.appendChild(panneau);
-    ombre.appendChild(bulle);
-    document.body.appendChild(hote);
-
-    function ajouter(texte, classe) {
-      var m = el("div", { "class": "m " + classe, text: texte });
-      zoneMessages.appendChild(m);
-      zoneMessages.scrollTop = zoneMessages.scrollHeight;
-      return m;
-    }
-
-    var accueilAffiche = false;
-    function basculer(ouvrir) {
+      ".pied{font-size:10.5px;color:#7d73
