@@ -178,13 +178,7 @@ def widget():
     return reponse
 
 
-@app.route("/logo.svg")
-def logo():
-    reponse = send_from_directory(app.static_folder, "logo.svg", mimetype="image/svg+xml")
-    reponse.headers["Access-Control-Allow-Origin"] = "*"
-    return reponse
-
-
+@app.route("/")
 @app.route("/demo")
 def demo():
     return send_from_directory(app.static_folder, "demo.html")
