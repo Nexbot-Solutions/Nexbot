@@ -179,6 +179,10 @@ def widget():
 
 
 @app.route("/")
+def accueil():
+    return send_from_directory(app.static_folder, "index.html")
+
+
 @app.route("/demo")
 def demo():
     return send_from_directory(app.static_folder, "demo.html")
