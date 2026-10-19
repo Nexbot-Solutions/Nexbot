@@ -6,9 +6,14 @@ de configuration JSON dans le dossier clients/.
 import json
 import os
 import re
+import smtplib
+import ssl
 import threading
 import time
 import unicodedata
+import urllib.error
+import urllib.request
+from email.message import EmailMessage
 from pathlib import Path
 
 PLANS = ("essentiel", "pro", "business")
@@ -39,6 +44,65 @@ _FICHIER_COMPTEURS = Path(__file__).resolve().parent / "compteurs.json"
 MEMOIRE_ECHANGES = {"essentiel": 0, "pro": 6, "business": 20}
 
 MODELE_GEMINI = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+
+# ---------- Transmission d'une demande à l'équipe du client (courriel) ----------
+MAX_TRANSMISSIONS_PAR_SESSION = 3
+MAX_TRANSMISSIONS_PAR_JOUR = 30
+_TRANSMISSIONS_JOUR = {}  # id_client -> [jour, nombre]
+_REGEX_COURRIEL = re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")
+
+# Phrases où le bot AFFIRME avoir transmis la demande (jamais acceptées sans envoi réussi)
+_AFFIRME_TRANSMISSION = re.compile(
+    r"(j'ai|je l'ai|je viens de|nous avons|on a)\s+(bien\s+)?(transmis|envoy[eé])"
+    r"|je (la |le )?transmets"
+    r"|(a|est|ont|sont)\s+(bien\s+)?(été\s+)?(transmis|envoy[eé])e?s?"
+    r"|(i've|i have|i just|we've|we have)\s+(sent|forwarded|passed|submitted|relayed)"
+    r"|(has|have) been (sent|forwarded|passed|submitted)",
+    re.IGNORECASE,
+)
+
+
+def courriel_configure() -> bool:
+    """Vrai si le serveur sait envoyer des courriels (clé Resend ou serveur SMTP)."""
+    return bool(os.environ.get("RESEND_API_KEY") or os.environ.get("SMTP_HOST"))
+
+
+def envoyer_courriel(destinataire: str, sujet: str, corps: str, repondre_a: str = "") -> None:
+    """Envoie un courriel texte. Lève une exception si l'envoi échoue."""
+    sujet = re.sub(r"[\r\n]+", " ", sujet)[:200]
+    expediteur = os.environ.get("EXPEDITEUR") or os.environ.get("SMTP_USER") or "NexBot <onboarding@resend.dev>"
+    cle = os.environ.get("RESEND_API_KEY")
+    if cle:
+        charge = {"from": expediteur, "to": [destinataire], "subject": sujet, "text": corps}
+        if repondre_a:
+            charge["reply_to"] = repondre_a
+        requete = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=json.dumps(charge).encode("utf-8"),
+            headers={"Authorization": f"Bearer {cle}", "Content-Type": "application/json", "User-Agent": "NexBot/1.0"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(requete, timeout=10):
+                return
+        except urllib.error.HTTPError as erreur:
+            raise RuntimeError(f"Resend {erreur.code} : {erreur.read()[:200]!r}") from erreur
+    message = EmailMessage()
+    message["From"], message["To"], message["Subject"] = expediteur, destinataire, sujet
+    if repondre_a:
+        message["Reply-To"] = repondre_a
+    message.set_content(corps)
+    hote, port = os.environ["SMTP_HOST"], int(os.environ.get("SMTP_PORT", "465"))
+    contexte = ssl.create_default_context()
+    if port == 465:
+        serveur = smtplib.SMTP_SSL(hote, port, timeout=10, context=contexte)
+    else:
+        serveur = smtplib.SMTP(hote, port, timeout=10)
+        serveur.starttls(context=contexte)
+    with serveur:
+        if os.environ.get("SMTP_USER"):
+            serveur.login(os.environ["SMTP_USER"], os.environ.get("SMTP_PASS", ""))
+        serveur.send_message(message)
 
 
 def normaliser(texte: str) -> str:
@@ -90,6 +154,9 @@ class Bot:
         self.config = config
         self.plan = config["plan"]
         self.langue = langue if langue in ("fr", "en") else "fr"
+        self._transmissions = 0       # demandes transmises pendant cette conversation
+        self._transmis_ce_tour = False
+        self._message_courant = ""
         self.historique = []  # liste de {"role": "user"|"model", "text": "..."}
 
     # ---------- Point d'entrée ----------
@@ -108,6 +175,8 @@ class Bot:
                 "We are very busy today. Please contact us directly, thank you!",
             )
 
+        self._message_courant = message
+        self._transmis_ce_tour = False
         if self.plan == "essentiel":
             reponse = self._repondre_mots_cles(message)
         else:
@@ -116,6 +185,7 @@ class Bot:
             except Exception as erreur:  # panne réseau, clé invalide, quota...
                 print(f"[avertissement] Gemini indisponible : {erreur}")
                 reponse = self._repondre_mots_cles(message)
+            reponse = self._corriger_fausse_transmission(reponse)
 
         self._memoriser(message, reponse)
         return reponse
@@ -140,8 +210,91 @@ class Bot:
             "I don't have the answer to that question. A team member will get back to you soon.",
         )
 
+    # ---------- Transmission à l'équipe ----------
+    def _coordonnees(self) -> str:
+        return self.config.get("coordonnees_humain") or "les coordonnées de l'entreprise indiquées plus haut"
+
+    def transmission_possible(self) -> bool:
+        """Le bot ne propose de transmettre que si tout est en place (sinon il mentirait)."""
+        return (
+            self.plan in ("pro", "business")
+            and bool(_REGEX_COURRIEL.fullmatch(str(self.config.get("courriel_equipe", "")).strip()))
+            and courriel_configure()
+        )
+
+    def _corriger_fausse_transmission(self, reponse: str) -> str:
+        """Si la réponse dit « j'ai transmis » alors que rien n'a été envoyé, on le corrige."""
+        if self._transmis_ce_tour or not _AFFIRME_TRANSMISSION.search(reponse):
+            return reponse
+        if self.langue == "en":
+            note = ("Correction: your request has NOT been sent to the team. "
+                    f"Please contact them directly: {self._coordonnees()}.")
+        else:
+            note = ("Précision : votre demande n'a PAS été transmise à l'équipe. "
+                    f"Veuillez la joindre directement : {self._coordonnees()}.")
+        print("[avertissement] Le bot a affirmé avoir transmis une demande sans envoi réussi.")
+        return f"{reponse}\n\n{note}"
+
+    def _transmettre(self, resume: str, priorite: str, nom: str, contact: str) -> str:
+        """Envoie le courriel à l'équipe. Le texte retourné est lu par le modèle, qui doit le respecter."""
+        resume, nom, contact = str(resume or "").strip()[:800], str(nom or "").strip()[:100], str(contact or "").strip()[:200]
+        echec = f"Non transmis. Dis honnêtement au visiteur que la demande n'a pas été envoyée et donne-lui : {self._coordonnees()}."
+        if not self.transmission_possible():
+            return echec
+        if not resume:
+            return "Non transmis : le résumé de la demande est manquant."
+        if not contact:
+            return "Non transmis : demande d'abord au visiteur un courriel ou un numéro de téléphone pour le joindre."
+        if self._transmissions >= MAX_TRANSMISSIONS_PAR_SESSION:
+            return echec
+        cle, aujourdhui = self.config.get("id") or self.config["nom_entreprise"], time.strftime("%Y-%m-%d")
+        with _VERROU:
+            jour, nombre = _TRANSMISSIONS_JOUR.get(cle, [aujourdhui, 0])
+            if jour != aujourdhui:
+                jour, nombre = aujourdhui, 0
+            if nombre >= MAX_TRANSMISSIONS_PAR_JOUR:
+                return echec
+            _TRANSMISSIONS_JOUR[cle] = [jour, nombre + 1]
+
+        urgente = str(priorite or "").lower().startswith(("urg", "high"))
+        etiquette = "URGENTE" if urgente else "normale"
+        extrait = "\n".join(
+            f"{'Visiteur' if h['role'] == 'user' else 'NexBot'} : {h['text']}" for h in self.historique[-6:]
+        )
+        extrait += f"\nVisiteur : {self._message_courant}"
+        corps = (
+            f"Nouvelle demande reçue par l'assistant virtuel de {self.config['nom_entreprise']}\n"
+            f"{'=' * 50}\n"
+            f"Priorité : {etiquette}\n"
+            f"Nom : {nom or '(non fourni)'}\n"
+            f"Pour le joindre : {contact}\n"
+            f"Langue du visiteur : {'anglais' if self.langue == 'en' else 'français'}\n"
+            f"Date : {time.strftime('%Y-%m-%d %H:%M')} (heure du serveur)\n\n"
+            f"Résumé :\n{resume}\n\n"
+            f"Extrait de la conversation :\n{extrait}\n\n"
+            f"--\nEnvoyé automatiquement par NexBot. Le visiteur a accepté d'être contacté. "
+            f"Répondez directement à la personne avec les coordonnées ci-dessus."
+        )
+        trouve = _REGEX_COURRIEL.search(contact)
+        try:
+            envoyer_courriel(
+                self.config["courriel_equipe"].strip(),
+                f"[NexBot] Demande {etiquette} — {self.config['nom_entreprise']}",
+                corps,
+                repondre_a=trouve.group(0) if trouve else "",
+            )
+        except Exception as erreur:
+            with _VERROU:
+                jour, nombre = _TRANSMISSIONS_JOUR.get(cle, [aujourdhui, 1])
+                _TRANSMISSIONS_JOUR[cle] = [jour, max(0, nombre - 1)]
+            print(f"[erreur] Envoi du courriel impossible : {erreur}")
+            return echec
+        self._transmissions += 1
+        self._transmis_ce_tour = True
+        return "Transmis avec succès à l'équipe. Confirme-le au visiteur et dis-lui que l'équipe le contactera."
+
     # ---------- Plans Pro et Business : Gemini ----------
-    def _instructions(self) -> str:
+    def _instructions(self, avec_transmission: bool = False) -> str:
         c = self.config
         faq = "\n".join(
             f"- Q ({', '.join(e['mots_cles'] + e.get('mots_cles_en', []))}) : {e['reponse']}"
@@ -173,6 +326,23 @@ class Bot:
             morceaux.append(
                 f"Personnalité de marque (à respecter dans chaque réponse) :\n{c['personnalite']}"
             )
+        if avec_transmission:
+            morceaux.append(
+                "Transmission à l'équipe : tu disposes de l'outil transmettre_a_l_equipe qui envoie "
+                "réellement un courriel à l'équipe. Utilise-le quand la demande exige un humain "
+                "(urgence, plainte, demande hors de ta portée) ou quand le visiteur veut être contacté. "
+                "Procédure : 1) propose de transmettre la demande; 2) obtiens son accord; 3) demande son "
+                "nom et un courriel ou un téléphone; 4) appelle l'outil avec un résumé clair, la priorité "
+                "(« urgente » seulement si c'est vraiment pressant, sinon « normale »), le nom et le contact. "
+                "Ne dis JAMAIS que la demande est transmise avant que l'outil ait répondu « Transmis avec succès ». "
+                f"Si l'outil échoue, dis-le honnêtement et donne : {self._coordonnees()}."
+            )
+        else:
+            morceaux.append(
+                "Transmission : tu ne peux PAS transmettre de demande ni recueillir de coordonnées. "
+                "Ne le propose jamais et ne prétends jamais l'avoir fait. Quand une personne est nécessaire, "
+                f"invite le visiteur à contacter l'équipe directement : {self._coordonnees()}."
+            )
         morceaux.append(
             "Règles : réponds court et clair. Utilise seulement les informations "
             "ci-dessus. Si tu ne sais pas, dis-le honnêtement et propose de "
@@ -196,14 +366,34 @@ class Bot:
         ]
         contenu.append(types.Content(role="user", parts=[types.Part(text=message)]))
 
-        reponse = _CLIENT_GEMINI.models.generate_content(
-            model=MODELE_GEMINI,
-            contents=contenu,
-            config=types.GenerateContentConfig(
-                system_instruction=self._instructions(),
+        def appeler(avec_outil: bool):
+            options = dict(
+                system_instruction=self._instructions(avec_outil),
                 max_output_tokens=int(self.config.get("max_tokens", 400)),
-            ),
-        )
+            )
+            if avec_outil:
+                def transmettre_a_l_equipe(resume: str, priorite: str, nom: str, contact: str) -> str:
+                    """Envoie par courriel la demande du visiteur à l'équipe de l'entreprise.
+                    resume: résumé clair de la demande. priorite: « urgente » ou « normale ».
+                    nom: nom du visiteur. contact: courriel ou téléphone du visiteur."""
+                    return self._transmettre(resume, priorite, nom, contact)
+
+                options["tools"] = [transmettre_a_l_equipe]
+                options["automatic_function_calling"] = types.AutomaticFunctionCallingConfig(
+                    maximum_remote_calls=3
+                )
+            return _CLIENT_GEMINI.models.generate_content(
+                model=MODELE_GEMINI, contents=contenu, config=types.GenerateContentConfig(**options)
+            )
+
+        if self.transmission_possible():
+            try:
+                reponse = appeler(True)
+            except (TypeError, ValueError, AttributeError) as erreur:  # outil refusé par la bibliothèque
+                print(f"[avertissement] Outil de transmission indisponible : {erreur}")
+                reponse = appeler(False)
+        else:
+            reponse = appeler(False)
         texte = (reponse.text or "").strip()
         if not texte:
             raise RuntimeError("Réponse vide de Gemini")

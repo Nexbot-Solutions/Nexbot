@@ -62,24 +62,27 @@ footer a { color: var(--muted); }
     <li><strong>Votre adresse IP</strong>, utilisée brièvement pour limiter le nombre de messages par minute et éviter les abus. Elle n'est pas enregistrée par NexBot dans une base de données.</li>
     <li><strong>Un compteur de messages par jour</strong> pour chaque entreprise cliente, sans le contenu des messages.</li>
     <li><strong>Les renseignements que vous nous écrivez volontairement</strong>, par exemple par courriel à l'adresse ci-dessus.</li>
+    <li><strong>Votre nom et vos coordonnées (courriel, téléphone)</strong>, seulement si vous demandez à l'assistant de transmettre votre demande à l'entreprise et que vous les lui donnez.</li>
   </ul>
   <p>NexBot n'utilise ni témoin publicitaire ni outil de suivi publicitaire.</p>
 
   <h2>3. Pourquoi nous les utilisons</h2>
   <ul>
     <li>Répondre à vos questions et assurer le fonctionnement de l'assistant.</li>
+    <li>Transmettre votre demande à l'entreprise concernée, lorsque vous le demandez.</li>
     <li>Protéger le service contre les abus et contrôler l'usage.</li>
     <li>Répondre à vos demandes de contact.</li>
   </ul>
   <p>Nous n'utilisons pas vos messages pour vous profiler et nous ne les vendons pas.</p>
 
   <h2>4. Conservation</h2>
-  <p>Le contenu des conversations est gardé en mémoire sur le serveur seulement le temps de la session, puis supprimé automatiquement après environ 30 minutes d'inactivité. Il n'est pas enregistré dans une base de données ni dans un fichier. Les courriels que vous nous envoyez sont conservés le temps nécessaire pour traiter votre demande.</p>
+  <p>Le contenu des conversations est gardé en mémoire sur le serveur seulement le temps de la session, puis supprimé automatiquement après environ 30 minutes d'inactivité. Il n'est pas enregistré dans une base de données ni dans un fichier. <strong>Exception :</strong> si vous demandez à l'assistant de transmettre votre demande, il vous demande d'abord votre accord, puis envoie par courriel à l'entreprise concernée votre nom, vos coordonnées, un résumé de votre demande et un extrait de la conversation. L'entreprise conserve ce courriel selon sa propre politique. Les courriels que vous nous envoyez sont conservés le temps nécessaire pour traiter votre demande.</p>
 
   <h2>5. Fournisseurs et transferts hors Québec</h2>
   <ul>
     <li><strong>Google (modèle d'intelligence artificielle Gemini)</strong> : selon l'offre de l'entreprise, le texte de vos messages peut être transmis à Google uniquement pour générer les réponses. L'offre de base fonctionne par mots-clés et n'envoie rien à Google.</li>
     <li><strong>Render</strong> : héberge le serveur de NexBot. Ses serveurs peuvent se trouver hors du Québec et il peut tenir des journaux techniques (par exemple l'adresse IP et l'heure d'une requête).</li>
+    <li><strong>Resend</strong> : service d'envoi de courriels, utilisé seulement lorsqu'une demande est transmise à l'entreprise. Il traite le contenu de ce courriel et ses serveurs sont situés hors du Québec.</li>
     <li><strong>Google Fonts</strong> : ce site charge ses polices depuis Google, ce qui transmet votre adresse IP à Google.</li>
   </ul>
   <p>Vos renseignements peuvent donc être traités à l'extérieur du Québec, notamment aux États-Unis, par ces fournisseurs. Nous ne leur transmettons que ce qui est nécessaire au service.</p>

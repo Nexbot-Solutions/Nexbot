@@ -19,6 +19,7 @@ parser.add_argument("--id", required=True, help="identifiant sans espaces, ex. c
 parser.add_argument("--nom", required=True, help="nom de l'entreprise")
 parser.add_argument("--plan", required=True, choices=["essentiel", "pro", "business"])
 parser.add_argument("--domaine", action="append", default=[], help="site du client (répétable), ex. cliniqueabc.com")
+parser.add_argument("--courriel-equipe", default="", help="courriel qui reçoit les demandes transmises par le bot (plans Pro et Business)")
 parser.add_argument("--serveur", default="https://TON-SERVEUR", help="adresse publique de ton serveur")
 args = parser.parse_args()
 
@@ -33,6 +34,7 @@ config = json.loads((BASE / "clients" / "_modele.json").read_text(encoding="utf-
 config["id"] = args.id
 config["nom_entreprise"] = args.nom
 config["plan"] = args.plan
+config["courriel_equipe"] = args.courriel_equipe
 config["domaines_autorises"] = [d.lower().replace("https://", "").replace("http://", "").strip("/") for d in args.domaine]
 destination.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -41,5 +43,7 @@ print("\n1) Ouvre ce fichier et remplis la FAQ, les heures et les infos de l'ent
 print("2) Redémarre le serveur (ou redéploie) pour qu'il charge le client.")
 print("3) Donne cette ligne au client, à coller avant </body> sur son site :\n")
 print(f'<script src="{args.serveur}/widget.js" data-client="{args.id}" async></script>')
+if args.plan != "essentiel" and not args.courriel_equipe:
+    print("\nAttention : aucun --courriel-equipe. Le bot ne pourra pas transmettre de demandes : il invitera le visiteur à contacter l'entreprise directement (champ coordonnees_humain).")
 if not config["domaines_autorises"]:
     print("\nAttention : aucun --domaine précisé, le bot est utilisable depuis n'importe quel site.")
