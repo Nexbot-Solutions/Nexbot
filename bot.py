@@ -163,6 +163,12 @@ class Bot:
             morceaux.append(f"Informations sur l'entreprise :\n{c['infos']}")
         if faq:
             morceaux.append(f"Questions fréquentes :\n{faq}")
+        if c.get("sujets_interdits"):
+            morceaux.append(
+                "Sujets interdits : ne réponds jamais aux questions portant sur "
+                f"{c['sujets_interdits']}. Dis poliment que tu ne peux pas en parler "
+                "et invite le visiteur à contacter l'entreprise directement."
+            )
         if self.plan == "business" and c.get("personnalite"):
             morceaux.append(
                 f"Personnalité de marque (à respecter dans chaque réponse) :\n{c['personnalite']}"

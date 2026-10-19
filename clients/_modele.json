@@ -11,6 +11,7 @@
   "personnalite": "",
   "heures": "Lundi au vendredi, 9 h à 17 h",
   "infos": "Adresse, services offerts, prix, politiques, etc.",
+  "sujets_interdits": "",
   "message_accueil": "Bonjour! Comment puis-je vous aider?",
   "message_accueil_en": "Hello! How can I help you?",
   "message_inconnu": "Je n'ai pas cette information. Un membre de l'équipe vous répondra bientôt.",
