@@ -153,7 +153,7 @@ class Bot:
     def __init__(self, config: dict, langue: str = "fr"):
         self.config = config
         self.plan = config["plan"]
-        self.langue = langue if langue in ("fr", "en") else "fr"
+        self.langue = config["langue_unique"] if config.get("langue_unique") in ("fr", "en") else (langue if langue in ("fr", "en") else "fr")
         self._transmissions = 0       # demandes transmises pendant cette conversation
         self._transmis_ce_tour = False
         self._message_courant = ""
@@ -167,7 +167,10 @@ class Bot:
         return self.config.get(cle) or fr
 
     def repondre(self, message: str) -> str:
-        self.langue = detecter_langue(message, self.langue)
+        if self.config.get("langue_unique") in ("fr", "en"):
+            self.langue = self.config["langue_unique"]  # le client a choisi une seule langue
+        else:
+            self.langue = detecter_langue(message, self.langue)
         if self._limite_atteinte():
             return self._texte(
                 "message_limite",
@@ -303,6 +306,10 @@ class Bot:
         )
         morceaux = [
             f"Tu es l'assistant virtuel de l'entreprise « {c['nom_entreprise']} ».",
+            ("Langue : réponds TOUJOURS en " + ("français" if c["langue_unique"] == "fr" else "anglais")
+             + ", même si le visiteur écrit dans une autre langue. Les informations ci-dessous peuvent être "
+             "dans une autre langue : traduis-les fidèlement, sans rien inventer.")
+            if c.get("langue_unique") in ("fr", "en") else
             "Langues : tu es bilingue. Réponds toujours dans la langue du dernier message "
             "du visiteur : français ou anglais. S'il écrit en anglais, réponds en anglais; "
             "s'il écrit en français, réponds en " + c.get("langue", "français québécois") + ". "
