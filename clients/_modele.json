@@ -3,20 +3,29 @@
   "nom_entreprise": "Nom de l'entreprise",
   "plan": "essentiel",
   "couleur": "#2F5BEA",
-  "domaines_autorises": ["siteduclient.com"],
+  "domaines_autorises": [
+    "siteduclient.com"
+  ],
   "langue": "français québécois",
   "ton": "professionnel et chaleureux",
   "personnalite": "",
   "heures": "Lundi au vendredi, 9 h à 17 h",
   "infos": "Adresse, services offerts, prix, politiques, etc.",
   "message_accueil": "Bonjour! Comment puis-je vous aider?",
+  "message_accueil_en": "Hello! How can I help you?",
   "message_inconnu": "Je n'ai pas cette information. Un membre de l'équipe vous répondra bientôt.",
+  "message_inconnu_en": "I don't have that information. A team member will get back to you soon.",
   "message_limite": "Nous avons beaucoup de demandes aujourd'hui. Veuillez nous joindre directement, merci!",
+  "message_limite_en": "We are very busy today. Please contact us directly, thank you!",
   "limite_messages_jour": 200,
   "max_tokens": 400,
   "faq": [
     {
-      "mots_cles": ["heure", "ouvert", "horaire"],
+      "mots_cles": [
+        "heure",
+        "ouvert",
+        "horaire"
+      ],
       "reponse": "Nous sommes ouverts du lundi au vendredi, de 9 h à 17 h."
     }
   ]

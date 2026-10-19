@@ -10,8 +10,11 @@
   "heures": "Non précisées",
   "infos": "NexBot est un assistant client intelligent pour les entreprises : il répond aux questions courantes, filtre les messages entrants et place les demandes prioritaires devant l'équipe, avec le contexte déjà résumé. Trois offres, en dollars canadiens, taxes en sus : ESSENTIEL à 99 $ par mois (réponses automatiques aux questions courantes, disponible en tout temps); PRO à 199 $ par mois (tout Essentiel, plus filtrage intelligent des messages entrants et qualification des demandes par priorité); BUSINESS à 349 $ par mois (tout Pro, plus automatisation avancée et solution adaptée à l'entreprise). Contact : nexbot.contact@gmail.com.",
   "message_accueil": "Bonjour! Je suis NexBot. Posez-moi une question sur nos offres, ou essayez-moi comme si vous étiez un client.",
+  "message_accueil_en": "Hello! I'm NexBot. Ask me about our plans, or try me out as if you were a customer.",
   "message_inconnu": "Je n'ai pas cette information. Écrivez-nous à nexbot.contact@gmail.com et on vous répondra avec plaisir.",
+  "message_inconnu_en": "I don't have that information. Write to us at nexbot.contact@gmail.com and we'll be happy to get back to you.",
   "message_limite": "Beaucoup de demandes en ce moment. Écrivez-nous à nexbot.contact@gmail.com, merci!",
+  "message_limite_en": "We're very busy right now. Write to us at nexbot.contact@gmail.com, thank you!",
   "limite_messages_jour": 200,
   "max_tokens": 400,
   "faq": []

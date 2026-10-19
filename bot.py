@@ -5,6 +5,7 @@ de configuration JSON dans le dossier clients/.
 """
 import json
 import os
+import re
 import threading
 import time
 import unicodedata
@@ -46,6 +47,37 @@ def normaliser(texte: str) -> str:
     return "".join(c for c in texte if unicodedata.category(c) != "Mn")
 
 
+MOTS_EN = {
+    "the", "is", "are", "you", "your", "do", "does", "what", "how", "can", "could", "would",
+    "hello", "hi", "hey", "thanks", "thank", "please", "price", "prices", "cost", "hours",
+    "open", "when", "where", "which", "who", "why", "have", "has", "with", "for", "and",
+    "my", "me", "i", "we", "need", "want", "help", "about", "this", "that", "of", "to", "in",
+    "it", "a", "an", "much", "plan", "plans", "pricing", "support", "english",
+}
+MOTS_FR = {
+    "le", "la", "les", "un", "une", "des", "du", "de", "est", "sont", "vous", "votre", "vos",
+    "quoi", "comment", "quel", "quelle", "quels", "quand", "ou", "où", "pourquoi", "bonjour",
+    "salut", "merci", "svp", "prix", "heures", "ouvert", "avez", "avoir", "je", "nous", "mon",
+    "ma", "mes", "besoin", "veux", "voudrais", "aide", "pour", "avec", "et", "que", "qui",
+    "ce", "cette", "ca", "c'est", "combien", "forfait", "forfaits", "offre", "offres", "francais",
+}
+
+
+def detecter_langue(texte: str, defaut: str = "fr") -> str:
+    """Devine « fr » ou « en » d'après les mots du message. En cas d'égalité, garde la langue précédente."""
+    mots = re.findall(r"[a-zà-ÿ']+", texte.lower())
+    mots_sans_accent = [normaliser(m) for m in mots]
+    en = sum(1 for m in mots_sans_accent if m in MOTS_EN)
+    fr = sum(1 for m in mots_sans_accent if m in {normaliser(x) for x in MOTS_FR})
+    if re.search(r"[àâçéèêëîïôûùüÿœ]", texte.lower()):
+        fr += 2
+    if en > fr:
+        return "en"
+    if fr > en:
+        return "fr"
+    return defaut if defaut in ("fr", "en") else "fr"
+
+
 def charger_client(chemin: str) -> dict:
     config = json.loads(Path(chemin).read_text(encoding="utf-8"))
     if config.get("plan") not in PLANS:
@@ -54,18 +86,26 @@ def charger_client(chemin: str) -> dict:
 
 
 class Bot:
-    def __init__(self, config: dict):
+    def __init__(self, config: dict, langue: str = "fr"):
         self.config = config
         self.plan = config["plan"]
+        self.langue = langue if langue in ("fr", "en") else "fr"
         self.historique = []  # liste de {"role": "user"|"model", "text": "..."}
 
     # ---------- Point d'entrée ----------
+    def _texte(self, cle: str, fr: str, en: str) -> str:
+        """Message configuré du client dans la langue courante (cle_en pour l'anglais), sinon texte par défaut."""
+        if self.langue == "en":
+            return self.config.get(cle + "_en") or en
+        return self.config.get(cle) or fr
+
     def repondre(self, message: str) -> str:
+        self.langue = detecter_langue(message, self.langue)
         if self._limite_atteinte():
-            return self.config.get(
+            return self._texte(
                 "message_limite",
-                "Nous avons beaucoup de demandes aujourd'hui. "
-                "Veuillez nous joindre directement, merci!",
+                "Nous avons beaucoup de demandes aujourd'hui. Veuillez nous joindre directement, merci!",
+                "We are very busy today. Please contact us directly, thank you!",
             )
 
         if self.plan == "essentiel":
@@ -85,27 +125,37 @@ class Bot:
         texte = normaliser(message)
         meilleur_score, meilleure_reponse = 0, None
         for entree in self.config.get("faq", []):
-            score = sum(1 for mot in entree["mots_cles"] if normaliser(mot) in texte)
+            mots = list(entree["mots_cles"]) + list(entree.get("mots_cles_en", []))
+            score = sum(1 for mot in mots if normaliser(mot) in texte)
             if score > meilleur_score:
-                meilleur_score, meilleure_reponse = score, entree["reponse"]
+                reponse = entree["reponse"]
+                if self.langue == "en" and entree.get("reponse_en"):
+                    reponse = entree["reponse_en"]
+                meilleur_score, meilleure_reponse = score, reponse
         if meilleure_reponse:
             return meilleure_reponse
-        return self.config.get(
+        return self._texte(
             "message_inconnu",
-            "Je n'ai pas la réponse à cette question. "
-            "Un membre de l'équipe vous répondra bientôt.",
+            "Je n'ai pas la réponse à cette question. Un membre de l'équipe vous répondra bientôt.",
+            "I don't have the answer to that question. A team member will get back to you soon.",
         )
 
     # ---------- Plans Pro et Business : Gemini ----------
     def _instructions(self) -> str:
         c = self.config
         faq = "\n".join(
-            f"- Q ({', '.join(e['mots_cles'])}) : {e['reponse']}"
+            f"- Q ({', '.join(e['mots_cles'] + e.get('mots_cles_en', []))}) : {e['reponse']}"
+            + (f" / EN: {e['reponse_en']}" if e.get("reponse_en") else "")
             for e in c.get("faq", [])
         )
         morceaux = [
             f"Tu es l'assistant virtuel de l'entreprise « {c['nom_entreprise']} ».",
-            f"Langue : {c.get('langue', 'français québécois')}.",
+            "Langues : tu es bilingue. Réponds toujours dans la langue du dernier message "
+            "du visiteur : français ou anglais. S'il écrit en anglais, réponds en anglais; "
+            "s'il écrit en français, réponds en " + c.get("langue", "français québécois") + ". "
+            "S'il change de langue, change aussi. Si le message est ambigu, utilise la langue "
+            f"de la conversation (actuellement : {'anglais' if self.langue == 'en' else 'français'}). "
+            "Les informations ci-dessous peuvent être en français : traduis-les fidèlement, sans rien inventer.",
             f"Ton : {c.get('ton', 'professionnel et chaleureux')}.",
             f"Heures d'ouverture : {c.get('heures', 'non précisées')}.",
         ]
@@ -121,7 +171,8 @@ class Bot:
             "Règles : réponds court et clair. Utilise seulement les informations "
             "ci-dessus. Si tu ne sais pas, dis-le honnêtement et propose de "
             "contacter l'équipe. N'invente jamais un prix, une heure ou une politique. "
-            "Si on te demande, dis que tu es un assistant virtuel."
+            "Si on te demande, dis que tu es un assistant virtuel. "
+            "Ne traduis jamais les noms propres, les noms de plans ni les adresses courriel."
         )
         return "\n\n".join(morceaux)
 

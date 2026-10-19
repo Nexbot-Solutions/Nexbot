@@ -125,9 +125,14 @@ def config_client(id_client):
     origine = request.headers.get("Origin")
     if origine and not origine_autorisee(config, origine):
         return jsonify(erreur="Domaine non autorisé"), 403
+    en = request.args.get("lang", "fr").lower().startswith("en")
+    if en:
+        accueil = config.get("message_accueil_en") or "Hello! How can I help you?"
+    else:
+        accueil = config.get("message_accueil", "Bonjour! Comment puis-je vous aider?")
     return jsonify(
         nom=config["nom_entreprise"],
-        accueil=config.get("message_accueil", "Bonjour! Comment puis-je vous aider?"),
+        accueil=accueil,
         couleur=config.get("couleur", "#2F5BEA"),
     )
 
@@ -164,7 +169,8 @@ def message(id_client):
     with VERROU:
         session = SESSIONS.get(cle)
         if session is None:
-            session = {"bot": Bot(config), "vu": time.time()}
+            langue = "en" if str(donnees.get("lang", "fr")).lower().startswith("en") else "fr"
+            session = {"bot": Bot(config, langue), "vu": time.time()}
             SESSIONS[cle] = session
         session["vu"] = time.time()
 

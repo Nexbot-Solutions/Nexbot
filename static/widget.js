@@ -24,10 +24,26 @@
     document.head.appendChild(lien);
   }
  
+  // Langue de l'interface : celle de la page du site, sinon celle du navigateur
+  var langueBrute = (document.documentElement.lang || navigator.language || "fr").toLowerCase();
+  var LANG = langueBrute.indexOf("en") === 0 ? "en" : "fr";
+  var T = {
+    fr: { ouvrir: "Ouvrir l'assistant ", assistant: "Assistant ", fermer: "Fermer", enLigne: "En ligne",
+          placeholder: "Écrivez votre message…", champ: "Votre message", envoyer: "Envoyer",
+          pied: "Propulsé par NexBot", accueil: "Bonjour! Comment puis-je vous aider?",
+          erreur: "Désolé, une erreur est survenue. Réessayez dans un instant.",
+          connexion: "Désolé, je n'arrive pas à me connecter. Réessayez dans un instant." },
+    en: { ouvrir: "Open the assistant ", assistant: "Assistant ", fermer: "Close", enLigne: "Online",
+          placeholder: "Type your message…", champ: "Your message", envoyer: "Send",
+          pied: "Powered by NexBot", accueil: "Hello! How can I help you?",
+          erreur: "Sorry, something went wrong. Please try again in a moment.",
+          connexion: "Sorry, I can't connect right now. Please try again in a moment." }
+  }[LANG];
+
   var sessionId = lire(cleSession) || "";
   var enCours = false;
  
-  fetch(base + "/api/" + encodeURIComponent(idClient) + "/config")
+  fetch(base + "/api/" + encodeURIComponent(idClient) + "/config?lang=" + LANG)
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(demarrer)
     .catch(function (e) { console.error("widget.js : impossible de charger la config", e); });
@@ -85,27 +101,27 @@
     }
  
     // --- Bulle ---
-    var bulle = el("button", { "class": "bulle", type: "button", "aria-label": "Ouvrir l'assistant " + cfg.nom }, [creerLogo()]);
+    var bulle = el("button", { "class": "bulle", type: "button", "aria-label": T.ouvrir + cfg.nom }, [creerLogo()]);
  
     // --- Panneau ---
-    var fermer = el("button", { "class": "fermer", type: "button", "aria-label": "Fermer", text: "×" });
+    var fermer = el("button", { "class": "fermer", type: "button", "aria-label": T.fermer, text: "×" });
     var entete = el("div", { "class": "entete" }, [
       el("div", { "class": "avatar" }, [creerLogo()]),
       el("div", {}, [
         el("div", { "class": "titre", text: cfg.nom }),
-        el("div", { "class": "sous", text: "En ligne" })
+        el("div", { "class": "sous", text: T.enLigne })
       ]),
       fermer
     ]);
  
     var zoneMessages = el("div", { "class": "messages", role: "log", "aria-live": "polite" });
  
-    var champ = el("input", { type: "text", placeholder: "Écrivez votre message…", maxlength: "1000", "aria-label": "Votre message", autocomplete: "off" });
-    var envoyer = el("button", { "class": "envoyer", type: "submit", text: "Envoyer" });
+    var champ = el("input", { type: "text", placeholder: T.placeholder, maxlength: "1000", "aria-label": T.champ, autocomplete: "off" });
+    var envoyer = el("button", { "class": "envoyer", type: "submit", text: T.envoyer });
     var formulaire = el("form", { "class": "zone" }, [champ, envoyer]);
  
-    var pied = el("div", { "class": "pied", text: "Propulsé par NexBot" });
-    var panneau = el("div", { "class": "panneau", role: "dialog", "aria-label": "Assistant " + cfg.nom }, [entete, zoneMessages, formulaire, pied]);
+    var pied = el("div", { "class": "pied", text: T.pied });
+    var panneau = el("div", { "class": "panneau", role: "dialog", "aria-label": T.assistant + cfg.nom }, [entete, zoneMessages, formulaire, pied]);
  
     ombre.appendChild(css);
     ombre.appendChild(panneau);
@@ -125,7 +141,7 @@
       panneau.classList.add("ouvert");
       if (!accueilAffiche) {
         accueilAffiche = true;
-        ajouter(cfg.accueil || "Bonjour! Comment puis-je vous aider?", "bot");
+        ajouter(cfg.accueil || T.accueil, "bot");
       }
       setTimeout(function () { champ.focus(); }, 50);
     }
@@ -156,7 +172,7 @@
       fetch(base + "/api/" + encodeURIComponent(idClient) + "/message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId, message: texte })
+        body: JSON.stringify({ session_id: sessionId, message: texte, lang: LANG })
       })
         .then(function (r) {
           return r.json().catch(function () { return {}; }).then(function (data) {
@@ -167,11 +183,11 @@
           var d = res.data || {};
           if (d.session_id) { sessionId = d.session_id; ecrire(cleSession, sessionId); }
           attente.className = "m bot";
-          attente.textContent = d.reponse || "Désolé, une erreur est survenue. Réessayez dans un instant.";
+          attente.textContent = d.reponse || T.erreur;
         })
         .catch(function () {
           attente.className = "m bot";
-          attente.textContent = "Désolé, je n'arrive pas à me connecter. Réessayez dans un instant.";
+          attente.textContent = T.connexion;
         })
         .then(function () {
           enCours = false;
