@@ -10,6 +10,7 @@ Routes :
   GET  /demo                      -> page de démonstration
   GET  /confidentialite           -> politique de confidentialité
   GET  /conditions                -> conditions d'utilisation
+  GET  /en, /en/privacy, /en/terms -> version anglaise du site
   GET  /sante                     -> vérification que le serveur roule
 """
 import os
@@ -204,6 +205,21 @@ def confidentialite():
 @app.route("/conditions")
 def conditions():
     return send_from_directory(app.static_folder, "conditions.html")
+
+
+@app.route("/en")
+def accueil_en():
+    return send_from_directory(app.static_folder, "en.html")
+
+
+@app.route("/en/privacy")
+def privacy_en():
+    return send_from_directory(app.static_folder, "privacy-en.html")
+
+
+@app.route("/en/terms")
+def terms_en():
+    return send_from_directory(app.static_folder, "terms-en.html")
 
 
 if __name__ == "__main__":

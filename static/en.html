@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07050d">
+<meta name="description" content="NexBot, the smart customer assistant: automated answers, message filtering and request qualification for businesses.">
+<title>NexBot | Smart customer assistant</title>
+<link rel="icon" type="image/png" href="/static/mascotte.png">
+<link rel="apple-touch-icon" href="/static/mascotte.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NexBot">
+<meta property="og:locale" content="en_CA">
+<meta property="og:title" content="NexBot | Smart customer assistant">
+<meta property="og:description" content="NexBot answers common questions, filters incoming messages and puts priority requests in front of your team.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Mise en page : thème sombre unique, noir teinté de violet. Grand robot lumineux au centre de l'accueil, grands titres, sections très aérées, carte Pro cerclée de violet. */
+:root {
+  --bg: #07050d;
+  --surface: #120c22;
+  --line: #2a1f47;
+  --fg: #f3f0fa;
+  --muted: #a99fc4;
+  --violet: #8b5cf6;
+  --violet-hi: #bda4ff;
+  --violet-lo: #5b2fd6;
+  --glow: rgba(139, 92, 246, 0.38);
+  --ok: #5fd3a0;
+  --warn: #ff7cc4;
+  --font-display: "Michroma", "Eurostile", "Bank Gothic", "Futura", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1080px; margin-inline: auto; position: relative; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1, h2 { font-family: var(--font-display); font-weight: 400; }
+p { margin: 0; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--violet-hi); outline-offset: 3px; }
+.grad { color: var(--fg); }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .grad { background: linear-gradient(180deg, #ffffff 20%, var(--violet-hi) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+}
+.label { font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--violet-hi); }
+
+/* Barre du haut */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px;
+  background: linear-gradient(180deg, rgba(7, 5, 13, 0.92), rgba(7, 5, 13, 0.6)); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.brand { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 0.06em; text-decoration: none; }
+.bar nav { display: flex; align-items: center; gap: 24px; }
+.bar nav a.link { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.93rem; }
+.bar nav a.link:hover { color: var(--fg); }
+.btn { display: inline-block; padding: 13px 26px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; text-decoration: none; border: 1px solid var(--line); color: var(--fg); background: transparent; text-align: center; }
+.btn.violet { background: linear-gradient(135deg, #a47bff, var(--violet-lo)); color: #fff; border-color: transparent; box-shadow: 0 8px 30px rgba(139, 92, 246, 0.35); }
+.btn.ghost:hover { border-color: var(--violet); }
+.btn:hover { filter: brightness(1.08); }
+.bar nav a.lang { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em; padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; }
+.bar nav a.lang:hover { color: var(--fg); border-color: var(--violet); }
+.try { position: relative; color: var(--muted); font-size: 0.92rem; }
+.faq { max-width: 760px; margin-inline: auto; display: grid; gap: 12px; }
+.faq details { background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); border: 1px solid var(--line); border-radius: 18px; padding: 4px 22px; }
+.faq summary { cursor: pointer; font-weight: 600; padding: 16px 0; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--violet-hi); font-size: 1.3rem; line-height: 1; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { color: var(--muted); padding-bottom: 18px; font-size: 0.98rem; }
+.faq a { color: var(--violet-hi); }
+.cta-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+/* Accueil */
+.hero { position: relative; overflow: hidden; text-align: center; display: grid; justify-items: center; grid-template-columns: minmax(0, 1fr); gap: 22px; padding-block: 24px 96px; }
+.hero::before { content: ""; position: absolute; left: 50%; top: -40px; width: 100%; max-width: 980px; aspect-ratio: 1; transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--glow), rgba(139, 92, 246, 0.08) 55%, transparent 75%); pointer-events: none; }
+.stage { position: relative; width: min(135px, 40%); }
+.stage img { position: relative; width: 100%; height: auto; display: block; }
+.wordmark { position: relative; width: min(210px, 56%); height: auto; display: block; margin-top: -12px; }
+.chip { position: absolute; display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; white-space: nowrap;
+  background: rgba(18, 12, 34, 0.78); border: 1px solid var(--line); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.chip i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+.chip.a { right: 100%; margin-right: 8px; top: 24%; } .chip.a i { background: var(--ok); }
+.chip.b { left: 100%; margin-left: 8px; bottom: 22%; } .chip.b i { background: var(--warn); }
+.hero h1 { position: relative; font-size: clamp(1.7rem, 6.4vw, 3.9rem); line-height: 1.15; max-width: 17ch; }
+.hero .lead { position: relative; color: var(--muted); font-size: 1.12rem; max-width: 54ch; }
+.actions { position: relative; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+
+/* Sections */
+section { padding-block: 96px 8px; }
+.sec-head { text-align: center; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; justify-items: center; margin: 0 auto 48px; max-width: 700px; }
+.sec-head h2 { font-size: clamp(1.3rem, 4.2vw, 2.3rem); line-height: 1.25; }
+.sec-head p { color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+.card { background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)); border: 1px solid var(--line); border-radius: 24px; padding: 30px 26px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.card h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.35; }
+.card p { color: var(--muted); font-size: 0.98rem; }
+.num { font-family: var(--font-display); font-size: 2.6rem; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px var(--violet); }
+.ico { width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, #a47bff, var(--violet-lo)); display: grid; place-items: center; box-shadow: 0 8px 26px rgba(139, 92, 246, 0.35); margin-bottom: 4px; }
+.ico svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.chat { max-width: 580px; margin: 22px auto 0; background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 22px; display: grid; gap: 12px; box-shadow: 0 0 80px rgba(139, 92, 246, 0.14); }
+.chat-head { display: flex; align-items: center; gap: 8px; }
+.chat-head i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: block; }
+.msg { max-width: 86%; padding: 11px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.45; }
+.msg.client { background: #1d1433; justify-self: start; border-bottom-left-radius: 4px; }
+.msg.bot { background: linear-gradient(135deg, #9a6dff, var(--violet-lo)); color: #fff; justify-self: end; border-bottom-right-radius: 4px; }
+.tag { justify-self: end; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding: 3px 11px; border-radius: 999px; border: 1px solid; }
+.tag.ok { color: var(--ok); border-color: var(--ok); }
+.tag.warn { color: var(--warn); border-color: var(--warn); }
+.chat hr { border: 0; border-top: 1px dashed var(--line); width: 100%; margin: 4px 0; }
+
+/* Offres */
+.plans { align-items: stretch; }
+.plan { grid-template-rows: auto auto auto auto 1fr auto; gap: 16px; padding: 34px 28px; }
+.plan h3 { font-family: var(--font-display); font-weight: 400; font-size: 1rem; letter-spacing: 0.12em; }
+.plan .desc { min-height: 3.3em; }
+.price { display: flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
+.price b { font-family: var(--font-display); font-weight: 400; font-size: 2.6rem; }
+.price span { color: var(--muted); font-size: 0.92rem; }
+.plan ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; align-content: start; font-size: 0.96rem; }
+.plan li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; }
+.plan li::before { content: ""; width: 7px; height: 7px; margin-top: 0.55em; border-radius: 50%; background: var(--violet); }
+.plan.featured { border: 1.5px solid transparent; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 70px rgba(139, 92, 246, 0.28); }
+.fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
+
+/* Objectif */
+.finale { position: relative; overflow: hidden; text-align: center; display: grid; justify-items: center; grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 112px 8px; }
+.finale::before { content: ""; position: absolute; left: 50%; top: 20px; width: 100%; max-width: 900px; aspect-ratio: 16 / 9; transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(139, 92, 246, 0.26), transparent 75%); pointer-events: none; }
+.finale > * { position: relative; }
+.finale h2 { font-size: clamp(1.3rem, 4.6vw, 2.6rem); line-height: 1.25; max-width: 20ch; }
+.goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 28px; width: 100%; max-width: 860px; text-align: left; }
+.goals div { border-top: 2px solid var(--violet); padding-top: 16px; display: grid; gap: 6px; min-width: 0; }
+.goals strong { font-family: var(--font-display); font-weight: 400; font-size: 0.95rem; line-height: 1.4; }
+.goals span { color: var(--muted); font-size: 0.96rem; }
+
+/* Contact */
+.cta { margin-top: 96px; text-align: center; display: grid; justify-items: center; grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 56px 24px; border-radius: 32px; border: 1px solid var(--line);
+  background: radial-gradient(90% 120% at 50% 0%, rgba(139, 92, 246, 0.34), rgba(18, 12, 34, 0.9) 70%); }
+.cta h2 { font-size: clamp(1.25rem, 4vw, 2.1rem); line-height: 1.25; }
+.cta p { color: var(--muted); }
+.cta .mail { font-family: var(--font-display); font-size: clamp(0.95rem, 3.4vw, 1.4rem); user-select: all; overflow-wrap: anywhere; margin-top: 8px; }
+button.copy { font: inherit; font-weight: 600; font-size: 0.92rem; color: var(--fg); background: transparent; border: 1px solid var(--violet); border-radius: 999px; padding: 11px 22px; cursor: pointer; }
+button.copy:hover { background: rgba(139, 92, 246, 0.18); }
+
+footer { padding-block: 40px 48px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 0.88rem; }
+
+@media (max-width: 760px) {
+  .chip { display: none; }
+  .hero { padding-block: 8px 64px; }
+  section { padding-block: 64px 8px; }
+  .finale { padding-block: 80px 8px; }
+  .cta { margin-top: 72px; }
+  .bar nav a.link { display: none; }
+  .plan .desc { min-height: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .card { transition: filter .15s, border-color .2s, transform .2s; }
+  .card:hover { transform: translateY(-4px); border-color: var(--violet); }
+  .stage img { animation: float 6s ease-in-out infinite; }
+  .chip.a { animation: float 5s ease-in-out infinite; }
+  .chip.b { animation: float 5.5s ease-in-out -2s infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+}
+html { background: #07050d; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="bar">
+    <a class="brand grad" href="#">NEXBOT</a>
+    <nav>
+      <a class="link" href="#fonctionnement">How it works</a>
+      <a class="link" href="#offres">Plans</a>
+      <a class="link" href="#faq">FAQ</a>
+      <a class="lang" href="/" hreflang="fr" lang="fr" aria-label="Passer au français">FR</a>
+      <a class="btn violet" href="#contact" style="padding: 10px 22px;">Demo</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <div class="stage">
+      <img src="/static/mascotte.png" alt="NexBot mascot, a black robot with a headset and a smiling face" width="425" height="421">
+      <span class="chip a"><i></i>Common question, solved</span>
+      <span class="chip b"><i></i>Urgent request, forwarded</span>
+    </div>
+    <img class="wordmark" src="/static/wordmark.png" alt="NexBot" width="650" height="78">
+    <span class="label">Smart customer assistant</span>
+    <h1><span class="grad">Your customer service, automated.</span></h1>
+    <p class="lead">NexBot answers common questions, filters incoming messages and puts priority requests in front of your team.</p>
+    <div class="actions">
+      <a class="btn violet" href="#offres">See the plans</a>
+      <a class="btn ghost" href="#contact">Request a demo</a>
+    </div>
+    <p class="try">Try it right now: click the bubble at the bottom right of the screen.</p>
+  </div>
+
+  <section id="fonctionnement">
+    <div class="sec-head">
+      <span class="label">How it works</span>
+      <h2><span class="grad">Every message lands in the right place.</span></h2>
+      <p>NexBot reads incoming messages, answers the simple ones on its own and passes the rest to your team, already sorted.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><span class="num">1</span><h3>The message arrives</h3><p>A customer writes in and NexBot receives it first.</p></div>
+      <div class="card"><span class="num">2</span><h3>NexBot sorts and replies</h3><p>Basic questions get an instant answer. Other requests are qualified.</p></div>
+      <div class="card"><span class="num">3</span><h3>Your team handles what matters</h3><p>Priority requests are passed on to them, with the context already summarized.</p></div>
+    </div>
+    <div class="chat" aria-label="Example conversation">
+      <div class="chat-head"><i></i><span class="label">Example conversation</span></div>
+      <div class="msg client">Hello, what are your opening hours?</div>
+      <div class="msg bot">Hello! We are open Tuesday to Saturday, 9 am to 5 pm.</div>
+      <span class="tag ok">Solved by NexBot</span>
+      <hr>
+      <div class="msg client">My order arrived damaged and I need it this week.</div>
+      <div class="msg bot">I am passing your request to our team right away.</div>
+      <span class="tag warn">Priority, forwarded to the team</span>
+    </div>
+  </section>
+
+  <section id="avantages">
+    <div class="sec-head">
+      <span class="label">Why NexBot</span>
+      <h2><span class="grad">A less overloaded team, better-served customers.</span></h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></div>
+        <h3>Cut repetitive requests</h3><p>The same questions come back every day. NexBot answers them for you, at any hour.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></div>
+        <h3>Filter incoming messages</h3><p>Every message is sorted by topic and urgency before it reaches your team.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Improve how conversations are handled</h3><p>Faster answers and clearer follow-up for every customer conversation.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
+        <h3>Bilingual, French and English</h3><p>NexBot replies in your customer's language, with no setup on their side.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="offres">
+    <div class="sec-head">
+      <span class="label">Plans</span>
+      <h2><span class="grad">Three levels, depending on the scale of your needs.</span></h2>
+      <p>Start with basic answers and move up when your volume of requests grows.</p>
+    </div>
+    <div class="grid plans">
+      <div class="card plan">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>ESSENTIEL</h3>
+        <p class="desc">Automation of basic answers.</p>
+        <div class="price"><b>$99</b><span>per month</span></div>
+        <ul>
+          <li>Automatic answers to common questions</li>
+          <li>Available at all times</li>
+        </ul>
+        <a class="btn ghost" href="https://buy.stripe.com/14A00i7l4fiS79lavxfrW02" target="_blank" rel="noopener">Choose Essentiel</a>
+      </div>
+      <div class="card plan featured">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>PRO</h3>
+        <p class="desc">Smart filtering and request qualification.</p>
+        <div class="price"><b>$199</b><span>per month</span></div>
+        <ul>
+          <li>Everything included in Essentiel</li>
+          <li>Smart filtering of incoming messages</li>
+          <li>Requests qualified by priority</li>
+        </ul>
+        <a class="btn violet" href="https://buy.stripe.com/9B600i8p87Qq79l8npfrW01" target="_blank" rel="noopener">Choose Pro</a>
+      </div>
+      <div class="card plan">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="13" width="4" height="8"/><rect x="10" y="8" width="4" height="13"/><rect x="16" y="3" width="4" height="18"/></svg></div>
+        <h3>BUSINESS</h3>
+        <p class="desc">Advanced automation, tailored to business needs.</p>
+        <div class="price"><b>$349</b><span>per month</span></div>
+        <ul>
+          <li>Everything included in Pro</li>
+          <li>Advanced automation</li>
+          <li>Solution tailored to your business</li>
+        </ul>
+        <a class="btn ghost" href="https://buy.stripe.com/fZu9AS6h0daK8dp1Z1frW00" target="_blank" rel="noopener">Choose Business</a>
+      </div>
+    </div>
+    <p class="fine">Prices in Canadian dollars, plus taxes.</p>
+  </section>
+
+  <section id="faq">
+    <div class="sec-head">
+      <span class="label">FAQ</span>
+      <h2><span class="grad">Your questions, answered.</span></h2>
+    </div>
+    <div class="faq">
+      <details><summary>How is NexBot installed on my website?</summary><p>We set up your assistant, then you add a single line of code to your site. Nothing to install for your customers.</p></details>
+      <details><summary>Which languages does NexBot answer in?</summary><p>French and English. It replies in the language your customer uses.</p></details>
+      <details><summary>Can NexBot make mistakes?</summary><p>Yes, like any virtual assistant. It relies on your business's information, says when it doesn't know and passes important requests to your team. It does not replace your staff.</p></details>
+      <details><summary>What happens to my customers' conversations?</summary><p>They are not saved in a database and are deleted automatically after the session. Details are in our <a href="/en/privacy">privacy policy</a>.</p></details>
+      <details><summary>Do prices include taxes?</summary><p>No. Prices are in Canadian dollars, plus taxes, and the subscription is billed monthly.</p></details>
+      <details><summary>How can I reach you?</summary><p>Write to us at <a href="mailto:nexbot.contact@gmail.com">nexbot.contact@gmail.com</a>.</p></details>
+    </div>
+  </section>
+
+  <div class="finale" id="objectif">
+    <span class="label">Our goal</span>
+    <h2><span class="grad">Keep your team focused on priority requests.</span></h2>
+    <div class="goals">
+      <div><strong>Less workload</strong><span>Cut teams' repetitive work.</span></div>
+      <div><strong>More speed</strong><span>Answer every customer faster.</span></div>
+      <div><strong>More focus</strong><span>Save human time for what is a priority.</span></div>
+    </div>
+  </div>
+
+  <section id="contact" style="padding-block: 0 8px;">
+    <div class="cta">
+      <span class="label">Contact</span>
+      <h2><span class="grad">Let's talk about your customer service.</span></h2>
+      <p>Write to us for a demonstration or to choose your plan.</p>
+      <span class="mail" id="mail">nexbot.contact@gmail.com</span>
+      <div class="cta-actions">
+        <a class="btn violet" href="mailto:nexbot.contact@gmail.com">Send an email</a>
+        <button class="copy" id="copy" type="button">Copy the address</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 NexBot</span>
+    <span>Smart customer assistant</span>
+    <span><a href="/en/privacy" style="color:inherit">Privacy</a> · <a href="/en/terms" style="color:inherit">Terms of use</a></span>
+  </footer>
+</div>
+
+<script>
+document.getElementById('copy').addEventListener('click', function () {
+  var btn = this, txt = document.getElementById('mail').textContent;
+  function done() { btn.textContent = 'Address copied'; setTimeout(function () { btn.textContent = "Copy the address"; }, 1800); }
+  function fallback() {
+    try {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('mail'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    } catch (e) {}
+  }
+  try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (e) { fallback(); }
+});
+</script>
+
+<script src="/widget.js" data-client="nexbot" async></script>
+</body>
+</html>
