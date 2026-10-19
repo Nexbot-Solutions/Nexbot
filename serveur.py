@@ -8,6 +8,8 @@ Routes :
   POST /api/<id_client>/message   -> {"session_id": "...", "message": "..."}
   GET  /widget.js                 -> le widget à coller sur le site du client
   GET  /demo                      -> page de démonstration
+  GET  /confidentialite           -> politique de confidentialité
+  GET  /conditions                -> conditions d'utilisation
   GET  /sante                     -> vérification que le serveur roule
 """
 import os
@@ -186,6 +188,16 @@ def accueil():
 @app.route("/demo")
 def demo():
     return send_from_directory(app.static_folder, "demo.html")
+
+
+@app.route("/confidentialite")
+def confidentialite():
+    return send_from_directory(app.static_folder, "confidentialite.html")
+
+
+@app.route("/conditions")
+def conditions():
+    return send_from_directory(app.static_folder, "conditions.html")
 
 
 if __name__ == "__main__":
