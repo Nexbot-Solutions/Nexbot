@@ -44,6 +44,8 @@ _FICHIER_COMPTEURS = Path(__file__).resolve().parent / "compteurs.json"
 MEMOIRE_ECHANGES = {"essentiel": 0, "pro": 6, "business": 20}
 
 MODELE_GEMINI = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+TENTATIVES_GEMINI = 3  # 1 essai + 2 reprises
+CODES_TEMPORAIRES = {429, 500, 502, 503, 504}
 
 # ---------- Transmission d'une demande à l'équipe du client (courriel) ----------
 MAX_TRANSMISSIONS_PAR_SESSION = 3
@@ -389,9 +391,19 @@ class Bot:
                 options["automatic_function_calling"] = types.AutomaticFunctionCallingConfig(
                     maximum_remote_calls=3
                 )
-            return _CLIENT_GEMINI.models.generate_content(
-                model=MODELE_GEMINI, contents=contenu, config=types.GenerateContentConfig(**options)
-            )
+            # Google répond parfois 503 (« forte demande ») ou 429 : on réessaie quelques fois.
+            # On ne réessaie jamais après un courriel déjà envoyé, pour éviter un doublon.
+            for tentative in range(1, TENTATIVES_GEMINI + 1):
+                try:
+                    return _CLIENT_GEMINI.models.generate_content(
+                        model=MODELE_GEMINI, contents=contenu, config=types.GenerateContentConfig(**options)
+                    )
+                except Exception as erreur:
+                    code = getattr(erreur, "code", None)
+                    if code not in CODES_TEMPORAIRES or self._transmis_ce_tour or tentative == TENTATIVES_GEMINI:
+                        raise
+                    print(f"[avertissement] Gemini {code}, nouvel essai {tentative}/{TENTATIVES_GEMINI - 1}")
+                    time.sleep(1.5 * tentative)
 
         if self.transmission_possible():
             try:
