@@ -18,6 +18,6 @@
   "message_limite": "Beaucoup de demandes en ce moment. Écrivez-nous à nexbot.contact@gmail.com, merci!",
   "message_limite_en": "We're very busy right now. Write to us at nexbot.contact@gmail.com, thank you!",
   "limite_messages_jour": 200,
-  "max_tokens": 400,
+  "max_tokens": 1500,
   "faq": []
 }
