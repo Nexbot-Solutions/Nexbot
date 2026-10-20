@@ -131,6 +131,7 @@ section { padding-block: 96px 8px; }
 .plan li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; }
 .plan li::before { content: ""; width: 7px; height: 7px; margin-top: 0.55em; border-radius: 50%; background: var(--violet); }
 .plan.featured { border: 1.5px solid transparent; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 70px rgba(139, 92, 246, 0.28); }
+.plan.premium { border: 1.5px solid transparent; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 0 6px var(--bg), 0 0 0 8px var(--violet-hi), 0 0 110px rgba(139, 92, 246, 0.5); }
 .fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
 
 /* Objectif */
@@ -287,7 +288,7 @@ body { margin: 0; }
         </ul>
         <a class="btn violet" href="https://buy.stripe.com/9B600i8p87Qq79l8npfrW01" target="_blank" rel="noopener">Choose Pro</a>
       </div>
-      <div class="card plan">
+      <div class="card plan premium">
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="13" width="4" height="8"/><rect x="10" y="8" width="4" height="13"/><rect x="16" y="3" width="4" height="18"/></svg></div>
         <h3>BUSINESS</h3>
         <p class="desc">Advanced automation, tailored to business needs.</p>
