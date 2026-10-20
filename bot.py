@@ -13,8 +13,10 @@ import time
 import unicodedata
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from email.message import EmailMessage
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 PLANS = ("essentiel", "pro", "business")
 
@@ -62,6 +64,15 @@ _AFFIRME_TRANSMISSION = re.compile(
     r"|(has|have) been (sent|forwarded|passed|submitted)",
     re.IGNORECASE,
 )
+
+
+def date_locale(fuseau: str = "") -> str:
+    """Date et heure pour le courriel, à l'heure du client (Québec par défaut)."""
+    nom = fuseau or "America/Toronto"
+    try:
+        return datetime.now(ZoneInfo(nom)).strftime("%Y-%m-%d %H:%M") + f" (heure de {nom.split('/')[-1].replace('_', ' ')})"
+    except Exception:  # fuseau inconnu ou base de fuseaux absente
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M") + " (UTC)"
 
 
 def courriel_configure() -> bool:
@@ -274,7 +285,7 @@ class Bot:
             f"Nom : {nom or '(non fourni)'}\n"
             f"Pour le joindre : {contact}\n"
             f"Langue du visiteur : {'anglais' if self.langue == 'en' else 'français'}\n"
-            f"Date : {time.strftime('%Y-%m-%d %H:%M')} (heure du serveur)\n\n"
+            f"Date : {date_locale(self.config.get('fuseau', ''))}\n\n"
             f"Résumé :\n{resume}\n\n"
             f"Extrait de la conversation :\n{extrait}\n\n"
             f"--\nEnvoyé automatiquement par NexBot. Le visiteur a accepté d'être contacté. "
