@@ -121,8 +121,8 @@ section { padding-block: 96px 8px; }
 
 /* Couleur du bot : démonstration cliquable (le vrai look du widget) */
 .demo-couleur { --c: #8b5cf6; --haut: #9a6dff; --haut2: #a47bff; --bas: #5b2fd6; --clair: #bda4ff; --wfond: #07050d; --ent1: #1a1033; --ent2: #120c22; --wbord: #2a1f47; --wbot: #1d1433; --wmuet: #a99fc4; --wph: #7d7399; --wtexte: #f3f0fa; --sur: #fff; --teinte: #ffffff; --glow: rgba(139, 92, 246, 0.3); --glow2: rgba(139, 92, 246, 0.55);
-  display: flex; flex-direction: column; gap: 30px; align-items: center; justify-content: center; }
-.wd { width: min(340px, 100%); display: grid; gap: 16px; justify-items: end; }
+  display: flex; flex-wrap: wrap; gap: 44px; align-items: center; justify-content: center; }
+.wd { width: min(340px, 100%); }
 .wd-panneau { width: 100%; background: var(--wfond); border: 1px solid var(--wbord); border-radius: 22px; overflow: hidden; color: var(--wtexte); box-shadow: 0 0 60px var(--glow), 0 16px 48px rgba(0, 0, 0, 0.6); }
 .wd-entete { background: linear-gradient(135deg, var(--ent1), var(--ent2)); border-bottom: 1px solid var(--wbord); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
 .wd-img { position: relative; isolation: isolate; overflow: hidden; background: #000; border-radius: 50%; flex: none; }
@@ -140,7 +140,7 @@ section { padding-block: 96px 8px; }
 .wd-zone span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: var(--wfond); color: var(--wph); border: 1px solid var(--wbord); border-radius: 999px; padding: 10px 16px; font-size: 14px; }
 .wd-zone b { background: linear-gradient(135deg, var(--haut2), var(--bas)); color: var(--sur); border-radius: 999px; padding: 0 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; box-shadow: 0 4px 16px var(--glow); }
 .wd-pied { font-size: 10.5px; color: var(--wph); text-align: center; padding: 0 12px 10px; background: var(--ent2); letter-spacing: 0.04em; }
-.wd-bulle { width: 64px; height: 64px; border: 1.5px solid var(--c); box-shadow: 0 0 28px var(--glow2), 0 6px 24px rgba(0, 0, 0, 0.5); }
+.wd-bulle { width: 96px; height: 96px; margin-bottom: 6px; border: 1.5px solid var(--c); box-shadow: 0 0 28px var(--glow2), 0 6px 24px rgba(0, 0, 0, 0.5); }
 .choix { display: grid; gap: 14px; justify-items: center; text-align: center; }
 .choix .hint { color: var(--muted); font-size: 0.92rem; }
 .dots { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
@@ -309,9 +309,9 @@ body { margin: 0; }
           <div class="wd-zone"><span>Écrivez votre message…</span><b>Envoyer</b></div>
           <div class="wd-pied">Propulsé par NexBot</div>
         </div>
-        <div class="wd-img wd-bulle"><img src="/static/IMG_7106.jpeg" alt="" draggable="false"></div>
       </div>
       <div class="choix">
+        <div class="wd-img wd-bulle"><img src="/static/IMG_7106.jpeg" alt="" draggable="false"></div>
         <span class="hint">Choisissez la couleur de votre entreprise</span>
         <div class="dots" id="dots-couleur">
           <button type="button" style="--d:#2f9e6e" data-c="#2f9e6e" aria-label="Vert" aria-pressed="false"></button>
