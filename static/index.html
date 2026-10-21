@@ -120,7 +120,7 @@ section { padding-block: 96px 8px; }
 .chat hr { border: 0; border-top: 1px dashed var(--line); width: 100%; margin: 4px 0; }
 
 /* Couleur du bot : démonstration cliquable */
-.demo-couleur { --c: #2f9e6e; --c-bord: rgba(47, 158, 110, 0.4); --c-fond: rgba(47, 158, 110, 0.16); --c-glow: rgba(47, 158, 110, 0.2); --sur: #fff;
+.demo-couleur { --c: #8b5cf6; --c-bord: rgba(139, 92, 246, 0.4); --c-fond: rgba(139, 92, 246, 0.16); --c-glow: rgba(139, 92, 246, 0.2); --sur: #fff;
   display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: center; }
 .mini { width: min(260px, 100%); background: #0d0a16; border: 1px solid var(--c-bord); border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px var(--c-glow); transition: border-color .25s, box-shadow .25s; }
 .mini-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--c-fond); border-bottom: 1px solid var(--c-bord); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; transition: background .25s, border-color .25s; }
@@ -298,13 +298,13 @@ body { margin: 0; }
       <div class="choix">
         <span class="hint">Choisissez la couleur de votre entreprise</span>
         <div class="dots" id="dots-couleur">
-          <button type="button" style="--d:#2f9e6e" data-c="#2f9e6e" aria-label="Vert" aria-pressed="true"></button>
+          <button type="button" style="--d:#2f9e6e" data-c="#2f9e6e" aria-label="Vert" aria-pressed="false"></button>
           <button type="button" style="--d:#e0a526" data-c="#e0a526" aria-label="Orange" aria-pressed="false"></button>
           <button type="button" style="--d:#2f5bea" data-c="#2f5bea" aria-label="Bleu" aria-pressed="false"></button>
           <button type="button" style="--d:#d4537e" data-c="#d4537e" aria-label="Rose" aria-pressed="false"></button>
-          <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Mauve" aria-pressed="false"></button>
+          <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Mauve" aria-pressed="true"></button>
           <button type="button" style="--d:#e8553d" data-c="#e8553d" aria-label="Rouge" aria-pressed="false"></button>
-          <label title="Autre couleur"><input type="color" value="#2f9e6e" aria-label="Autre couleur"></label>
+          <label title="Autre couleur"><input type="color" value="#8b5cf6" aria-label="Autre couleur"></label>
         </div>
       </div>
     </div>
