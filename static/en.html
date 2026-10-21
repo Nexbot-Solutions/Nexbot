@@ -119,6 +119,11 @@ section { padding-block: 96px 8px; }
 .tag.warn { color: var(--warn); border-color: var(--warn); }
 .chat hr { border: 0; border-top: 1px dashed var(--line); width: 100%; margin: 4px 0; }
 
+/* Couleur du bot */
+.swatches { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.swatch { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); font-size: 0.92rem; font-weight: 500; }
+.swatch i { width: 14px; height: 14px; border-radius: 50%; background: var(--c); display: block; box-shadow: 0 0 14px var(--c); }
+
 /* Offres */
 .plans { align-items: stretch; }
 .plan { grid-template-rows: auto auto auto auto 1fr auto; gap: 16px; padding: 34px 28px; }
@@ -253,6 +258,20 @@ body { margin: 0; }
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
         <h3>Bilingual, French and English</h3><p>NexBot replies in your customer's language, with no setup on their side.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="couleur">
+    <div class="sec-head">
+      <span class="label">In your company's colors</span>
+      <h2><span class="grad">An assistant that matches your website.</span></h2>
+      <p>The NexBot widget picks up your website's main color: the button, the header and the chat bubbles all match it. Your customers see an assistant that feels like part of your business. Prefer a specific color? Tell us which one and we'll apply it.</p>
+    </div>
+    <div class="swatches" aria-label="Color examples">
+      <span class="swatch" style="--c:#2f9e6e"><i></i>Bakery</span>
+      <span class="swatch" style="--c:#e0a526"><i></i>Garage</span>
+      <span class="swatch" style="--c:#2f5bea"><i></i>Clinic</span>
+      <span class="swatch" style="--c:#d4537e"><i></i>Boutique</span>
     </div>
   </section>
 
