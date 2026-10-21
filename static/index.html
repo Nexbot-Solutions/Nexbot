@@ -119,10 +119,28 @@ section { padding-block: 96px 8px; }
 .tag.warn { color: var(--warn); border-color: var(--warn); }
 .chat hr { border: 0; border-top: 1px dashed var(--line); width: 100%; margin: 4px 0; }
 
-/* Couleur du bot */
-.swatches { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.swatch { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); font-size: 0.92rem; font-weight: 500; }
-.swatch i { width: 14px; height: 14px; border-radius: 50%; background: var(--c); display: block; box-shadow: 0 0 14px var(--c); }
+/* Couleur du bot : démonstration cliquable */
+.demo-couleur { --c: #2f9e6e; --c-bord: rgba(47, 158, 110, 0.4); --c-fond: rgba(47, 158, 110, 0.16); --c-glow: rgba(47, 158, 110, 0.2); --sur: #fff;
+  display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: center; }
+.mini { width: min(260px, 100%); background: #0d0a16; border: 1px solid var(--c-bord); border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px var(--c-glow); transition: border-color .25s, box-shadow .25s; }
+.mini-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--c-fond); border-bottom: 1px solid var(--c-bord); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; transition: background .25s, border-color .25s; }
+.mini-head i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); display: block; transition: background .25s; }
+.mini-body { padding: 14px; display: grid; gap: 9px; font-size: 0.86rem; line-height: 1.4; }
+.mini .b, .mini .u { max-width: 88%; padding: 9px 12px; }
+.mini .b { background: #1b1826; justify-self: start; border-radius: 14px 14px 14px 4px; }
+.mini .u { background: var(--c); color: var(--sur); justify-self: end; border-radius: 14px 14px 4px 14px; transition: background .25s, color .25s; }
+.mini-foot { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--c-bord); font-size: 0.78rem; color: #7d7399; }
+.mini-foot span { flex: 1; }
+.mini-foot b { background: var(--c); color: var(--sur); font-weight: 600; padding: 5px 12px; border-radius: 999px; transition: background .25s, color .25s; }
+.choix { display: grid; gap: 14px; justify-items: start; }
+.choix .hint { color: var(--muted); font-size: 0.92rem; }
+.dots { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.dots button { width: 32px; height: 32px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--d); }
+.dots button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--d); }
+.dots label { position: relative; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: block; background: conic-gradient(#e8553d, #e0a526, #2f9e6e, #2f5bea, #8b5cf6, #d4537e, #e8553d); }
+.dots label:focus-within { outline: 2px solid var(--violet-hi); outline-offset: 3px; }
+.dots label.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--c); }
+.dots input { opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; padding: 0; border: 0; }
 
 /* Offres */
 .plans { align-items: stretch; }
@@ -267,11 +285,28 @@ body { margin: 0; }
       <h2><span class="grad">Un assistant qui ressemble à votre site.</span></h2>
       <p>Le widget NexBot prend la couleur principale de votre site : le bouton, l'en-tête et les bulles de conversation s'y accordent. Vos clients voient un assistant qui fait partie de votre entreprise. Vous préférez une couleur précise? Dites-nous laquelle et nous l'appliquons.</p>
     </div>
-    <div class="swatches" aria-label="Exemples de couleurs">
-      <span class="swatch" style="--c:#2f9e6e"><i></i>Boulangerie</span>
-      <span class="swatch" style="--c:#e0a526"><i></i>Garage</span>
-      <span class="swatch" style="--c:#2f5bea"><i></i>Clinique</span>
-      <span class="swatch" style="--c:#d4537e"><i></i>Boutique</span>
+    <div class="demo-couleur" id="demo-couleur">
+      <div class="mini" role="img" aria-label="Aperçu de l'assistant dont on peut changer la couleur">
+        <div class="mini-head"><i></i><span>Votre entreprise</span></div>
+        <div class="mini-body">
+          <div class="b">Bonjour! Comment puis-je vous aider?</div>
+          <div class="u">J'aimerais avoir des renseignements.</div>
+          <div class="b">Bien sûr, je m'en occupe!</div>
+        </div>
+        <div class="mini-foot"><span>Écrivez votre message…</span><b>Envoyer</b></div>
+      </div>
+      <div class="choix">
+        <span class="hint">Choisissez la couleur de votre entreprise</span>
+        <div class="dots" id="dots-couleur">
+          <button type="button" style="--d:#2f9e6e" data-c="#2f9e6e" aria-label="Vert" aria-pressed="true"></button>
+          <button type="button" style="--d:#e0a526" data-c="#e0a526" aria-label="Orange" aria-pressed="false"></button>
+          <button type="button" style="--d:#2f5bea" data-c="#2f5bea" aria-label="Bleu" aria-pressed="false"></button>
+          <button type="button" style="--d:#d4537e" data-c="#d4537e" aria-label="Rose" aria-pressed="false"></button>
+          <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Mauve" aria-pressed="false"></button>
+          <button type="button" style="--d:#e8553d" data-c="#e8553d" aria-label="Rouge" aria-pressed="false"></button>
+          <label title="Autre couleur"><input type="color" value="#2f9e6e" aria-label="Autre couleur"></label>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -380,6 +415,25 @@ document.getElementById('copy').addEventListener('click', function () {
   }
   try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (e) { fallback(); }
 });
+</script>
+
+<script>
+(function () {
+  var demo = document.getElementById('demo-couleur');
+  if (!demo) return;
+  var pastilles = demo.querySelectorAll('.dots button'), autre = demo.querySelector('.dots label'), champ = autre.querySelector('input');
+  function rgba(h, a) { return 'rgba(' + parseInt(h.slice(1, 3), 16) + ',' + parseInt(h.slice(3, 5), 16) + ',' + parseInt(h.slice(5, 7), 16) + ',' + a + ')'; }
+  function lum(h) { return (0.299 * parseInt(h.slice(1, 3), 16) + 0.587 * parseInt(h.slice(3, 5), 16) + 0.114 * parseInt(h.slice(5, 7), 16)) / 255; }
+  function appliquer(c, depuisChamp) {
+    var s = demo.style;
+    s.setProperty('--c', c); s.setProperty('--c-bord', rgba(c, 0.4)); s.setProperty('--c-fond', rgba(c, 0.16));
+    s.setProperty('--c-glow', rgba(c, 0.2)); s.setProperty('--sur', lum(c) > 0.68 ? '#111' : '#fff');
+    for (var i = 0; i < pastilles.length; i++) pastilles[i].setAttribute('aria-pressed', !depuisChamp && pastilles[i].getAttribute('data-c') === c ? 'true' : 'false');
+    autre.className = depuisChamp ? 'on' : '';
+  }
+  for (var i = 0; i < pastilles.length; i++) pastilles[i].addEventListener('click', function () { appliquer(this.getAttribute('data-c'), false); });
+  champ.addEventListener('input', function () { appliquer(champ.value, true); });
+})();
 </script>
 
 <script src="/widget.js" data-client="nexbot" async></script>
