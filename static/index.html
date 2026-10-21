@@ -121,8 +121,8 @@ section { padding-block: 96px 8px; }
 
 /* Couleur du bot : démonstration cliquable (le vrai look du widget) */
 .demo-couleur { --c: #8b5cf6; --haut: #9a6dff; --haut2: #a47bff; --bas: #5b2fd6; --clair: #bda4ff; --wfond: #07050d; --ent1: #1a1033; --ent2: #120c22; --wbord: #2a1f47; --wbot: #1d1433; --wmuet: #a99fc4; --wph: #7d7399; --wtexte: #f3f0fa; --sur: #fff; --teinte: #ffffff; --glow: rgba(139, 92, 246, 0.3); --glow2: rgba(139, 92, 246, 0.55);
-  display: flex; flex-wrap: wrap; gap: 36px; align-items: center; justify-content: center; }
-.wd { width: min(300px, 100%); display: grid; gap: 16px; justify-items: end; }
+  display: flex; flex-direction: column; gap: 30px; align-items: center; justify-content: center; }
+.wd { width: min(340px, 100%); display: grid; gap: 16px; justify-items: end; }
 .wd-panneau { width: 100%; background: var(--wfond); border: 1px solid var(--wbord); border-radius: 22px; overflow: hidden; color: var(--wtexte); box-shadow: 0 0 60px var(--glow), 0 16px 48px rgba(0, 0, 0, 0.6); }
 .wd-entete { background: linear-gradient(135deg, var(--ent1), var(--ent2)); border-bottom: 1px solid var(--wbord); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
 .wd-img { position: relative; isolation: isolate; overflow: hidden; background: #000; border-radius: 50%; flex: none; }
@@ -141,16 +141,15 @@ section { padding-block: 96px 8px; }
 .wd-zone b { background: linear-gradient(135deg, var(--haut2), var(--bas)); color: var(--sur); border-radius: 999px; padding: 0 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; box-shadow: 0 4px 16px var(--glow); }
 .wd-pied { font-size: 10.5px; color: var(--wph); text-align: center; padding: 0 12px 10px; background: var(--ent2); letter-spacing: 0.04em; }
 .wd-bulle { width: 64px; height: 64px; border: 1.5px solid var(--c); box-shadow: 0 0 28px var(--glow2), 0 6px 24px rgba(0, 0, 0, 0.5); }
-.choix { display: grid; gap: 14px; justify-items: start; }
+.choix { display: grid; gap: 14px; justify-items: center; text-align: center; }
 .choix .hint { color: var(--muted); font-size: 0.92rem; }
-.dots { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.dots { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
 .dots button { width: 32px; height: 32px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--d); }
 .dots button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--d); }
 .dots label { position: relative; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: block; background: conic-gradient(#e8553d, #e0a526, #2f9e6e, #2f5bea, #8b5cf6, #d4537e, #e8553d); }
 .dots label:focus-within { outline: 2px solid var(--violet-hi); outline-offset: 3px; }
 .dots label.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--c); }
 .dots input { opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; padding: 0; border: 0; }
-@media (max-width: 760px) { .choix { justify-items: center; text-align: center; } }
 
 /* Offres */
 .plans { align-items: stretch; }
