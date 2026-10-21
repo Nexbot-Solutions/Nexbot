@@ -72,7 +72,7 @@
     if (couleur === VIOLET_NEXBOT) {
       return { c: couleur, haut: "#9a6dff", haut2: "#a47bff", bas: "#5b2fd6", clair: "#bda4ff",
                fond: "#07050d", ent1: "#1a1033", ent2: "#120c22", bord: "#2a1f47", bot: "#1d1433",
-               muet: "#a99fc4", ph: "#7d7399", texte: "#f3f0fa", sur: "#fff" };
+               muet: "#a99fc4", ph: "#7d7399", texte: "#f3f0fa", sur: "#fff", teinte: "#ffffff" };
     }
     // Une couleur très foncée serait invisible sur le fond sombre : on l'éclaircit un peu.
     if (luminosite(couleur) < 0.2) couleur = melange(couleur, "#ffffff", 0.35);
@@ -92,7 +92,8 @@
       muet: melange("#b8b8b8", couleur, 0.25),
       ph: melange("#8c8c8c", couleur, 0.2),
       texte: melange("#f5f5f5", couleur, 0.06),
-      sur: claire ? "#111111" : "#ffffff"
+      sur: claire ? "#111111" : "#ffffff",
+      teinte: couleur
     };
   }
 
@@ -152,6 +153,8 @@
       ".bulle{width:64px;height:64px;border-radius:50%;border:1.5px solid " + P.c + ";cursor:pointer;background:#000;padding:0;overflow:hidden;box-shadow:0 0 28px " + rgba(P.c, .55) + ",0 6px 24px rgba(0,0,0,.5);transition:transform .2s,box-shadow .2s}" +
       ".bulle:hover{transform:scale(1.06);box-shadow:0 0 36px " + rgba(P.c, .75) + ",0 6px 24px rgba(0,0,0,.5)}" +
       ".bulle img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.9);transform-origin:51% 50%}" +
+      ".bulle,.avatar{position:relative;isolation:isolate}" +
+      ".bulle::after,.avatar::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:" + P.teinte + ";mix-blend-mode:multiply;pointer-events:none}" +
       ".bulle:focus-visible,.envoyer:focus-visible,.fermer:focus-visible{outline:2px solid " + P.clair + ";outline-offset:3px}" +
       ".panneau{display:none;position:absolute;right:0;bottom:80px;width:370px;max-width:calc(100vw - 40px);height:540px;max-height:calc(100vh - 120px);background:" + P.fond + ";border:1px solid " + P.bord + ";border-radius:22px;box-shadow:0 0 60px " + rgba(P.c, .3) + ",0 16px 48px rgba(0,0,0,.6);overflow:hidden;flex-direction:column;color:" + P.texte + "}" +
       ".panneau.ouvert{display:flex}" +
