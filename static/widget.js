@@ -6,7 +6,7 @@
  * Couleur : celle du champ "couleur" du fichier clients/ID_DU_CLIENT.json
  * (ex. "#0a7d5a"). Pour la tester sans toucher au serveur, on peut aussi
  * ajouter data-couleur="#0a7d5a" sur la balise <script>.
- * Avec la valeur "auto" (data-couleur="auto" ou "couleur": "auto"), le widget
+ * Sans couleur indiquée (ou avec "auto"), le widget
  * prend la couleur principale du site du client.
  */
 (function () {
@@ -141,7 +141,7 @@
   }
 
   function demarrer(cfg) {
-    var choix = script.getAttribute("data-couleur") || cfg.couleur;
+    var choix = script.getAttribute("data-couleur") || cfg.couleur || "auto";
     if (String(choix).toLowerCase() === "auto") choix = detecterCouleurSite();
     var P = palette(choix);
     var hote = el("div", { style: "position:fixed;right:20px;bottom:20px;z-index:2147483000;font-family:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;" });

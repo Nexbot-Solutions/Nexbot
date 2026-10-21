@@ -2,7 +2,7 @@
   "id": "demo",
   "nom_entreprise": "Clinique Exemple",
   "plan": "business",
-  "couleur": "#2F5BEA",
+  "couleur": "auto",
   "domaines_autorises": [],
   "langue": "français québécois",
   "ton": "chaleureux, respectueux, vouvoiement",

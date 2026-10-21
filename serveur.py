@@ -134,7 +134,7 @@ def config_client(id_client):
     return jsonify(
         nom=config["nom_entreprise"],
         accueil=accueil,
-        couleur=config.get("couleur", "#2F5BEA"),
+        couleur=config.get("couleur", "auto"),
     )
 
 

@@ -2,7 +2,7 @@
   "id": "nom-du-client",
   "nom_entreprise": "Nom de l'entreprise",
   "plan": "essentiel",
-  "couleur": "#2F5BEA",
+  "couleur": "auto",
   "domaines_autorises": [
     "siteduclient.com"
   ],
