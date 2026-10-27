@@ -126,7 +126,8 @@ section { padding-block: 96px 8px; }
 .chat-anim { max-width: 580px; margin: 22px auto 0; }
 .cv { --cv-h: 440px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: var(--bg); color: var(--fg); box-shadow: 0 0 60px rgba(139, 92, 246, 0.3), 0 16px 48px rgba(0, 0, 0, 0.6); }
 .cv-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #1a1033, var(--surface)); border-bottom: 1px solid var(--line); }
-.cv-av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: #000; border: 1px solid var(--violet); flex: none; }
+.cv-av { position: relative; isolation: isolate; width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: #000; border: 1px solid var(--violet); flex: none; }
+.cv-av::after { content: ""; position: absolute; inset: 0; background: #fff; mix-blend-mode: multiply; pointer-events: none; }
 .cv-av img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.9); transform-origin: 51% 50%; }
 .cv-name { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.08em; line-height: 1.3; text-transform: uppercase; }
 .cv-state { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 2px; line-height: 1.3; }
@@ -296,7 +297,7 @@ body { margin: 0; }
     <div class="chat-anim" role="img" aria-label="Exemple de conversation avec NexBot : un client signale une commande endommagée, NexBot lui demande son numéro de commande, puis transmet un résumé prioritaire à l'équipe">
       <div class="cv" id="cv" aria-hidden="true">
         <div class="cv-head">
-          <div class="cv-av"><img src="/static/mascotte.png" alt="" width="40" height="40" draggable="false"></div>
+          <div class="cv-av"><img src="/static/IMG_7106.jpeg" alt="" width="38" height="38" draggable="false"></div>
           <div><div class="cv-name">NexBot</div><div class="cv-state">En ligne</div></div>
           <span class="cv-x">×</span>
         </div>
