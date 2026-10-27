@@ -122,6 +122,8 @@ section { padding-block: 96px 8px; }
 .tag { justify-self: end; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding: 3px 11px; border-radius: 999px; border: 1px solid; }
 .tag.ok { color: var(--ok); border-color: var(--ok); }
 .tag.warn { color: var(--warn); border-color: var(--warn); }
+.chat-anim { max-width: 580px; margin: 22px auto 0; border-radius: 26px; box-shadow: 0 0 80px rgba(139, 92, 246, 0.14); }
+.chat-anim img { display: block; width: 100%; height: auto; border-radius: 26px; }
 .chat hr { border: 0; border-top: 1px dashed var(--line); width: 100%; margin: 4px 0; }
 
 /* Couleur du bot : démonstration cliquable (le vrai look du widget) */
@@ -257,15 +259,11 @@ body { margin: 0; }
       <div class="card"><span class="num">2</span><h3>NexBot trie et répond</h3><p>Les questions de base reçoivent une réponse immédiate. Les autres demandes sont qualifiées.</p></div>
       <div class="card"><span class="num">3</span><h3>Votre équipe traite l'essentiel</h3><p>Les demandes prioritaires lui sont transmises, avec le contexte déjà résumé.</p></div>
     </div>
-    <div class="chat" aria-label="Exemple de conversation">
-      <div class="chat-head"><i></i><span class="label">Exemple de conversation</span></div>
-      <div class="msg client">Bonjour, quelles sont vos heures d'ouverture?</div>
-      <div class="msg bot">Bonjour! Nous sommes ouverts du mardi au samedi, de 9 h à 17 h.</div>
-      <span class="tag ok">Réglé par NexBot</span>
-      <hr>
-      <div class="msg client">Ma commande est arrivée endommagée et j'en ai besoin cette semaine.</div>
-      <div class="msg bot">Je transmets votre demande à notre équipe tout de suite.</div>
-      <span class="tag warn">Prioritaire, transmis à l'équipe</span>
+    <div class="chat-anim">
+      <picture>
+        <source srcset="/static/exemple-conversation.webp" type="image/webp">
+        <img src="/static/exemple-conversation.gif" alt="Exemple de conversation avec NexBot : une question simple réglée par NexBot, puis une demande prioritaire transmise à l'équipe" width="800" height="944" loading="lazy">
+      </picture>
     </div>
   </section>
 
