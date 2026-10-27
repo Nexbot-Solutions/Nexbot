@@ -158,7 +158,7 @@ section { padding-block: 96px 8px; }
 
 /* Offres */
 .plans { align-items: stretch; }
-.plan { grid-template-rows: auto auto auto auto 1fr auto; gap: 16px; padding: 34px 28px; }
+.plan { grid-template-rows: auto auto auto auto 1fr auto auto; gap: 16px; padding: 34px 28px; }
 .plan h3 { font-family: var(--font-display); font-weight: 400; font-size: 1rem; letter-spacing: 0.12em; }
 .plan .desc { min-height: 3.3em; }
 .price { display: flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
@@ -170,6 +170,20 @@ section { padding-block: 96px 8px; }
 .plan.featured { border: 1.5px solid transparent; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 70px rgba(139, 92, 246, 0.28); }
 .plan.premium .btn { background: linear-gradient(135deg, #ff8fd0 0%, #b184ff 45%, #6a3df0 100%); color: #fff; border-color: rgba(255, 255, 255, 0.28); box-shadow: 0 10px 38px rgba(177, 132, 255, 0.55), 0 0 28px rgba(255, 124, 196, 0.28); }
 .plan.premium .btn:hover { filter: brightness(1.1); }
+/* "More information" tab on each plan */
+.plans:has(.more[open]) { align-items: start; } /* when a tab is open, the other cards don't stretch */
+.plan .more { min-width: 0; border-top: 1px solid var(--line); }
+.plan .more summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 2px; font-weight: 600; font-size: 0.93rem; color: var(--violet-hi); }
+.plan .more summary::-webkit-details-marker { display: none; }
+.plan .more summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.2s ease; }
+.plan .more[open] summary::after { transform: rotate(-135deg); }
+.plan .more summary:focus-visible { outline: 2px solid var(--violet-hi); outline-offset: 3px; border-radius: 8px; }
+.plan .more-body { display: grid; gap: 18px; padding: 4px 0 6px; font-size: 0.92rem; line-height: 1.5; color: var(--muted); animation: more-in 0.25s ease both; }
+.plan .more-body p { margin: 0; }
+.plan .more-body h4 { margin: 0 0 9px; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--violet-hi); }
+.plan .more-body ul { gap: 9px; font-size: 0.92rem; }
+.plan .more-body a { color: var(--violet-hi); }
+@keyframes more-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .plan.premium { border: 1.5px solid var(--violet-hi); background: linear-gradient(#150e29, #0d081a); box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 110px rgba(139, 92, 246, 0.5); }
 .fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
 
@@ -350,6 +364,34 @@ body { margin: 0; }
           <li>Automatic answers to common questions</li>
           <li>Available at all times</li>
         </ul>
+        <details class="more">
+          <summary>More information</summary>
+          <div class="more-body">
+            <div>
+              <h4>How it works</h4>
+              <p>NexBot recognizes keywords in the visitor's question and answers with the replies you wrote or approved: hours, address, prices, policies.</p>
+            </div>
+            <div>
+              <h4>What you get</h4>
+              <ul>
+                <li>No made-up answers: it only says what you have planned.</li>
+                <li>No artificial intelligence: no message is sent to an external AI service.</li>
+                <li>Answers in French and English, depending on the versions you provide.</li>
+                <li>Simple setup: we configure your assistant, then you add one line of code to your site.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Good to know</h4>
+              <ul>
+                <li>If a question isn't recognized, it shows the message you chose, for example your contact details.</li>
+                <li>Each question is handled on its own, with no memory of the conversation.</li>
+                <li>Requests are not forwarded to your team by email (available in Pro and Business).</li>
+                <li>Daily message limit (200 per day by default). After that, the visitor is invited to contact you directly.</li>
+                <li>No commitment: cancel at any time.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn ghost" href="https://buy.stripe.com/14A00i7l4fiS79lavxfrW02" target="_blank" rel="noopener">Choose Essentiel</a>
       </div>
       <div class="card plan featured">
@@ -363,6 +405,42 @@ body { margin: 0; }
           <li>Requests qualified by priority</li>
           <li>Important requests sent to your team by email</li>
         </ul>
+        <details class="more">
+          <summary>More information</summary>
+          <div class="more-body">
+            <div>
+              <h4>How it works</h4>
+              <p>NexBot understands the question in natural language and answers from the information you give it: hours, services, prices, frequently asked questions. It remembers the last 6 exchanges of the conversation.</p>
+            </div>
+            <div>
+              <h4>What you get</h4>
+              <ul>
+                <li>Natural answers, in your customer's language (French or English).</li>
+                <li>It only uses your information. If it doesn't know, it says so and invites the visitor to contact you, rather than making up a price, an hour or a policy.</li>
+                <li>You choose its tone and the topics it refuses to discuss.</li>
+                <li>If the AI service is unavailable, it answers from your FAQ instead of going silent.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Forwarding to your team</h4>
+              <ul>
+                <li>NexBot offers to forward the visitor's request, gets their agreement, then asks for their name and an email or phone number.</li>
+                <li>You receive an email with the summary, the priority (normal or urgent), the contact details, the language, the date and an excerpt of the conversation. If the visitor gave an email address, just reply to the message.</li>
+                <li>NexBot only confirms sending once the email has actually gone out. If it fails, it says so honestly and gives your contact details.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Good to know</h4>
+              <ul>
+                <li>The text of messages is sent to Google (Gemini model) only to generate the answers.</li>
+                <li>Like any virtual assistant, it can make mistakes. It does not replace your staff.</li>
+                <li>Abuse protection: 3 forwarded requests per conversation and 30 per day.</li>
+                <li>Daily message limit (200 per day by default). After that, the visitor is invited to contact you directly.</li>
+                <li>No commitment: cancel at any time.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn violet" href="https://buy.stripe.com/9B600i8p87Qq79l8npfrW01" target="_blank" rel="noopener">Choose Pro</a>
       </div>
       <div class="card plan premium">
@@ -375,6 +453,34 @@ body { margin: 0; }
           <li>Advanced automation</li>
           <li>Solution tailored to your business</li>
         </ul>
+        <details class="more">
+          <summary>More information</summary>
+          <div class="more-body">
+            <div>
+              <h4>How it works</h4>
+              <p>Everything Pro does, with a longer conversation memory and a personality that reflects your business.</p>
+            </div>
+            <div>
+              <h4>What you get</h4>
+              <ul>
+                <li>Everything in Pro: natural-language answers, off-limits topics, important requests forwarded to you by email.</li>
+                <li>Extended memory: it remembers the last 20 exchanges (6 in Pro), so it can follow long conversations without the visitor repeating themselves.</li>
+                <li>Brand personality: a style and tone written for your business, respected in every answer.</li>
+                <li><span>A setup tailored to your business. <a href="mailto:nexbot.contact@gmail.com">Write to us</a> to talk it over.</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Good to know</h4>
+              <ul>
+                <li>The text of messages is sent to Google (Gemini model) only to generate the answers.</li>
+                <li>Like any virtual assistant, it can make mistakes. It does not replace your staff.</li>
+                <li>Same protections as Pro: 3 forwarded requests per conversation and 30 per day.</li>
+                <li>Daily message limit (200 per day by default). After that, the visitor is invited to contact you directly.</li>
+                <li>No commitment: cancel at any time.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn ghost" href="https://buy.stripe.com/fZu9AS6h0daK8dp1Z1frW00" target="_blank" rel="noopener">Choose Business</a>
       </div>
     </div>

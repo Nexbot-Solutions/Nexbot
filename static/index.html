@@ -195,7 +195,7 @@ section { padding-block: 96px 8px; }
 
 /* Offres */
 .plans { align-items: stretch; }
-.plan { grid-template-rows: auto auto auto auto 1fr auto; gap: 16px; padding: 34px 28px; }
+.plan { grid-template-rows: auto auto auto auto 1fr auto auto; gap: 16px; padding: 34px 28px; }
 .plan h3 { font-family: var(--font-display); font-weight: 400; font-size: 1rem; letter-spacing: 0.12em; }
 .plan .desc { min-height: 3.3em; }
 .price { display: flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
@@ -207,6 +207,20 @@ section { padding-block: 96px 8px; }
 .plan.featured { border: 1.5px solid transparent; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 70px rgba(139, 92, 246, 0.28); }
 .plan.premium .btn { background: linear-gradient(135deg, #ff8fd0 0%, #b184ff 45%, #6a3df0 100%); color: #fff; border-color: rgba(255, 255, 255, 0.28); box-shadow: 0 10px 38px rgba(177, 132, 255, 0.55), 0 0 28px rgba(255, 124, 196, 0.28); }
 .plan.premium .btn:hover { filter: brightness(1.1); }
+/* Onglet « Plus d'informations » de chaque offre */
+.plans:has(.more[open]) { align-items: start; } /* quand un onglet est ouvert, les autres cartes ne s'étirent pas */
+.plan .more { min-width: 0; border-top: 1px solid var(--line); }
+.plan .more summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 2px; font-weight: 600; font-size: 0.93rem; color: var(--violet-hi); }
+.plan .more summary::-webkit-details-marker { display: none; }
+.plan .more summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.2s ease; }
+.plan .more[open] summary::after { transform: rotate(-135deg); }
+.plan .more summary:focus-visible { outline: 2px solid var(--violet-hi); outline-offset: 3px; border-radius: 8px; }
+.plan .more-body { display: grid; gap: 18px; padding: 4px 0 6px; font-size: 0.92rem; line-height: 1.5; color: var(--muted); animation: more-in 0.25s ease both; }
+.plan .more-body p { margin: 0; }
+.plan .more-body h4 { margin: 0 0 9px; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--violet-hi); }
+.plan .more-body ul { gap: 9px; font-size: 0.92rem; }
+.plan .more-body a { color: var(--violet-hi); }
+@keyframes more-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .plan.premium { border: 1.5px solid var(--violet-hi); background: linear-gradient(#150e29, #0d081a); box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 110px rgba(139, 92, 246, 0.5); }
 .fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
 
@@ -390,6 +404,34 @@ body { margin: 0; }
           <li>Réponses automatiques aux questions courantes</li>
           <li>Disponible en tout temps</li>
         </ul>
+        <details class="more">
+          <summary>Plus d'informations</summary>
+          <div class="more-body">
+            <div>
+              <h4>Comment ça fonctionne</h4>
+              <p>NexBot reconnaît les mots-clés de la question du visiteur et répond avec les réponses que vous avez rédigées ou approuvées : heures, adresse, tarifs, politiques.</p>
+            </div>
+            <div>
+              <h4>Ce que vous obtenez</h4>
+              <ul>
+                <li>Aucune réponse inventée : il ne dit que ce que vous avez prévu.</li>
+                <li>Aucune intelligence artificielle : aucun message n'est envoyé à un service externe d'IA.</li>
+                <li>Réponses en français et en anglais, selon les versions que vous fournissez.</li>
+                <li>Installation simple : nous configurons votre assistant, puis vous ajoutez une ligne de code à votre site.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Bon à savoir</h4>
+              <ul>
+                <li>Si la question n'est pas reconnue, il affiche le message que vous avez choisi, par exemple vos coordonnées.</li>
+                <li>Chaque question est traitée seule, sans suivi de la conversation.</li>
+                <li>Les demandes ne sont pas transmises à votre équipe par courriel (offert dans Pro et Business).</li>
+                <li>Limite quotidienne de messages (200 par jour par défaut). Ensuite, le visiteur est invité à vous joindre directement.</li>
+                <li>Sans engagement : vous annulez en tout temps.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn ghost" href="https://buy.stripe.com/14A00i7l4fiS79lavxfrW02" target="_blank" rel="noopener">Choisir Essentiel</a>
       </div>
       <div class="card plan featured">
@@ -403,6 +445,42 @@ body { margin: 0; }
           <li>Qualification des demandes par priorité</li>
           <li>Demandes importantes transmises à votre équipe par courriel</li>
         </ul>
+        <details class="more">
+          <summary>Plus d'informations</summary>
+          <div class="more-body">
+            <div>
+              <h4>Comment ça fonctionne</h4>
+              <p>NexBot comprend la question en langage naturel et répond à partir des informations que vous lui fournissez : heures, services, prix, questions fréquentes. Il se souvient des 6 derniers échanges de la conversation.</p>
+            </div>
+            <div>
+              <h4>Ce que vous obtenez</h4>
+              <ul>
+                <li>Des réponses naturelles, dans la langue du client (français ou anglais).</li>
+                <li>Il n'utilise que vos informations. S'il ne sait pas, il le dit et invite le visiteur à vous joindre, plutôt que d'inventer un prix, une heure ou une politique.</li>
+                <li>Vous choisissez son ton et les sujets dont il refuse de parler.</li>
+                <li>Si le service d'IA est indisponible, il répond avec votre FAQ au lieu de rester muet.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Transmission à votre équipe</h4>
+              <ul>
+                <li>NexBot propose au visiteur de transmettre sa demande, obtient son accord, puis lui demande son nom et un courriel ou un téléphone.</li>
+                <li>Vous recevez un courriel avec le résumé, la priorité (normale ou urgente), les coordonnées, la langue, la date et un extrait de la conversation. Si le visiteur a donné un courriel, vous n'avez qu'à répondre au message.</li>
+                <li>NexBot ne confirme l'envoi que lorsque le courriel est réellement parti. En cas d'échec, il le dit honnêtement et donne vos coordonnées.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Bon à savoir</h4>
+              <ul>
+                <li>Le texte des messages est envoyé à Google (modèle Gemini) uniquement pour générer les réponses.</li>
+                <li>Comme tout assistant virtuel, il peut se tromper. Il ne remplace pas votre équipe.</li>
+                <li>Protection contre les abus : 3 demandes transmises par conversation et 30 par jour.</li>
+                <li>Limite quotidienne de messages (200 par jour par défaut). Ensuite, le visiteur est invité à vous joindre directement.</li>
+                <li>Sans engagement : vous annulez en tout temps.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn violet" href="https://buy.stripe.com/9B600i8p87Qq79l8npfrW01" target="_blank" rel="noopener">Choisir Pro</a>
       </div>
       <div class="card plan premium">
@@ -415,6 +493,34 @@ body { margin: 0; }
           <li>Automatisation avancée</li>
           <li>Solution adaptée à votre entreprise</li>
         </ul>
+        <details class="more">
+          <summary>Plus d'informations</summary>
+          <div class="more-body">
+            <div>
+              <h4>Comment ça fonctionne</h4>
+              <p>Tout ce que fait Pro, avec une mémoire de conversation plus longue et une personnalité à l'image de votre entreprise.</p>
+            </div>
+            <div>
+              <h4>Ce que vous obtenez</h4>
+              <ul>
+                <li>Tout Pro : réponses en langage naturel, sujets interdits, transmission de vos demandes importantes par courriel.</li>
+                <li>Mémoire élargie : il se souvient des 20 derniers échanges (6 dans Pro), pour suivre les longues conversations sans que le visiteur ait à se répéter.</li>
+                <li>Personnalité de marque : un style et un ton rédigés pour votre entreprise, respectés dans chaque réponse.</li>
+                <li><span>Une mise en place adaptée à votre entreprise. <a href="mailto:nexbot.contact@gmail.com">Écrivez-nous</a> pour en discuter.</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Bon à savoir</h4>
+              <ul>
+                <li>Le texte des messages est envoyé à Google (modèle Gemini) uniquement pour générer les réponses.</li>
+                <li>Comme tout assistant virtuel, il peut se tromper. Il ne remplace pas votre équipe.</li>
+                <li>Mêmes protections que Pro : 3 demandes transmises par conversation et 30 par jour.</li>
+                <li>Limite quotidienne de messages (200 par jour par défaut). Ensuite, le visiteur est invité à vous joindre directement.</li>
+                <li>Sans engagement : vous annulez en tout temps.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
         <a class="btn ghost" href="https://buy.stripe.com/fZu9AS6h0daK8dp1Z1frW00" target="_blank" rel="noopener">Choisir Business</a>
       </div>
     </div>
