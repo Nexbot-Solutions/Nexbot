@@ -35,11 +35,18 @@ config["id"] = args.id
 config["nom_entreprise"] = args.nom
 config["plan"] = args.plan
 config["courriel_equipe"] = args.courriel_equipe
+config["limite_messages_jour"] = {"essentiel": 200, "pro": 200, "business": 1000}[args.plan]
+if args.plan != "business":
+    config.pop("logo", None)
+    config.pop("personnalite", None)
 config["domaines_autorises"] = [d.lower().replace("https://", "").replace("http://", "").strip("/") for d in args.domaine]
 destination.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 print(f"Client créé : {destination}")
 print("\n1) Ouvre ce fichier et remplis la FAQ, les heures et les infos de l'entreprise.")
+if args.plan == "business":
+    print("   Business : mets le logo du client dans static/logos/ et indique \"logo\": \"/static/logos/NOM.png\",")
+    print("   puis rédige sa « personnalite » (style et ton de la marque).")
 print("2) Redémarre le serveur (ou redéploie) pour qu'il charge le client.")
 print("3) Donne cette ligne au client, à coller avant </body> sur son site :\n")
 print(f'<script src="{args.serveur}/widget.js" data-client="{args.id}" async></script>')

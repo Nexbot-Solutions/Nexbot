@@ -3,6 +3,7 @@
   "nom_entreprise": "Nom de l'entreprise",
   "plan": "essentiel",
   "couleur": "auto",
+  "logo": "",
   "domaines_autorises": [
     "siteduclient.com"
   ],

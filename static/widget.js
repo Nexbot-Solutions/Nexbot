@@ -8,6 +8,9 @@
  * ajouter data-couleur="#0a7d5a" sur la balise <script>.
  * Sans couleur indiquée (ou avec "auto"), le widget
  * prend la couleur principale du site du client.
+ *
+ * Plan Business : le champ "logo" du fichier client (ex. "/static/logos/abc.png")
+ * remplace la mascotte NexBot, et la mention « Propulsé par NexBot » est retirée.
  */
 (function () {
   var script = document.currentScript || document.querySelector('script[src*="widget.js"]');
@@ -145,6 +148,9 @@
     var choix = script.getAttribute("data-couleur") || cfg.couleur || "auto";
     if (String(choix).toLowerCase() === "auto") choix = detecterCouleurSite();
     var P = palette(choix);
+    // Plan Business : logo de l'entreprise (sinon la mascotte NexBot)
+    var logoPerso = "";
+    try { if (cfg.logo) logoPerso = new URL(cfg.logo, base).href; } catch (e) {}
     var hote = el("div", { style: "position:fixed;right:20px;bottom:20px;z-index:2147483000;font-family:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;" });
     var ombre = hote.attachShadow ? hote.attachShadow({ mode: "open" }) : hote;
 
@@ -181,20 +187,24 @@
       ".envoyer:hover{filter:brightness(1.1)}" +
       ".envoyer:disabled{opacity:.5;cursor:default}" +
       ".pied{font-size:10.5px;color:" + P.ph + ";text-align:center;padding:0 12px 10px;background:" + P.ent2 + ";letter-spacing:.04em}" +
+      ".perso{background:#fff}" +
+      ".perso img{transform:none;object-fit:contain;padding:12%}" +
+      ".perso::after{display:none}" +
       "@media (max-width:480px){.panneau{position:fixed;right:10px;left:10px;bottom:90px;width:auto;max-width:none}}"
     });
 
     function creerLogo() {
-      return el("img", { src: LOGO, alt: "NexBot", draggable: "false" });
+      return el("img", { src: logoPerso || LOGO, alt: logoPerso ? cfg.nom : "NexBot", draggable: "false" });
     }
+    var perso = logoPerso ? " perso" : "";
 
     // --- Bulle ---
-    var bulle = el("button", { "class": "bulle", type: "button", "aria-label": T.ouvrir + cfg.nom }, [creerLogo()]);
+    var bulle = el("button", { "class": "bulle" + perso, type: "button", "aria-label": T.ouvrir + cfg.nom }, [creerLogo()]);
 
     // --- Panneau ---
     var fermer = el("button", { "class": "fermer", type: "button", "aria-label": T.fermer, text: "×" });
     var entete = el("div", { "class": "entete" }, [
-      el("div", { "class": "avatar" }, [creerLogo()]),
+      el("div", { "class": "avatar" + perso }, [creerLogo()]),
       el("div", {}, [
         el("div", { "class": "titre", text: cfg.nom }),
         el("div", { "class": "sous", text: T.enLigne })
@@ -208,8 +218,11 @@
     var envoyer = el("button", { "class": "envoyer", type: "submit", text: T.envoyer });
     var formulaire = el("form", { "class": "zone" }, [champ, envoyer]);
 
-    var pied = el("div", { "class": "pied", text: T.pied });
-    var panneau = el("div", { "class": "panneau", role: "dialog", "aria-label": T.assistant + cfg.nom }, [entete, zoneMessages, formulaire, pied]);
+    var parties = [entete, zoneMessages, formulaire];
+    // Plan Business : sans la mention « Propulsé par NexBot »
+    if (!cfg.marque_blanche) parties.push(el("div", { "class": "pied", text: T.pied }));
+    else formulaire.style.paddingBottom = "16px";
+    var panneau = el("div", { "class": "panneau", role: "dialog", "aria-label": T.assistant + cfg.nom }, parties);
 
     ombre.appendChild(css);
     ombre.appendChild(panneau);

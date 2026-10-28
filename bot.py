@@ -45,13 +45,17 @@ _FICHIER_COMPTEURS = Path(__file__).resolve().parent / "compteurs.json"
 # Combien d'échanges le bot garde en mémoire selon le plan
 MEMOIRE_ECHANGES = {"essentiel": 0, "pro": 6, "business": 20}
 
+# Limite de messages par jour selon le plan (si le fichier du client n'en précise pas)
+LIMITE_MESSAGES_JOUR = {"essentiel": 200, "pro": 200, "business": 1000}
+
 MODELE_GEMINI = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 TENTATIVES_GEMINI = 3  # 1 essai + 2 reprises
 CODES_TEMPORAIRES = {429, 500, 502, 503, 504}
 
 # ---------- Transmission d'une demande à l'équipe du client (courriel) ----------
 MAX_TRANSMISSIONS_PAR_SESSION = 3
-MAX_TRANSMISSIONS_PAR_JOUR = 30
+# Demandes transmises à l'équipe par jour, selon le plan
+MAX_TRANSMISSIONS_PAR_JOUR = {"essentiel": 0, "pro": 30, "business": 100}
 _TRANSMISSIONS_JOUR = {}  # id_client -> [jour, nombre]
 _REGEX_COURRIEL = re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")
 
@@ -268,7 +272,7 @@ class Bot:
             jour, nombre = _TRANSMISSIONS_JOUR.get(cle, [aujourdhui, 0])
             if jour != aujourdhui:
                 jour, nombre = aujourdhui, 0
-            if nombre >= MAX_TRANSMISSIONS_PAR_JOUR:
+            if nombre >= MAX_TRANSMISSIONS_PAR_JOUR[self.plan]:
                 return echec
             _TRANSMISSIONS_JOUR[cle] = [jour, nombre + 1]
 
@@ -440,7 +444,7 @@ class Bot:
 
     def _limite_atteinte(self) -> bool:
         """Protège la facture Gemini avec un compteur conservé après redémarrage."""
-        limite = int(self.config.get("limite_messages_jour", 200))
+        limite = int(self.config.get("limite_messages_jour") or LIMITE_MESSAGES_JOUR[self.plan])
         cle = self.config.get("id") or self.config["nom_entreprise"]
         aujourdhui = time.strftime("%Y-%m-%d")
         with _VERROU:

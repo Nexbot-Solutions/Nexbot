@@ -135,11 +135,18 @@ def config_client(id_client):
         accueil = config.get("message_accueil_en") or "Hello! How can I help you?"
     else:
         accueil = config.get("message_accueil", "Bonjour! Comment puis-je vous aider?")
-    return jsonify(
+    reponse = dict(
         nom=config["nom_entreprise"],
         accueil=accueil,
         couleur=config.get("couleur", "auto"),
     )
+    # Plan Business : logo de l'entreprise dans l'assistant et aucune mention « Propulsé par NexBot »
+    if config.get("plan") == "business":
+        reponse["marque_blanche"] = True
+        logo = str(config.get("logo") or "").strip()
+        if logo.startswith(("https://", "/static/")):
+            reponse["logo"] = logo
+    return jsonify(**reponse)
 
 
 @app.route("/api/<id_client>/message", methods=["POST", "OPTIONS"])
