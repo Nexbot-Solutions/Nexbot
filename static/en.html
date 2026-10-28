@@ -220,6 +220,12 @@ section { padding-block: 96px 8px; }
 .plan .more-body h4 { margin: 0 0 9px; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--violet-hi); }
 .plan .more-body ul { gap: 9px; font-size: 0.92rem; }
 .plan .more-body a { color: var(--violet-hi); }
+/* "Setup fee: $0" banner under the plans */
+.nofee { max-width: 760px; margin: 36px auto 0; display: flex; align-items: center; gap: 22px; padding: 20px 26px; border: 1px solid var(--ok); border-radius: 22px; background: linear-gradient(135deg, rgba(95, 211, 160, 0.1), rgba(139, 92, 246, 0.08)); box-shadow: 0 0 50px rgba(95, 211, 160, 0.1); }
+.nofee .big { flex: none; font-family: var(--font-display); font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1; color: var(--ok); }
+.nofee h3 { margin: 0 0 4px; font-size: 1.05rem; }
+.nofee p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+@media (max-width: 560px) { .nofee { flex-direction: column; text-align: center; gap: 10px; padding: 20px; } }
 @keyframes more-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .plan.premium { border: 1.5px solid var(--violet-hi); background: linear-gradient(#150e29, #0d081a); box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 110px rgba(139, 92, 246, 0.5); }
 .fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
@@ -416,7 +422,7 @@ body { margin: 0; }
                 <li>No made-up answers: it only says what you have planned.</li>
                 <li>No artificial intelligence: no message is sent to an external AI service.</li>
                 <li>Answers in French and English, depending on the versions you provide.</li>
-                <li>Simple setup: we configure your assistant, then you add one line of code to your site.</li>
+                <li>Free setup and installation: we configure your assistant, then you add one line of code to your site.</li>
               </ul>
             </div>
             <div>
@@ -525,6 +531,13 @@ body { margin: 0; }
         <a class="btn ghost" href="https://buy.stripe.com/fZu9AS6h0daK8dp1Z1frW00" target="_blank" rel="noopener">Choose Business</a>
       </div>
     </div>
+    <div class="nofee">
+      <div class="big">$0</div>
+      <div>
+        <h3>Setup fee</h3>
+        <p>We set up and install your assistant for free. You only pay the monthly subscription for your plan.</p>
+      </div>
+    </div>
     <p class="fine">Prices in Canadian dollars, plus taxes. Email forwarding of requests is included in Pro and Business.</p>
   </section>
 
@@ -535,6 +548,7 @@ body { margin: 0; }
     </div>
     <div class="faq">
       <details><summary>How is NexBot installed on my website?</summary><p>We set up your assistant, then you add a single line of code to your site. Nothing to install for your customers.</p></details>
+      <details><summary>Are there any setup or installation fees?</summary><p>No. Setting up and installing your assistant is free. You only pay the monthly subscription for your plan.</p></details>
       <details><summary>Which languages does NexBot answer in?</summary><p>French and English. It replies in the language your customer uses.</p></details>
       <details><summary>Can NexBot make mistakes?</summary><p>Yes, like any virtual assistant. It relies on your business's information, says when it doesn't know and invites your customer to contact you directly. It does not replace your staff.</p></details>
       <details><summary>What happens to my customers' conversations?</summary><p>They are not saved in a database and are deleted automatically after the session. The only exception: if a visitor asks for their request to be passed on, they first agree, then an email is sent to your team. Details are in our <a href="/en/privacy">privacy policy</a>.</p></details>

@@ -220,6 +220,12 @@ section { padding-block: 96px 8px; }
 .plan .more-body h4 { margin: 0 0 9px; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--violet-hi); }
 .plan .more-body ul { gap: 9px; font-size: 0.92rem; }
 .plan .more-body a { color: var(--violet-hi); }
+/* Encadré « frais de configuration : 0 $ » sous les offres */
+.nofee { max-width: 760px; margin: 36px auto 0; display: flex; align-items: center; gap: 22px; padding: 20px 26px; border: 1px solid var(--ok); border-radius: 22px; background: linear-gradient(135deg, rgba(95, 211, 160, 0.1), rgba(139, 92, 246, 0.08)); box-shadow: 0 0 50px rgba(95, 211, 160, 0.1); }
+.nofee .big { flex: none; font-family: var(--font-display); font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1; color: var(--ok); }
+.nofee h3 { margin: 0 0 4px; font-size: 1.05rem; }
+.nofee p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+@media (max-width: 560px) { .nofee { flex-direction: column; text-align: center; gap: 10px; padding: 20px; } }
 @keyframes more-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .plan.premium { border: 1.5px solid var(--violet-hi); background: linear-gradient(#150e29, #0d081a); box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 110px rgba(139, 92, 246, 0.5); }
 .fine { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 24px; }
@@ -417,7 +423,7 @@ body { margin: 0; }
                 <li>Aucune réponse inventée : il ne dit que ce que vous avez prévu.</li>
                 <li>Aucune intelligence artificielle : aucun message n'est envoyé à un service externe d'IA.</li>
                 <li>Réponses en français et en anglais, selon les versions que vous fournissez.</li>
-                <li>Installation simple : nous configurons votre assistant, puis vous ajoutez une ligne de code à votre site.</li>
+                <li>Installation et configuration gratuites : nous configurons votre assistant, puis vous ajoutez une ligne de code à votre site.</li>
               </ul>
             </div>
             <div>
@@ -526,6 +532,13 @@ body { margin: 0; }
         <a class="btn ghost" href="https://buy.stripe.com/fZu9AS6h0daK8dp1Z1frW00" target="_blank" rel="noopener">Choisir Business</a>
       </div>
     </div>
+    <div class="nofee">
+      <div class="big">0 $</div>
+      <div>
+        <h3>Frais de configuration</h3>
+        <p>Nous configurons et installons votre assistant gratuitement. Vous payez seulement l'abonnement mensuel de votre offre.</p>
+      </div>
+    </div>
     <p class="fine">Prix en dollars canadiens, taxes en sus. La transmission des demandes par courriel est incluse dans Pro et Business.</p>
   </section>
 
@@ -536,6 +549,7 @@ body { margin: 0; }
     </div>
     <div class="faq">
       <details><summary>Comment NexBot s'installe-t-il sur mon site?</summary><p>Nous configurons votre assistant, puis vous ajoutez une seule ligne de code à votre site. Aucune application à installer pour vos clients.</p></details>
+      <details><summary>Y a-t-il des frais de configuration ou d'installation?</summary><p>Non. La configuration et l'installation de votre assistant sont gratuites. Vous payez seulement l'abonnement mensuel de votre offre.</p></details>
       <details><summary>Dans quelles langues NexBot répond-il?</summary><p>En français et en anglais. Il répond dans la langue utilisée par votre client.</p></details>
       <details><summary>NexBot peut-il se tromper?</summary><p>Oui, comme tout assistant virtuel. Il s'appuie sur les informations de votre entreprise, indique quand il ne sait pas et invite votre client à vous contacter directement. Il ne remplace pas votre personnel.</p></details>
       <details><summary>Que deviennent les conversations de mes clients?</summary><p>Elles ne sont pas enregistrées dans une base de données et sont effacées automatiquement après la session. Seule exception : si un visiteur demande de transmettre sa demande, il donne d'abord son accord, puis un courriel est envoyé à votre équipe. Les détails sont dans notre <a href="/confidentialite">politique de confidentialité</a>.</p></details>
