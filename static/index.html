@@ -221,8 +221,8 @@ section { padding-block: 96px 8px; }
 .plan .more-body ul { gap: 9px; font-size: 0.92rem; }
 .plan .more-body a { color: var(--violet-hi); }
 /* Encadré « frais de configuration : 0 $ » sous les offres */
-.nofee { max-width: 760px; margin: 36px auto 0; display: flex; align-items: center; gap: 22px; padding: 20px 26px; border: 1px solid var(--ok); border-radius: 22px; background: linear-gradient(135deg, rgba(95, 211, 160, 0.1), rgba(139, 92, 246, 0.08)); box-shadow: 0 0 50px rgba(95, 211, 160, 0.1); }
-.nofee .big { flex: none; font-family: var(--font-display); font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1; color: var(--ok); }
+.nofee { max-width: 760px; margin: 36px auto 0; display: flex; align-items: center; gap: 22px; padding: 20px 26px; border: 1.5px solid transparent; border-radius: 22px; background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box; box-shadow: 0 0 60px rgba(139, 92, 246, 0.28); }
+.nofee .big { flex: none; font-family: var(--font-display); font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1; color: var(--violet-hi); }
 .nofee h3 { margin: 0 0 4px; font-size: 1.05rem; }
 .nofee p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
 @media (max-width: 560px) { .nofee { flex-direction: column; text-align: center; gap: 10px; padding: 20px; } }
@@ -533,7 +533,7 @@ body { margin: 0; }
       </div>
     </div>
     <div class="nofee">
-      <div class="big">0 $</div>
+      <div class="big grad">0 $</div>
       <div>
         <h3>Frais de configuration</h3>
         <p>Nous configurons et installons votre assistant gratuitement. Vous payez seulement l'abonnement mensuel de votre offre.</p>
