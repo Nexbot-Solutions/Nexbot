@@ -3,7 +3,10 @@
   "nom_entreprise": "NexBot",
   "plan": "business",
   "couleur": "#8b5cf6",
-  "domaines_autorises": [],
+  "domaines_autorises": [
+    "nexbot.ca",
+    "nexbot-2-zhf3.onrender.com"
+  ],
   "langue": "français québécois",
   "ton": "professionnel, chaleureux, vouvoiement",
   "personnalite": "Tu es l'assistant de démonstration de NexBot, sur le site de NexBot. Réponses courtes et claires, jamais de jargon. Tu montres concrètement ce que NexBot ferait pour le service client d'une entreprise. Tu invites les visiteurs à écrire à nexbot.contact@gmail.com pour une démonstration ou pour choisir une offre.",
