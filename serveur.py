@@ -11,19 +11,24 @@ Routes :
   GET  /confidentialite           -> politique de confidentialité
   GET  /conditions                -> conditions d'utilisation
   GET  /en, /en/privacy, /en/terms -> version anglaise du site
+  GET  /bienvenue, /en/welcome    -> formulaire à remplir après l'achat d'une offre
+  POST /api/onboarding            -> reçoit le formulaire et l'envoie par courriel à l'équipe NexBot
   GET  /sante                     -> vérification que le serveur roule
 """
 import os
+import re
 import threading
 import time
 import uuid
 from collections import defaultdict, deque
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 
 from flask import Flask, jsonify, request, send_from_directory
 
-from bot import Bot, charger_client
+from bot import Bot, charger_client, courriel_configure, envoyer_courriel
 
 BASE = Path(__file__).resolve().parent
 LONGUEUR_MAX_MESSAGE = 1000
@@ -33,6 +38,7 @@ MAX_MESSAGES_PAR_MIN_PAR_IP = 20
 TRUST_PROXY = os.environ.get("TRUST_PROXY", "false").lower() == "true"
 
 app = Flask(__name__, static_folder=str(BASE / "static"), static_url_path="/static")
+app.config["MAX_CONTENT_LENGTH"] = 200_000  # aucune requête légitime n'approche cette taille
 
 CLIENTS = {}
 SESSIONS = {}  # (id_client, session_id) -> {"bot": Bot, "vu": timestamp}
@@ -220,6 +226,137 @@ def privacy_en():
 @app.route("/en/terms")
 def terms_en():
     return send_from_directory(app.static_folder, "terms-en.html")
+
+
+# ---------- Formulaire à remplir après l'achat ----------
+DEST_ONBOARDING = os.environ.get("ONBOARDING_DEST", "nexbot.contact@gmail.com")
+MAX_ONBOARDING_PAR_HEURE_PAR_IP = 5
+RECENTS_ONBOARDING = defaultdict(deque)
+RE_COURRIEL = re.compile(r"^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]{2,}$")
+PLANS_VALIDES = {"essentiel": "Essentiel", "pro": "Pro", "business": "Business"}
+# (clé du formulaire, libellé dans le courriel, longueur maximale)
+CHAMPS_ONBOARDING = [
+    ("entreprise", "Nom de l'entreprise", 150),
+    ("contact_nom", "Nom du contact", 150),
+    ("courriel", "Courriel", 200),
+    ("telephone", "Téléphone", 40),
+    ("site_web", "Site web où installer l'assistant", 300),
+    ("couleur", "Couleur du widget", 40),
+    ("langues", "Langues de l'assistant", 60),
+    ("heures", "Heures d'ouverture", 1500),
+    ("coordonnees", "Coordonnées à afficher si l'assistant ne sait pas", 1500),
+    ("services_prix", "Services, produits et prix", 6000),
+    ("faq", "Questions fréquentes et réponses", 8000),
+    ("politiques", "Politiques (retours, livraison, annulation...)", 4000),
+    ("courriel_demandes", "Courriel qui reçoit les demandes transmises", 200),
+    ("ton", "Ton souhaité", 300),
+    ("sujets_interdits", "Sujets que l'assistant doit refuser", 2000),
+    ("personnalite", "Personnalité de marque", 3000),
+]
+
+
+def ip_du_client() -> str:
+    if TRUST_PROXY:
+        return request.headers.get("X-Forwarded-For", request.remote_addr or "?").split(",")[0].strip()
+    return request.remote_addr or "?"
+
+
+def trop_de_formulaires(ip: str) -> bool:
+    maintenant = time.time()
+    with VERROU:
+        file = RECENTS_ONBOARDING[ip]
+        while file and maintenant - file[0] > 3600:
+            file.popleft()
+        if len(file) >= MAX_ONBOARDING_PAR_HEURE_PAR_IP:
+            return True
+        file.append(maintenant)
+    return False
+
+
+@app.route("/api/onboarding", methods=["POST"])
+def onboarding():
+    donnees = request.get_json(silent=True)
+    if not isinstance(donnees, dict):
+        return jsonify(erreur="Requête invalide."), 400
+    if str(donnees.get("website", "")).strip():  # champ caché que seuls les robots remplissent
+        return jsonify(ok=True)
+
+    en = str(donnees.get("lang", "fr")).lower().startswith("en")
+
+    def msg(fr: str, ang: str) -> str:
+        return ang if en else fr
+
+    if trop_de_formulaires(ip_du_client()):
+        return jsonify(erreur=msg("Trop d'envois depuis cette adresse. Réessayez plus tard ou écrivez-nous par courriel.",
+                                  "Too many submissions from this address. Try again later or email us.")), 429
+
+    valeurs = {}
+    for cle, _libelle, maximum in CHAMPS_ONBOARDING:
+        brut = donnees.get(cle, "")
+        valeurs[cle] = brut.replace("\r", "").strip()[:maximum] if isinstance(brut, str) else ""
+    plan = PLANS_VALIDES.get(str(donnees.get("plan", "")).lower())
+
+    if not plan:
+        return jsonify(erreur=msg("Choisissez votre offre.", "Choose your plan.")), 400
+    if not valeurs["entreprise"] or not valeurs["contact_nom"]:
+        return jsonify(erreur=msg("Indiquez le nom de l'entreprise et votre nom.",
+                                  "Enter the business name and your name.")), 400
+    if not RE_COURRIEL.match(valeurs["courriel"]):
+        return jsonify(erreur=msg("Entrez un courriel valide.", "Enter a valid email address.")), 400
+    if valeurs["courriel_demandes"] and not RE_COURRIEL.match(valeurs["courriel_demandes"]):
+        return jsonify(erreur=msg("Le courriel qui reçoit les demandes n'est pas valide.",
+                                  "The email that receives requests is not valid.")), 400
+    if donnees.get("consentement") is not True:
+        return jsonify(erreur=msg("Cochez la case d'autorisation pour envoyer le formulaire.",
+                                  "Tick the authorization box to submit the form.")), 400
+
+    if not courriel_configure():
+        return jsonify(erreur=msg("L'envoi n'est pas disponible pour le moment. Écrivez-nous à nexbot.contact@gmail.com.",
+                                  "Submission is unavailable right now. Please email us at nexbot.contact@gmail.com.")), 503
+
+    maintenant = datetime.now(ZoneInfo("America/Toronto")).strftime("%Y-%m-%d %H:%M")
+    lignes = [
+        f"Nouveau client : {valeurs['entreprise']}",
+        f"Offre : {plan}",
+        f"Formulaire rempli en : {'anglais' if en else 'français'}",
+        f"Reçu le : {maintenant} (heure de l'Est)",
+        "Autorisation d'utiliser ces renseignements : oui",
+        "",
+    ]
+    for cle, libelle, _maximum in CHAMPS_ONBOARDING:
+        lignes.append(f"{libelle} :")
+        lignes.append(valeurs[cle] or "(non rempli)")
+        lignes.append("")
+    try:
+        envoyer_courriel(
+            DEST_ONBOARDING,
+            f"[NexBot] Nouveau client : {valeurs['entreprise']} ({plan})",
+            "\n".join(lignes),
+            repondre_a=valeurs["courriel"],
+        )
+    except Exception as erreur:  # on ne journalise pas le contenu du formulaire
+        print(f"Échec de l'envoi du formulaire client : {type(erreur).__name__}")
+        return jsonify(erreur=msg("L'envoi a échoué. Réessayez, ou écrivez-nous à nexbot.contact@gmail.com.",
+                                  "Sending failed. Try again, or email us at nexbot.contact@gmail.com.")), 502
+    return jsonify(ok=True)
+
+
+def page_privee(nom_fichier: str):
+    """Page qui ne doit pas apparaître dans les moteurs de recherche."""
+    reponse = send_from_directory(app.static_folder, nom_fichier)
+    reponse.headers["X-Robots-Tag"] = "noindex, nofollow"
+    reponse.headers["Cache-Control"] = "no-cache"
+    return reponse
+
+
+@app.route("/bienvenue")
+def bienvenue():
+    return page_privee("bienvenue.html")
+
+
+@app.route("/en/welcome")
+def welcome_en():
+    return page_privee("welcome-en.html")
 
 
 if __name__ == "__main__":
