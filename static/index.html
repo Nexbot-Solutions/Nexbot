@@ -264,7 +264,7 @@ button.copy:hover { background: rgba(139, 92, 246, 0.18); }
 footer { padding-block: 40px 48px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 0.88rem; }
 
 /* Menu mobile : bouton « Menu » + panneau de liens (caché sur ordinateur) */
-section, .finale { scroll-margin-top: 76px; }
+section, .finale, .plan { scroll-margin-top: 80px; }
 .menu-btn { display: none; align-items: center; justify-content: center; width: 38px; height: 38px; flex: none; padding: 0; cursor: pointer; color: var(--fg); background: rgba(139, 92, 246, 0.14); border: 1px solid var(--violet); border-radius: 50%; }
 .menu-btn:hover { background: rgba(139, 92, 246, 0.28); }
 .menu-btn:focus-visible { outline: 2px solid var(--violet-hi); outline-offset: 3px; }
@@ -290,15 +290,30 @@ section, .finale { scroll-margin-top: 76px; }
   .menu-mobile .mh b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 0.95rem; letter-spacing: 0.05em; }
   .menu-mobile .mh small { display: inline-flex; align-items: center; gap: 6px; color: var(--ok); font-size: 0.8rem; font-weight: 600; }
   .menu-mobile .mh small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
-  .menu-mobile a.m { display: flex; align-items: center; gap: 14px; padding: 12px 10px; border-radius: 18px; color: var(--fg); text-decoration: none; }
-  .menu-mobile a.m .ic { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 14px; background: linear-gradient(135deg, rgba(164, 123, 255, 0.28), rgba(91, 47, 214, 0.18)); border: 1px solid rgba(189, 164, 255, 0.28); }
-  .menu-mobile a.m .ic svg { width: 21px; height: 21px; fill: none; stroke: var(--violet-hi); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-  .menu-mobile a.m .tx { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
-  .menu-mobile a.m .tx b { font-weight: 600; font-size: 1.06rem; }
-  .menu-mobile a.m .tx small { color: var(--muted); font-size: 0.86rem; }
-  .menu-mobile a.m > svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s, stroke 0.2s; }
-  .menu-mobile a.m:hover, .menu-mobile a.m:active, .menu-mobile a.m:focus-visible { background: rgba(139, 92, 246, 0.16); outline: none; }
-  .menu-mobile a.m:hover > svg, .menu-mobile a.m:active > svg { stroke: var(--violet-hi); transform: translateX(3px); }
+  .menu-mobile .m { display: flex; align-items: center; gap: 14px; padding: 12px 10px; border-radius: 18px; color: var(--fg); text-decoration: none; }
+  .menu-mobile .m .ic { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 14px; background: linear-gradient(135deg, rgba(164, 123, 255, 0.28), rgba(91, 47, 214, 0.18)); border: 1px solid rgba(189, 164, 255, 0.28); }
+  .menu-mobile .m .ic svg { width: 21px; height: 21px; fill: none; stroke: var(--violet-hi); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .menu-mobile .m .tx { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+  .menu-mobile .m .tx b { font-weight: 600; font-size: 1.06rem; }
+  .menu-mobile .m .tx small { color: var(--muted); font-size: 0.86rem; }
+  .menu-mobile .m > svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s, stroke 0.2s; }
+  .menu-mobile .m:hover, .menu-mobile .m:active, .menu-mobile .m:focus-visible { background: rgba(139, 92, 246, 0.16); outline: none; }
+  .menu-mobile .m:hover > svg, .menu-mobile .m:active > svg { stroke: var(--violet-hi); transform: translateX(3px); }
+  .menu-mobile button.m { width: 100%; font: inherit; text-align: left; background: none; border: 0; cursor: pointer; }
+  .menu-mobile button.m[aria-expanded="true"] { background: rgba(139, 92, 246, 0.16); }
+  .menu-mobile button.m[aria-expanded="true"] > svg { transform: rotate(90deg); stroke: var(--violet-hi); }
+  .menu-mobile .plans-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+  .menu-mobile .plans-sub.open { grid-template-rows: 1fr; }
+  .menu-mobile .plans-sub > div { overflow: hidden; display: grid; gap: 6px; padding-left: 68px; }
+  .menu-mobile .plans-sub.open > div { padding-block: 6px 4px; }
+  .menu-mobile a.p { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: 14px; text-decoration: none; color: var(--fg); background: rgba(255, 255, 255, 0.035); border: 1px solid var(--line); }
+  .menu-mobile a.p b { font-family: var(--font-display); font-weight: 400; font-size: 0.78rem; letter-spacing: 0.1em; }
+  .menu-mobile a.p span { color: var(--violet-hi); font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
+  .menu-mobile a.p.pro { border-color: rgba(189, 164, 255, 0.55); background: rgba(139, 92, 246, 0.12); }
+  .menu-mobile a.p.biz { border-color: rgba(255, 143, 208, 0.45); }
+  .menu-mobile a.p:hover, .menu-mobile a.p:active { background: rgba(139, 92, 246, 0.2); }
+  .plan.flash { animation: planflash 1.6s ease; }
+  @keyframes planflash { 0%, 100% { box-shadow: 0 0 0 rgba(189, 164, 255, 0); } 30% { box-shadow: 0 0 0 3px var(--violet-hi), 0 0 60px rgba(189, 164, 255, 0.5); } }
   .menu-mobile .btn { margin: 10px 2px 2px; padding: 16px 26px; font-size: 1rem; }
   .menu-mobile a.mig { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 0 4px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
   .menu-mobile a.mig svg { width: 18px; height: 18px; }
@@ -348,7 +363,8 @@ body { margin: 0; }
     <div class="menu-mobile" id="menu-mobile">
       <div class="mh"><div><b>NEXBOT</b><small>En ligne</small></div></div>
       <a class="m" href="#fonctionnement"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span><span class="tx"><b>Fonctionnement</b><small>Comment NexBot répond</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="m" href="#offres"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg></span><span class="tx"><b>Offres</b><small>Dès 99 $ par mois</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <button class="m" type="button" id="menu-offres-btn" aria-expanded="false" aria-controls="menu-offres"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg></span><span class="tx"><b>Offres</b><small>Dès 99 $ par mois</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div class="plans-sub" id="menu-offres" role="group" aria-label="Offres"><div><a class="p" href="#plan-essentiel"><b>ESSENTIEL</b><span>99 $ / mois</span></a><a class="p pro" href="#plan-pro"><b>PRO</b><span>199 $ / mois</span></a><a class="p biz" href="#plan-business"><b>BUSINESS</b><span>349 $ / mois</span></a></div></div>
       <a class="m" href="#faq"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg></span><span class="tx"><b>FAQ</b><small>Vos questions, nos réponses</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <a class="btn violet" href="#contact">Demander une démo</a>
       <a class="mig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@nexbotbusiness</a>
@@ -468,7 +484,7 @@ body { margin: 0; }
       <p>Commencez par les réponses de base et passez au niveau supérieur quand votre volume de demandes augmente.</p>
     </div>
     <div class="grid plans">
-      <div class="card plan">
+      <div class="card plan" id="plan-essentiel">
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h3>ESSENTIEL</h3>
         <p class="desc">Automatisation des réponses de base.</p>
@@ -507,7 +523,7 @@ body { margin: 0; }
         </details>
         <a class="btn ghost" href="https://buy.stripe.com/14A00i7l4fiS79lavxfrW02" target="_blank" rel="noopener">Choisir Essentiel</a>
       </div>
-      <div class="card plan featured">
+      <div class="card plan featured" id="plan-pro">
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>PRO</h3>
         <p class="desc">Filtrage intelligent et qualification des demandes.</p>
@@ -556,7 +572,7 @@ body { margin: 0; }
         </details>
         <a class="btn violet" href="https://buy.stripe.com/9B600i8p87Qq79l8npfrW01" target="_blank" rel="noopener">Choisir Pro</a>
       </div>
-      <div class="card plan premium">
+      <div class="card plan premium" id="plan-business">
         <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="13" width="4" height="8"/><rect x="10" y="8" width="4" height="13"/><rect x="16" y="3" width="4" height="18"/></svg></div>
         <h3>BUSINESS</h3>
         <p class="desc">Automatisation avancée, adaptée aux besoins des entreprises.</p>
@@ -687,6 +703,28 @@ body { margin: 0; }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { set(false); btn.focus(); } });
   document.addEventListener('click', function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) set(false); });
   window.addEventListener('resize', function () { if (window.innerWidth > 760) set(false); });
+})();
+
+(function () {
+  var t = document.getElementById('menu-offres-btn'), sub = document.getElementById('menu-offres');
+  if (!t || !sub) return;
+  t.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var open = t.getAttribute('aria-expanded') !== 'true';
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    sub.classList.toggle('open', open);
+  });
+  document.getElementById('menu-btn').addEventListener('click', function () {
+    t.setAttribute('aria-expanded', 'false'); sub.classList.remove('open');
+  });
+  sub.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a.p');
+    if (!a) return;
+    var card = document.querySelector(a.getAttribute('href'));
+    if (!card) return;
+    card.classList.remove('flash'); void card.offsetWidth;
+    setTimeout(function () { card.classList.add('flash'); }, 450);
+  });
 })();
 </script>
 
