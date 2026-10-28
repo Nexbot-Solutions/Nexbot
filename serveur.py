@@ -11,6 +11,7 @@ Routes :
   GET  /confidentialite           -> politique de confidentialité
   GET  /conditions                -> conditions d'utilisation
   GET  /en, /en/privacy, /en/terms -> version anglaise du site
+  GET  /robots.txt, /sitemap.xml  -> pour les moteurs de recherche
   GET  /sante                     -> vérification que le serveur roule
 """
 import os
@@ -21,11 +22,14 @@ from collections import defaultdict, deque
 from pathlib import Path
 from urllib.parse import urlparse
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, Response, jsonify, request, send_from_directory
 
 from bot import Bot, charger_client
 
 BASE = Path(__file__).resolve().parent
+# Adresse publique du site (liens canoniques, image de partage, plan du site).
+# Quand tu auras ton propre domaine : Render > Environment > SITE_URL=https://tondomaine.ca
+SITE_URL = os.environ.get("SITE_URL", "https://nexbot-2-zhf3.onrender.com").rstrip("/")
 LONGUEUR_MAX_MESSAGE = 1000
 DUREE_SESSION_SEC = 30 * 60
 MAX_SESSIONS = 2000
@@ -187,9 +191,39 @@ def widget():
     return reponse
 
 
+def page_avec_adresse(nom_fichier: str) -> Response:
+    """Sert une page HTML en remplaçant __SITE_URL__ par l'adresse publique du site."""
+    html = (BASE / "static" / nom_fichier).read_text(encoding="utf-8").replace("__SITE_URL__", SITE_URL)
+    reponse = Response(html, mimetype="text/html")
+    reponse.headers["Cache-Control"] = "public, max-age=60"
+    return reponse
+
+
 @app.route("/")
 def accueil():
-    return send_from_directory(app.static_folder, "index.html")
+    return page_avec_adresse("index.html")
+
+
+@app.route("/robots.txt")
+def robots():
+    texte = f"User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: {SITE_URL}/sitemap.xml\n"
+    return Response(texte, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    paires = [("/", "/en"), ("/confidentialite", "/en/privacy"), ("/conditions", "/en/terms")]
+    lignes = ['<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for fr, en in paires:
+        for chemin in (fr, en):
+            lignes.append("  <url>")
+            lignes.append(f"    <loc>{SITE_URL}{chemin}</loc>")
+            lignes.append(f'    <xhtml:link rel="alternate" hreflang="fr" href="{SITE_URL}{fr}"/>')
+            lignes.append(f'    <xhtml:link rel="alternate" hreflang="en" href="{SITE_URL}{en}"/>')
+            lignes.append("  </url>")
+    lignes.append("</urlset>")
+    return Response("\n".join(lignes) + "\n", mimetype="application/xml")
 
 
 @app.route("/demo")
@@ -209,7 +243,7 @@ def conditions():
 
 @app.route("/en")
 def accueil_en():
-    return send_from_directory(app.static_folder, "en.html")
+    return page_avec_adresse("en.html")
 
 
 @app.route("/en/privacy")
