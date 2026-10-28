@@ -252,7 +252,21 @@ button.copy:hover { background: rgba(139, 92, 246, 0.18); }
 
 footer { padding-block: 40px 48px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 0.88rem; }
 
+/* Menu mobile : bouton « Menu » + panneau de liens (caché sur ordinateur) */
+section, .finale { scroll-margin-top: 76px; }
+.menu-btn { display: none; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; cursor: pointer; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 999px; }
+.menu-btn:hover { border-color: var(--violet); }
+.menu-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.menu-btn .x { display: none; }
+.menu-btn[aria-expanded="true"] .bars { display: none; }
+.menu-btn[aria-expanded="true"] .x { display: block; }
+.menu-mobile { display: none; position: absolute; left: 0; right: 0; top: 100%; padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6); }
+.menu-mobile a { display: block; padding: 14px 16px; border-radius: 12px; color: var(--fg); text-decoration: none; font-weight: 500; }
+.menu-mobile a:hover, .menu-mobile a:focus-visible { background: rgba(139, 92, 246, 0.18); }
+.menu-mobile.open { display: block; }
+
 @media (max-width: 760px) {
+  .menu-btn { display: inline-flex; }
   .chip { display: none; }
   .hero { padding-block: 8px 64px; }
   section { padding-block: 64px 8px; }
@@ -285,7 +299,14 @@ body { margin: 0; }
       <a class="link" href="#faq">FAQ</a>
       <a class="ig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener noreferrer" aria-label="Instagram NexBot"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
       <a class="lang" href="/en" hreflang="en" lang="en" aria-label="Switch to English">EN</a>
+      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Ouvrir le menu"><svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </nav>
+    <div class="menu-mobile" id="menu-mobile">
+      <a href="#fonctionnement">Fonctionnement</a>
+      <a href="#offres">Offres</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
   </div>
 
   <div class="hero">
@@ -542,6 +563,20 @@ body { margin: 0; }
     <p class="fine">Prix en dollars canadiens, taxes en sus. La transmission des demandes par courriel est incluse dans Pro et Business.</p>
   </section>
 
+  <section id="apres-paiement">
+    <div class="sec-head">
+      <span class="label">Après votre choix</span>
+      <h2><span class="grad">Voici ce qui se passe ensuite.</span></h2>
+      <p>Pas de démarches compliquées : nous nous occupons de la configuration, vous n'avez qu'une ligne de code à ajouter.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><span class="num">1</span><h3>Vous choisissez votre offre</h3><p>Le paiement se fait en ligne, par Stripe. Sans engagement : vous pouvez annuler en tout temps.</p></div>
+      <div class="card"><span class="num">2</span><h3>Nous configurons votre assistant</h3><p>À partir des informations de votre entreprise (heures, services, prix, questions fréquentes) et de la couleur de votre site. C'est gratuit.</p></div>
+      <div class="card"><span class="num">3</span><h3>Vous ajoutez une ligne de code</h3><p>Nous vous la fournissons, vous la collez sur votre site, et votre assistant est en ligne. Vos clients n'ont rien à installer.</p></div>
+    </div>
+    <p class="fine">Une question avant de choisir? <a href="#contact" style="color:var(--violet-hi)">Écrivez-nous</a>, nous répondons avec plaisir.</p>
+  </section>
+
   <section id="faq">
     <div class="sec-head">
       <span class="label">FAQ</span>
@@ -590,6 +625,23 @@ body { margin: 0; }
     <span><a href="/confidentialite" style="color:inherit">Confidentialité</a> · <a href="/conditions" style="color:inherit">Conditions d'utilisation</a></span>
   </footer>
 </div>
+
+<script>
+(function () {
+  var btn = document.getElementById('menu-btn'), menu = document.getElementById('menu-mobile');
+  if (!btn || !menu) return;
+  function set(open) {
+    menu.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  }
+  btn.addEventListener('click', function () { set(btn.getAttribute('aria-expanded') !== 'true'); });
+  menu.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) set(false); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 760) set(false); });
+})();
+</script>
 
 <script>
 document.getElementById('copy').addEventListener('click', function () {
