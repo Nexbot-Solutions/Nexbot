@@ -285,10 +285,32 @@ section, .finale { scroll-margin-top: 76px; }
     box-shadow: 0 0 60px rgba(139, 92, 246, 0.28), 0 24px 56px rgba(0, 0, 0, 0.65);
     opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top right; transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s; }
   .menu-mobile.open { opacity: 1; visibility: visible; transform: none; }
-  .menu-mobile a.m { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 18px; border-radius: 16px; color: var(--fg); text-decoration: none; font-weight: 600; font-size: 1.06rem; }
-  .menu-mobile a.m svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--violet-hi); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-  .menu-mobile a.m:hover, .menu-mobile a.m:active, .menu-mobile a.m:focus-visible { background: rgba(139, 92, 246, 0.18); outline: none; }
-  .menu-mobile .btn { margin: 8px 6px 4px; padding: 16px 26px; }
+  .menu-mobile { padding: 14px; gap: 6px; }
+  .menu-mobile .mh { display: flex; align-items: center; gap: 12px; padding: 4px 6px 12px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
+  .menu-mobile .mh img { width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 0 18px rgba(139, 92, 246, 0.45); }
+  .menu-mobile .mh b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 0.95rem; letter-spacing: 0.05em; }
+  .menu-mobile .mh small { display: inline-flex; align-items: center; gap: 6px; color: var(--ok); font-size: 0.8rem; font-weight: 600; }
+  .menu-mobile .mh small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .menu-mobile a.m { display: flex; align-items: center; gap: 14px; padding: 12px 10px; border-radius: 18px; color: var(--fg); text-decoration: none; }
+  .menu-mobile a.m .ic { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 14px; background: linear-gradient(135deg, rgba(164, 123, 255, 0.28), rgba(91, 47, 214, 0.18)); border: 1px solid rgba(189, 164, 255, 0.28); }
+  .menu-mobile a.m .ic svg { width: 21px; height: 21px; fill: none; stroke: var(--violet-hi); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .menu-mobile a.m .tx { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+  .menu-mobile a.m .tx b { font-weight: 600; font-size: 1.06rem; }
+  .menu-mobile a.m .tx small { color: var(--muted); font-size: 0.86rem; }
+  .menu-mobile a.m > svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s, stroke 0.2s; }
+  .menu-mobile a.m:hover, .menu-mobile a.m:active, .menu-mobile a.m:focus-visible { background: rgba(139, 92, 246, 0.16); outline: none; }
+  .menu-mobile a.m:hover > svg, .menu-mobile a.m:active > svg { stroke: var(--violet-hi); transform: translateX(3px); }
+  .menu-mobile .btn { margin: 10px 2px 2px; padding: 16px 26px; font-size: 1rem; }
+  .menu-mobile a.mig { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 0 4px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  .menu-mobile a.mig svg { width: 18px; height: 18px; }
+  .menu-mobile a.mig:hover { color: var(--fg); }
+  .menu-mobile > * { opacity: 0; transform: translateY(8px); transition: opacity 0.3s ease, transform 0.3s ease; }
+  .menu-mobile.open > * { opacity: 1; transform: none; }
+  .menu-mobile.open > :nth-child(2) { transition-delay: 0.04s; }
+  .menu-mobile.open > :nth-child(3) { transition-delay: 0.08s; }
+  .menu-mobile.open > :nth-child(4) { transition-delay: 0.12s; }
+  .menu-mobile.open > :nth-child(5) { transition-delay: 0.16s; }
+  .menu-mobile.open > :nth-child(6) { transition-delay: 0.2s; }
   .chip { display: none; }
   .hero { padding-block: 8px 64px; }
   section { padding-block: 64px 8px; }
@@ -325,10 +347,12 @@ body { margin: 0; }
       <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Ouvrir le menu"><svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </nav>
     <div class="menu-mobile" id="menu-mobile">
-      <a class="m" href="#fonctionnement"><span>Fonctionnement</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="m" href="#offres"><span>Offres</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="m" href="#faq"><span>FAQ</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <div class="mh"><img src="/static/mascotte.png" alt="Mascotte NexBot" width="40" height="40"><div><b>NEXBOT</b><small>En ligne</small></div></div>
+      <a class="m" href="#fonctionnement"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span><span class="tx"><b>Fonctionnement</b><small>Comment NexBot répond</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="m" href="#offres"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg></span><span class="tx"><b>Offres</b><small>Dès 99 $ par mois</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="m" href="#faq"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg></span><span class="tx"><b>FAQ</b><small>Vos questions, nos réponses</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <a class="btn violet" href="#contact">Demander une démo</a>
+      <a class="mig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@nexbotbusiness</a>
     </div>
   </div>
 
