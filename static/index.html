@@ -312,6 +312,9 @@ section, .finale, .plan { scroll-margin-top: 80px; }
   .menu-mobile a.p.pro { border-color: rgba(189, 164, 255, 0.55); background: rgba(139, 92, 246, 0.12); }
   .menu-mobile a.p.biz { border-color: rgba(255, 143, 208, 0.45); }
   .menu-mobile a.p:hover, .menu-mobile a.p:active { background: rgba(139, 92, 246, 0.2); }
+  .menu-mobile a.s { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 14px; text-decoration: none; color: var(--fg); font-weight: 600; font-size: 0.95rem; background: rgba(255, 255, 255, 0.035); border: 1px solid var(--line); }
+  .menu-mobile a.s i { font-style: normal; font-family: var(--font-display); font-size: 0.7rem; color: var(--violet-hi); letter-spacing: 0.05em; }
+  .menu-mobile a.s:hover, .menu-mobile a.s:active { background: rgba(139, 92, 246, 0.2); }
   .plan.flash { animation: planflash 1.6s ease; }
   @keyframes planflash { 0%, 100% { box-shadow: 0 0 0 rgba(189, 164, 255, 0); } 30% { box-shadow: 0 0 0 3px var(--violet-hi), 0 0 60px rgba(189, 164, 255, 0.5); } }
   .menu-mobile .btn { margin: 10px 2px 2px; padding: 16px 26px; font-size: 1rem; }
@@ -362,7 +365,8 @@ body { margin: 0; }
     </nav>
     <div class="menu-mobile" id="menu-mobile">
       <div class="mh"><div><b>NEXBOT</b><small>En ligne</small></div></div>
-      <a class="m" href="#fonctionnement"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span><span class="tx"><b>Fonctionnement</b><small>Comment NexBot répond</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <button class="m" type="button" id="menu-fonct-btn" aria-expanded="false" aria-controls="menu-fonct"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span><span class="tx"><b>Fonctionnement</b><small>Comment NexBot répond</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div class="plans-sub" id="menu-fonct" role="group" aria-label="Fonctionnement"><div><a class="s" href="#fonctionnement"><i>01</i>Comment ça marche</a><a class="s" href="#avantages"><i>02</i>Pourquoi NexBot</a><a class="s" href="#couleur"><i>03</i>Aux couleurs de votre site</a><a class="s" href="#apres-paiement"><i>04</i>Après votre choix</a></div></div>
       <button class="m" type="button" id="menu-offres-btn" aria-expanded="false" aria-controls="menu-offres"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg></span><span class="tx"><b>Offres</b><small>Dès 99 $ par mois</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <div class="plans-sub" id="menu-offres" role="group" aria-label="Offres"><div><a class="p" href="#plan-essentiel"><b>ESSENTIEL</b><span>99 $ / mois</span></a><a class="p pro" href="#plan-pro"><b>PRO</b><span>199 $ / mois</span></a><a class="p biz" href="#plan-business"><b>BUSINESS</b><span>349 $ / mois</span></a></div></div>
       <a class="m" href="#faq"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg></span><span class="tx"><b>FAQ</b><small>Vos questions, nos réponses</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
@@ -706,25 +710,35 @@ body { margin: 0; }
 })();
 
 (function () {
-  var t = document.getElementById('menu-offres-btn'), sub = document.getElementById('menu-offres');
-  if (!t || !sub) return;
-  t.addEventListener('click', function (e) {
-    e.stopPropagation();
-    var open = t.getAttribute('aria-expanded') !== 'true';
-    t.setAttribute('aria-expanded', open ? 'true' : 'false');
-    sub.classList.toggle('open', open);
+  var toggles = document.querySelectorAll('#menu-mobile button.m[aria-controls]');
+  function closeAll(except) {
+    toggles.forEach(function (b) {
+      if (b === except) return;
+      b.setAttribute('aria-expanded', 'false');
+      var s = document.getElementById(b.getAttribute('aria-controls')); if (s) s.classList.remove('open');
+    });
+  }
+  toggles.forEach(function (t) {
+    var sub = document.getElementById(t.getAttribute('aria-controls'));
+    if (!sub) return;
+    t.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = t.getAttribute('aria-expanded') !== 'true';
+      closeAll(t);
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+      sub.classList.toggle('open', open);
+    });
+    sub.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var card = document.querySelector(a.getAttribute('href'));
+      if (!card || !card.classList.contains('plan')) return;
+      card.classList.remove('flash'); void card.offsetWidth;
+      setTimeout(function () { card.classList.add('flash'); }, 450);
+    });
   });
-  document.getElementById('menu-btn').addEventListener('click', function () {
-    t.setAttribute('aria-expanded', 'false'); sub.classList.remove('open');
-  });
-  sub.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a.p');
-    if (!a) return;
-    var card = document.querySelector(a.getAttribute('href'));
-    if (!card) return;
-    card.classList.remove('flash'); void card.offsetWidth;
-    setTimeout(function () { card.classList.add('flash'); }, 450);
-  });
+  var mb = document.getElementById('menu-btn');
+  if (mb) mb.addEventListener('click', function () { closeAll(null); });
 })();
 </script>
 
