@@ -70,8 +70,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--violet-hi); out
 .btn.ig-big svg { width: 24px; height: 24px; margin-right: 10px !important; vertical-align: -6px !important; }
 .bar nav a.lang { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em; padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; }
 .bar nav a.lang:hover { color: var(--fg); border-color: var(--violet); }
-.bar nav a.ig { display: inline-flex; align-items: center; justify-content: center; width: 96px; height: 42px; color: #fff; border: 0; border-radius: 999px; background: linear-gradient(135deg, #ff5fa6, #a47bff 60%, #6f8bff); box-shadow: 0 6px 22px rgba(255, 95, 166, 0.35); }
-.bar nav a.ig svg { width: 24px; height: 24px; }
+.bar nav a.ig { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex: none; color: #fff; border: 0; border-radius: 50%; background: linear-gradient(135deg, #ff5fa6, #a47bff 60%, #6f8bff); box-shadow: 0 4px 14px rgba(255, 95, 166, 0.3); }
+.bar nav a.ig svg { width: 19px; height: 19px; }
 .bar nav a.ig:hover { filter: brightness(1.1); }
 .try { position: relative; color: var(--muted); font-size: 0.92rem; }
 .faq { max-width: 760px; margin-inline: auto; display: grid; gap: 12px; }
@@ -254,19 +254,30 @@ footer { padding-block: 40px 48px; display: flex; justify-content: space-between
 
 /* Menu mobile : bouton « Menu » + panneau de liens (caché sur ordinateur) */
 section, .finale { scroll-margin-top: 76px; }
-.menu-btn { display: none; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; cursor: pointer; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 999px; }
-.menu-btn:hover { border-color: var(--violet); }
-.menu-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.menu-btn { display: none; align-items: center; justify-content: center; width: 38px; height: 38px; flex: none; padding: 0; cursor: pointer; color: var(--fg); background: rgba(139, 92, 246, 0.14); border: 1px solid var(--violet); border-radius: 50%; }
+.menu-btn:hover { background: rgba(139, 92, 246, 0.28); }
+.menu-btn:focus-visible { outline: 2px solid var(--violet-hi); outline-offset: 3px; }
+.menu-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .menu-btn .x { display: none; }
 .menu-btn[aria-expanded="true"] .bars { display: none; }
 .menu-btn[aria-expanded="true"] .x { display: block; }
-.menu-mobile { display: none; position: absolute; left: 0; right: 0; top: 100%; padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6); }
-.menu-mobile a { display: block; padding: 14px 16px; border-radius: 12px; color: var(--fg); text-decoration: none; font-weight: 500; }
-.menu-mobile a:hover, .menu-mobile a:focus-visible { background: rgba(139, 92, 246, 0.18); }
-.menu-mobile.open { display: block; }
+.menu-scrim, .menu-mobile { display: none; }
 
 @media (max-width: 760px) {
   .menu-btn { display: inline-flex; }
+  .bar nav { gap: 8px; }
+  .bar nav a.lang { display: inline-flex; align-items: center; height: 38px; padding: 0 13px; }
+  .menu-scrim { display: block; position: fixed; inset: 0; z-index: 4; background: rgba(7, 5, 13, 0.62); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s; }
+  .menu-scrim.open { opacity: 1; visibility: visible; }
+  .menu-mobile { display: grid; gap: 2px; position: absolute; left: 0; right: 0; top: calc(100% + 2px); padding: 10px; border: 1.5px solid transparent; border-radius: 26px;
+    background: linear-gradient(#150e29, #0d081a) padding-box, linear-gradient(135deg, var(--violet-hi), var(--violet-lo)) border-box;
+    box-shadow: 0 0 60px rgba(139, 92, 246, 0.28), 0 24px 56px rgba(0, 0, 0, 0.65);
+    opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top right; transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s; }
+  .menu-mobile.open { opacity: 1; visibility: visible; transform: none; }
+  .menu-mobile a.m { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 18px; border-radius: 16px; color: var(--fg); text-decoration: none; font-weight: 600; font-size: 1.06rem; }
+  .menu-mobile a.m svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--violet-hi); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .menu-mobile a.m:hover, .menu-mobile a.m:active, .menu-mobile a.m:focus-visible { background: rgba(139, 92, 246, 0.18); outline: none; }
+  .menu-mobile .btn { margin: 8px 6px 4px; padding: 16px 26px; }
   .chip { display: none; }
   .hero { padding-block: 8px 64px; }
   section { padding-block: 64px 8px; }
@@ -291,6 +302,7 @@ body { margin: 0; }
 
 
 <div class="wrap">
+  <div class="menu-scrim" id="menu-scrim"></div>
   <div class="bar">
     <a class="brand grad" href="#">NEXBOT</a>
     <nav>
@@ -302,10 +314,10 @@ body { margin: 0; }
       <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Ouvrir le menu"><svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </nav>
     <div class="menu-mobile" id="menu-mobile">
-      <a href="#fonctionnement">Fonctionnement</a>
-      <a href="#offres">Offres</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
+      <a class="m" href="#fonctionnement"><span>Fonctionnement</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="m" href="#offres"><span>Offres</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="m" href="#faq"><span>FAQ</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="btn violet" href="#contact">Demander une démo</a>
     </div>
   </div>
 
@@ -628,15 +640,16 @@ body { margin: 0; }
 
 <script>
 (function () {
-  var btn = document.getElementById('menu-btn'), menu = document.getElementById('menu-mobile');
+  var btn = document.getElementById('menu-btn'), menu = document.getElementById('menu-mobile'), scrim = document.getElementById('menu-scrim');
   if (!btn || !menu) return;
   function set(open) {
     menu.classList.toggle('open', open);
+    if (scrim) scrim.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
   }
   btn.addEventListener('click', function () { set(btn.getAttribute('aria-expanded') !== 'true'); });
-  menu.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
+  menu.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a')) set(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { set(false); btn.focus(); } });
   document.addEventListener('click', function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) set(false); });
   window.addEventListener('resize', function () { if (window.innerWidth > 760) set(false); });
