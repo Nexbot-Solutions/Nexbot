@@ -513,6 +513,18 @@ html, body { background: var(--bg); }
   background-size: 20px 20px, cover; background-repeat: no-repeat; background-position: center; }
 @media (max-width: 480px) { .cta .mail { font-size: 0.98rem; padding: 10px 18px 10px 10px; gap: 10px; } .cta .mail::before { width: 34px; height: 34px; background-size: 17px 17px, cover; } }
 @media (max-width: 480px) { .h3 .actions { display: grid; width: 100%; } .h3 .actions .btn { width: 100%; } .h3 h1 { font-size: 1.72rem; } }
+
+/* Ce qu'il fait : réels NexBot */
+.nxa-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 18px;margin:0 -16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nxa-track::-webkit-scrollbar{display:none}
+.nxa-card{flex:0 0 72%;max-width:320px;margin:0;scroll-snap-align:center;border-radius:24px;overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:0 0 50px rgba(139,92,246,.18);cursor:pointer;position:relative}
+.nxa-card video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--bg)}
+.nxa-card figcaption{text-align:left;padding:16px 18px 20px}
+.nxa-card strong{display:block;font-size:1rem;margin-bottom:4px;color:var(--fg)}
+.nxa-card span{color:var(--muted);font-size:.9rem;line-height:1.45}
+.nxa-card.paused::after{content:"";position:absolute;left:50%;top:38%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(139,92,246,.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='white'/%3E%3C/svg%3E") center/30px no-repeat}
+.nxa-ig{display:block;text-align:center;margin-top:18px;color:var(--violet-hi);font-weight:600;text-decoration:none;font-size:.95rem}
+@media(min-width:900px){.nxa-track{justify-content:center;overflow:visible;margin:0}.nxa-card{flex:0 0 300px}}
 </style>
 </head>
 <body>
@@ -610,6 +622,29 @@ html, body { background: var(--bg); }
       </div>
     </div>
    </div>
+  </section>
+
+  <section id="en-action">
+    <div class="sec-head">
+      <span class="label">What he does</span>
+      <h2><span class="grad">Watch him work.</span></h2>
+      <p>Real answers, in seconds.</p>
+    </div>
+    <div class="nxa-track">
+      <figure class="nxa-card">
+        <video src="/static/reels/demo.mp4" poster="/static/reels/demo.jpg" muted loop playsinline preload="none" aria-label="Video : On your website"></video>
+        <figcaption><strong>On your website</strong><span>A question, an answer. An urgent request, your team is alerted.</span></figcaption>
+      </figure>
+      <figure class="nxa-card">
+        <video src="/static/reels/tri.mp4" poster="/static/reels/tri.jpg" muted loop playsinline preload="none" aria-label="Video : Sorting messages"></video>
+        <figcaption><strong>Sorting messages</strong><span>Simple ones, he answers. Important ones, he sends to you.</span></figcaption>
+      </figure>
+      <figure class="nxa-card">
+        <video src="/static/reels/client-difficile.mp4" poster="/static/reels/client-difficile.jpg" muted loop playsinline preload="none" aria-label="Video : The difficult customer"></video>
+        <figcaption><strong>The difficult customer</strong><span>Always polite. Even with him.</span></figcaption>
+      </figure>
+    </div>
+    <a class="nxa-ig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener">More videos on Instagram · @nexbotbusiness</a>
   </section>
 
   <section id="couleur">
@@ -1135,6 +1170,25 @@ document.getElementById('copy').addEventListener('click', function () {
     nx.style.transition = 'none'; nx.className = ''; void nx.offsetWidth; nx.style.transition = '';
     cur.className = 'off'; nx.className = 'on'; fit();
   }, 2600);
+})();
+</script>
+
+<script>
+(function(){
+  var cards=document.querySelectorAll('.nxa-card');
+  var io='IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){var c=e.target,v=c.querySelector('video');
+      if(e.isIntersecting && !c.dataset.user){v.play().catch(function(){c.classList.add('paused')});}
+      else if(!e.isIntersecting){v.pause();}
+    });
+  },{threshold:.6}) : null;
+  cards.forEach(function(c){
+    var v=c.querySelector('video');
+    if(io) io.observe(c); else c.classList.add('paused');
+    v.addEventListener('play',function(){c.classList.remove('paused')});
+    v.addEventListener('pause',function(){c.classList.add('paused')});
+    c.addEventListener('click',function(){c.dataset.user='1'; v.paused ? v.play() : v.pause();});
+  });
 })();
 </script>
 </body>
