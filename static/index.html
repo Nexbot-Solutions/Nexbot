@@ -515,16 +515,48 @@ html, body { background: var(--bg); }
 @media (max-width: 480px) { .h3 .actions { display: grid; width: 100%; } .h3 .actions .btn { width: 100%; } .h3 h1 { font-size: 1.72rem; } }
 
 /* Ce qu'il fait : réels NexBot */
-.nxa-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 18px;margin:0 -16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#en-action{position:relative;isolation:isolate}
+#en-action::before{content:"";position:absolute;left:50%;top:58%;width:min(1100px,100vw);height:70%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(139,92,246,.26),rgba(91,47,214,.08) 60%,transparent);filter:blur(10px);z-index:-1;pointer-events:none}
+.nxa-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:110px calc(50vw - min(37vw,150px)) 30px;margin:-76px calc(50% - 50vw) -20px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .nxa-track::-webkit-scrollbar{display:none}
-.nxa-card{flex:0 0 72%;max-width:320px;margin:0;scroll-snap-align:center;border-radius:24px;overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:0 0 50px rgba(139,92,246,.18);cursor:pointer;position:relative}
-.nxa-card video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--bg)}
-.nxa-card figcaption{text-align:left;padding:16px 18px 20px}
-.nxa-card strong{display:block;font-size:1rem;margin-bottom:4px;color:var(--fg)}
-.nxa-card span{color:var(--muted);font-size:.9rem;line-height:1.45}
-.nxa-card.paused::after{content:"";position:absolute;left:50%;top:38%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(139,92,246,.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='white'/%3E%3C/svg%3E") center/30px no-repeat}
-.nxa-ig{display:block;text-align:center;margin-top:18px;color:var(--violet-hi);font-weight:600;text-decoration:none;font-size:.95rem}
-@media(min-width:900px){.nxa-track{justify-content:center;overflow:visible;margin:0}.nxa-card{flex:0 0 300px}}
+.nxa-card{--g:139,92,246;flex:0 0 min(74vw,300px);margin:0;scroll-snap-align:center;cursor:pointer;opacity:.4;transform:scale(.88);transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.nxa-card.on{opacity:1;transform:none}
+.nxa-phone{position:relative;border-radius:46px;padding:9px;background:linear-gradient(155deg,#3a2d5c 0%,#110d1c 34%,#0b0912 66%,#2c2148 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 0 0 2px rgba(0,0,0,.6),0 40px 80px -30px rgba(var(--g),.75),0 0 140px -50px rgba(var(--g),.9)}
+.nxa-phone video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:38px;background:#07050d}
+.nxa-phone::after{content:"";position:absolute;inset:0;border-radius:46px;pointer-events:none;background:linear-gradient(118deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 28%)}
+.nxa-island{position:absolute;top:17px;left:50%;width:24%;height:18px;transform:translateX(-50%);border-radius:20px;background:#000;z-index:2;box-shadow:0 0 0 1px rgba(255,255,255,.05)}
+.nxa-bar{position:absolute;left:30px;right:30px;bottom:24px;height:3px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden;z-index:2}
+.nxa-bar i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,#fff,var(--violet-hi))}
+.nxa-play{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;z-index:3;opacity:0;transform:scale(.8);transition:.3s;
+  background:rgba(255,255,255,.14) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='white'/%3E%3C/svg%3E") 54% 50%/30px no-repeat;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.nxa-card.paused .nxa-play{opacity:1;transform:none}
+.nxa-card figcaption{text-align:center;padding:26px 6px 0}
+.nxa-card em{display:inline-block;font-style:normal;font-family:var(--font-display);font-size:.7rem;letter-spacing:.14em;color:rgb(var(--g));padding:5px 11px;border-radius:999px;background:rgba(var(--g),.12);box-shadow:inset 0 0 0 1px rgba(var(--g),.35);margin-bottom:12px}
+.nxa-card strong{display:block;font-size:1.12rem;font-weight:600;color:var(--fg);margin-bottom:6px}
+.nxa-card span{display:block;color:var(--muted);font-size:.92rem;line-height:1.5;max-width:270px;margin:0 auto}
+.nxa-dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
+.nxa-dots button{width:8px;height:8px;padding:0;border:0;border-radius:8px;background:rgba(255,255,255,.22);cursor:pointer;transition:width .35s,background .35s}
+.nxa-dots button[aria-current="true"]{width:28px;background:var(--violet-hi)}
+.nxa-ig{display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:calc(100% - 32px);text-align:center;margin:30px auto 0;padding:12px 22px;border-radius:999px;color:var(--fg);font-weight:600;font-size:.95rem;text-decoration:none;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(90deg,#f472b6,#8b5cf6,#6d8bff) border-box;border:1.5px solid transparent;transition:transform .25s,box-shadow .25s}
+.nxa-ig:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(139,92,246,.7)}
+.nxa-ig svg{width:18px;height:18px;flex:none}
+.nxa-ig b{font-weight:inherit}
+@media(max-width:480px){.nxa-ig{font-size:.86rem;padding:11px 18px}.nxa-ig b{display:none}}
+@media(min-width:900px){
+  .nxa-track{justify-content:center;overflow:visible;margin:0;padding:60px 0 10px;gap:44px}
+  .nxa-card{flex:0 0 280px;opacity:1}
+  .nxa-card:nth-child(1){transform:rotate(-4deg) translateY(26px)}
+  .nxa-card:nth-child(2){transform:translateY(-14px) scale(1.06)}
+  .nxa-card:nth-child(3){transform:rotate(4deg) translateY(26px)}
+  .nxa-card:hover{transform:translateY(-22px) scale(1.04)}
+  .nxa-card:nth-child(2):hover{transform:translateY(-30px) scale(1.09)}
+  .nxa-dots{display:none}
+}
+@media(max-width:899px){.nxa-card:not(.on) .nxa-phone{box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 0 0 2px rgba(0,0,0,.6)}}
+@media(prefers-reduced-motion:reduce){.nxa-card,.nxa-play,.nxa-ig{transition:none}}
 </style>
 </head>
 <body>
@@ -632,20 +664,36 @@ html, body { background: var(--bg); }
       <p>De vraies réponses, en quelques secondes.</p>
     </div>
     <div class="nxa-track">
-      <figure class="nxa-card">
-        <video src="/static/reels/demo.mp4" poster="/static/reels/demo.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Sur votre site"></video>
-        <figcaption><strong>Sur votre site</strong><span>Une question, une réponse. Une urgence, votre équipe est alertée.</span></figcaption>
+      <figure class="nxa-card" style="--g:139,92,246">
+        <div class="nxa-phone">
+          <span class="nxa-island"></span>
+          <video src="/static/reels/demo.mp4" poster="/static/reels/demo.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Sur votre site"></video>
+          <span class="nxa-play" aria-hidden="true"></span>
+          <span class="nxa-bar"><i></i></span>
+        </div>
+        <figcaption><em>01</em><strong>Sur votre site</strong><span>Une question, une réponse. Une urgence, votre équipe est alertée.</span></figcaption>
       </figure>
-      <figure class="nxa-card">
-        <video src="/static/reels/tri.mp4" poster="/static/reels/tri.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Le tri des messages"></video>
-        <figcaption><strong>Le tri des messages</strong><span>Le simple, il répond. L'important, il vous le transmet.</span></figcaption>
+      <figure class="nxa-card" style="--g:236,72,153">
+        <div class="nxa-phone">
+          <span class="nxa-island"></span>
+          <video src="/static/reels/tri.mp4" poster="/static/reels/tri.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Le tri des messages"></video>
+          <span class="nxa-play" aria-hidden="true"></span>
+          <span class="nxa-bar"><i></i></span>
+        </div>
+        <figcaption><em>02</em><strong>Le tri des messages</strong><span>Le simple, il répond. L'important, il vous le transmet.</span></figcaption>
       </figure>
-      <figure class="nxa-card">
-        <video src="/static/reels/client-difficile.mp4" poster="/static/reels/client-difficile.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Le client difficile"></video>
-        <figcaption><strong>Le client difficile</strong><span>Toujours poli. Même avec lui.</span></figcaption>
+      <figure class="nxa-card" style="--g:96,120,255">
+        <div class="nxa-phone">
+          <span class="nxa-island"></span>
+          <video src="/static/reels/client-difficile.mp4" poster="/static/reels/client-difficile.jpg" muted loop playsinline preload="none" aria-label="Vidéo : Le client difficile"></video>
+          <span class="nxa-play" aria-hidden="true"></span>
+          <span class="nxa-bar"><i></i></span>
+        </div>
+        <figcaption><em>03</em><strong>Le client difficile</strong><span>Toujours poli. Même avec lui.</span></figcaption>
       </figure>
     </div>
-    <a class="nxa-ig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener">Plus de vidéos sur Instagram · @nexbotbusiness</a>
+    <div class="nxa-dots"><button type="button" aria-label="Voir la vidéo 1" aria-current="true"></button><button type="button" aria-label="Voir la vidéo 2" aria-current="false"></button><button type="button" aria-label="Voir la vidéo 3" aria-current="false"></button></div>
+    <a class="nxa-ig" href="https://www.instagram.com/nexbotbusiness/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>Plus de vidéos sur Instagram<b> · @nexbotbusiness</b></span></a>
   </section>
 
   <section id="couleur">
@@ -1176,13 +1224,29 @@ document.getElementById('copy').addEventListener('click', function () {
 
 <script>
 (function(){
-  var cards=document.querySelectorAll('.nxa-card');
+  var track=document.querySelector('.nxa-track'); if(!track) return;
+  var cards=[].slice.call(track.querySelectorAll('.nxa-card'));
+  var dots=[].slice.call(document.querySelectorAll('.nxa-dots button'));
+  var wide=window.matchMedia('(min-width: 900px)');
+  function setActive(i){
+    cards.forEach(function(c,k){c.classList.toggle('on', wide.matches || k===i);});
+    dots.forEach(function(d,k){d.setAttribute('aria-current', k===i ? 'true' : 'false');});
+  }
+  function nearest(){
+    var mid=track.scrollLeft+track.clientWidth/2, best=0, bd=1e9;
+    cards.forEach(function(c,k){var d=Math.abs(c.offsetLeft+c.offsetWidth/2-mid); if(d<bd){bd=d;best=k;}});
+    return best;
+  }
+  var raf; track.addEventListener('scroll',function(){cancelAnimationFrame(raf); raf=requestAnimationFrame(function(){setActive(nearest());});},{passive:true});
+  dots.forEach(function(d,k){d.addEventListener('click',function(){var c=cards[k]; track.scrollTo({left:c.offsetLeft-(track.clientWidth-c.offsetWidth)/2,behavior:'smooth'});});});
+  (wide.addEventListener ? wide.addEventListener('change',function(){setActive(nearest());}) : wide.addListener(function(){setActive(nearest());}));
+  setActive(0);
   var io='IntersectionObserver' in window ? new IntersectionObserver(function(es){
     es.forEach(function(e){var c=e.target,v=c.querySelector('video');
       if(e.isIntersecting && !c.dataset.user){v.play().catch(function(){c.classList.add('paused')});}
       else if(!e.isIntersecting){v.pause();}
     });
-  },{threshold:.6}) : null;
+  },{threshold:.55}) : null;
   cards.forEach(function(c){
     var v=c.querySelector('video');
     if(io) io.observe(c); else c.classList.add('paused');
@@ -1190,6 +1254,11 @@ document.getElementById('copy').addEventListener('click', function () {
     v.addEventListener('pause',function(){c.classList.add('paused')});
     c.addEventListener('click',function(){c.dataset.user='1'; v.paused ? v.play() : v.pause();});
   });
+  var bars=cards.map(function(c){return [c.querySelector('video'), c.querySelector('.nxa-bar i')];});
+  (function tick(){
+    bars.forEach(function(b){ if(b[0].duration) b[1].style.transform='scaleX('+(b[0].currentTime/b[0].duration)+')'; });
+    requestAnimationFrame(tick);
+  })();
 })();
 </script>
 </body>
