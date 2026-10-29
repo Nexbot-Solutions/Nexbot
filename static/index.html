@@ -454,12 +454,17 @@ html, body { background: var(--bg); }
   background: rgba(255,255,255,.04); border: 1px solid var(--line); }
 .pill i { width: 9px; height: 9px; border-radius: 50%; background: #43e08a; box-shadow: 0 0 0 4px rgba(67,224,138,.18); }
 .h3 h1 { font-size: clamp(1.75rem, 3.7vw, 3.05rem); line-height: 1.16; }
-.h3 h1 .rot { display: inline-block; color: var(--violet-hi); }
+.h3 h1 .l1, .h3 h1 .l2 { display: block; white-space: nowrap; }
+.rot { display: inline-block; position: relative; vertical-align: top; height: 1.32em; margin-bottom: -0.16em; overflow: hidden; transition: width .6s cubic-bezier(.65,0,.35,1); }
+.rot span { position: absolute; left: 0; top: 0; line-height: 1.16; white-space: nowrap; padding-bottom: .16em; color: var(--violet-hi);
+  transition: transform .6s cubic-bezier(.65,0,.35,1), opacity .45s ease; transform: translateY(105%); opacity: 0; }
+.rot span:first-child { position: relative; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.rot span.on { transform: none; opacity: 1; }
+.rot span.off { transform: translateY(-105%); opacity: 0; }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .h3 h1 .rot, .h3 h1 em { background: linear-gradient(90deg, var(--violet-hi), var(--hot)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .rot span, .h3 h1 em { background: linear-gradient(90deg, var(--violet-hi), var(--hot)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
 }
-.h3 h1 .rot.swap { animation: rot-in .45s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes rot-in { from { opacity: 0; transform: translateY(.35em); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 .h3 h1 em { font-style: normal; display: block; margin-top: 4px; }
 .h3 .lead { color: var(--muted); font-size: 1.14rem; max-width: 44ch; }
 .h3 .actions { justify-content: flex-start; margin: 0; }
@@ -531,7 +536,7 @@ html, body { background: var(--bg); }
     <div class="h3-bg" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="txt">
       <span class="pill"><i></i>En ligne 24/7 · Français et anglais</span>
-      <h1><span class="grad">Votre</span> <span class="rot" data-words="commerce|restaurant|garage|clinique|boutique">commerce</span> <span class="grad">répond.</span><em>Même à 23 h.</em></h1>
+      <h1><span class="l1"><span class="grad">Votre</span> <span class="rot" aria-hidden="true"><span class="on">commerce</span><span>restaurant</span><span>garage</span><span>clinique</span><span>boutique</span></span></span><span class="l2 grad">répond.</span><em>Même à 23 h.</em><span class="sr">Votre commerce répond. Même à 23 h.</span></h1>
       <p class="lead">NexBot répond à vos clients en quelques secondes, jour et nuit, et transmet les demandes importantes à votre équipe, déjà résumées.</p>
       <div class="actions">
       <a class="btn violet" href="#offres">Voir les offres</a>
@@ -1105,10 +1110,17 @@ document.getElementById('copy').addEventListener('click', function () {
 <script src="/widget.js" data-client="nexbot" async></script>
 <script>
 (function () {
-  var el = document.querySelector('.h3 .rot'); if (!el) return;
-  var w = el.getAttribute('data-words').split('|'), i = 0;
+  var box = document.querySelector('.h3 .rot'); if (!box) return;
+  var w = box.children, i = 0, n = w.length;
+  function fit() { box.style.width = w[i].offsetWidth + 'px'; }
+  fit(); window.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  setInterval(function () { i = (i + 1) % w.length; el.textContent = w[i]; el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }, 2200);
+  setInterval(function () {
+    var cur = w[i]; i = (i + 1) % n; var nx = w[i];
+    nx.style.transition = 'none'; nx.className = ''; void nx.offsetWidth; nx.style.transition = '';
+    cur.className = 'off'; nx.className = 'on'; fit();
+  }, 2600);
 })();
 </script>
 </body>
