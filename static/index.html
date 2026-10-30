@@ -557,6 +557,55 @@ html, body { background: var(--bg); }
 }
 @media(max-width:899px){.nxa-card:not(.on) .nxa-phone{box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 0 0 2px rgba(0,0,0,.6)}}
 @media(prefers-reduced-motion:reduce){.nxa-card,.nxa-play,.nxa-ig{transition:none}}
+
+/* FAQ : pile de cartes colorées à glisser */
+#faq{position:relative;isolation:isolate;overflow-x:clip}
+#faq::before{content:"";position:absolute;left:50%;top:58%;width:min(1000px,100vw);height:76%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(var(--nxs-g,139,92,246),.22),rgba(91,47,214,.05) 60%,transparent);filter:blur(12px);z-index:-1;pointer-events:none;transition:background .8s}
+.nxs{display:none}
+.nxs-on .nxs{display:grid;justify-items:center;gap:22px;margin-top:6px;position:relative}
+.nxs-on .faq{display:none}
+.nxs-on .faq.open{display:grid;margin-top:30px}
+.nxs-aura{position:absolute;left:50%;top:230px;width:min(640px,120vw);height:560px;transform:translate(-50%,-50%);pointer-events:none;z-index:-1;filter:blur(40px);opacity:.85}
+.nxs-aura i{position:absolute;width:62%;height:62%;border-radius:50%;transition:background 1s}
+.nxs-aura i:nth-child(1){left:2%;top:6%;background:radial-gradient(closest-side,rgba(var(--a1,139,92,246),.75),transparent);animation:nxsA 9s ease-in-out infinite}
+.nxs-aura i:nth-child(2){right:2%;bottom:4%;background:radial-gradient(closest-side,rgba(var(--a2,236,72,153),.7),transparent);animation:nxsA 11s ease-in-out -4s infinite reverse}
+@keyframes nxsA{50%{transform:translate(9%,-7%) scale(1.12)}}
+.nxs-spark{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;background:rgb(var(--s));box-shadow:0 0 12px 2px rgba(var(--s),.9);animation:nxsTw 2.6s ease-in-out infinite;z-index:-1;transition:background 1s,box-shadow 1s}
+@keyframes nxsTw{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.25)}}
+.nxs-stage{position:relative;width:min(100%,400px);height:450px;touch-action:pan-y;outline:none;margin-bottom:34px}
+.nxs-card{--c:139,92,246;--c2:236,72,153;position:absolute;inset:0;border-radius:30px;padding:24px 22px 20px;display:flex;flex-direction:column;gap:12px;overflow:hidden;color:#fff;
+  background:radial-gradient(95% 55% at 50% 118%,rgba(var(--c2),.55),transparent 70%),radial-gradient(120% 75% at 100% 0%,rgba(var(--c2),.92),transparent 56%),radial-gradient(110% 85% at 0% 0%,rgba(var(--c),.95),transparent 62%),linear-gradient(172deg,rgba(var(--c),.5),rgba(var(--c2),.18) 55%,rgba(20,13,38,0) 80%),#130c25;
+  border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 70px -30px rgba(0,0,0,.95),0 0 90px -28px rgba(var(--c),.95),30px 40px 90px -50px rgba(var(--c2),.95);
+  transition:transform 1s cubic-bezier(.2,.8,.2,1),opacity .85s;will-change:transform;user-select:none;-webkit-user-select:none;transform-origin:50% 100%}
+.nxs-card:not(.top)>*{visibility:hidden}
+.nxs-card.top{cursor:grab}
+.nxs-card.drag{transition:none;cursor:grabbing}
+.nxs-big{position:absolute;right:14px;top:2px;font-family:var(--font-display);font-size:5.8rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.42);pointer-events:none;text-shadow:0 0 30px rgba(255,255,255,.18)}
+.nxs-k{font-family:var(--font-display);font-size:.66rem;letter-spacing:.14em;display:inline-flex;align-items:center;gap:9px}
+.nxs-k i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,.08));box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 6px 18px -6px rgba(var(--c2),.9)}
+.nxs-k svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nxs-card h3{margin:6px 0 0;font-size:1.34rem;line-height:1.27;font-weight:700;text-wrap:balance;max-width:86%;text-shadow:0 2px 14px rgba(0,0,0,.25)}
+.nxs-card p{margin:0;color:rgba(255,255,255,.92);font-size:.96rem;line-height:1.55;padding:14px 16px;border-radius:18px;background:rgba(12,7,26,.42);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nxs-card a{color:#fff}
+.nxs-hint{margin-top:auto;display:flex;justify-content:space-between;font-size:.8rem;color:rgba(255,255,255,.66)}
+.nxs-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.26) 50%,transparent 65%);transform:translateX(-120%)}
+.nxs-card.top .nxs-shine{animation:nxsShine 1.3s .2s ease-out}
+@keyframes nxsShine{to{transform:translateX(120%)}}
+.nxs-stamp{position:absolute;top:50%;margin-top:-16px;padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.06em;background:rgba(255,255,255,.95);color:#140d26;opacity:0;pointer-events:none;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)}
+.nxs-stamp.r{right:18px}.nxs-stamp.l{left:18px}
+.nxs-card.wiggle{animation:nxsWig 1.2s ease-in-out}
+@keyframes nxsWig{20%{transform:translateX(-26px) rotate(-3deg)}50%{transform:translateX(22px) rotate(2.5deg)}75%{transform:translateX(-8px) rotate(-1deg)}}
+.nxs-ctl{display:flex;align-items:center;gap:14px}
+.nxs-rb{width:50px;height:50px;border-radius:50%;border:1px solid rgba(var(--a1,139,92,246),.5);background:var(--surface);color:var(--fg);cursor:pointer;display:grid;place-items:center;transition:transform .2s,border-color .6s,box-shadow .6s;box-shadow:0 0 24px -8px rgba(var(--a1,139,92,246),.8)}
+.nxs-rb:hover{transform:translateY(-2px)}
+.nxs-rb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.nxs-dots{display:flex;gap:7px;align-items:center}
+.nxs-dots button{--c:139,92,246;--c2:236,72,153;width:10px;height:10px;padding:0;border:0;border-radius:10px;background:rgba(var(--c),.45);cursor:pointer;transition:width .4s,background .4s,box-shadow .4s}
+.nxs-dots button[aria-current="true"]{width:32px;background:linear-gradient(90deg,rgb(var(--c)),rgb(var(--c2)));box-shadow:0 0 14px rgba(var(--c),.9)}
+.nxs-count{font-family:var(--font-display);font-size:.78rem;letter-spacing:.1em;font-variant-numeric:tabular-nums;color:rgb(var(--a1,189,164,255));transition:color .6s;min-width:52px;text-align:center}
+.nxs-all{font:inherit;font-size:.88rem;color:var(--violet-hi);background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+@media(max-width:420px){.nxs-stage{height:480px}.nxs-card h3{font-size:1.2rem}.nxs-card p{font-size:.92rem;padding:12px 14px}.nxs-dots{gap:5px}.nxs-dots button{width:8px;height:8px}.nxs-dots button[aria-current="true"]{width:24px}}
+@media(prefers-reduced-motion:reduce){.nxs-card{transition:none}.nxs-card.top .nxs-shine,.nxs-card.wiggle,.nxs-aura i,.nxs-spark{animation:none}}
 </style>
 </head>
 <body>
@@ -908,15 +957,15 @@ html, body { background: var(--bg); }
       <h2><span class="grad">Vos questions, nos réponses.</span></h2>
     </div>
     <div class="faq">
-      <details><summary>Comment NexBot s'installe-t-il sur mon site?</summary><p>Nous configurons votre assistant, puis vous ajoutez une seule ligne de code à votre site. Aucune application à installer pour vos clients.</p></details>
-      <details><summary>Y a-t-il des frais de configuration ou d'installation?</summary><p>Non. La configuration et l'installation de votre assistant sont gratuites. Vous payez seulement l'abonnement mensuel de votre offre.</p></details>
-      <details><summary>Dans quelles langues NexBot répond-il?</summary><p>En français et en anglais. Il répond dans la langue utilisée par votre client.</p></details>
-      <details><summary>NexBot peut-il se tromper?</summary><p>Oui, comme tout assistant virtuel. Il s'appuie sur les informations de votre entreprise, indique quand il ne sait pas et invite votre client à vous contacter directement. Il ne remplace pas votre personnel.</p></details>
-      <details><summary>Que deviennent les conversations de mes clients?</summary><p>Elles ne sont pas enregistrées dans une base de données et sont effacées automatiquement après la session. Seule exception : si un visiteur demande de transmettre sa demande, il donne d'abord son accord, puis un courriel est envoyé à votre équipe. Les détails sont dans notre <a href="/confidentialite">politique de confidentialité</a>.</p></details>
-      <details><summary>Comment mon équipe reçoit-elle les demandes importantes?</summary><p>Par courriel, avec le résumé de la demande, sa priorité (normale ou urgente) et les coordonnées du visiteur, seulement si celui-ci accepte d'être contacté. Cette fonction est incluse dans les plans Pro et Business.</p></details>
-      <details><summary>Puis-je annuler en tout temps?</summary><p>Oui, sans pénalité ni engagement minimal. L'annulation prend effet à la fin de la période déjà payée. Les détails sont dans nos <a href="/conditions">conditions d'utilisation</a>.</p></details>
-      <details><summary>Les prix incluent-ils les taxes?</summary><p>Non. Les prix sont en dollars canadiens, taxes en sus, et l'abonnement se paie mensuellement.</p></details>
-      <details><summary>Comment vous joindre?</summary><p>Écrivez-nous à <a href="mailto:nexbot.contact@gmail.com">nexbot.contact@gmail.com</a>.</p></details>
+      <details data-q="Installation" data-i="code"><summary>Comment NexBot s'installe-t-il sur mon site?</summary><p>Nous configurons votre assistant, puis vous ajoutez une seule ligne de code à votre site. Aucune application à installer pour vos clients.</p></details>
+      <details data-q="Frais" data-i="tag"><summary>Y a-t-il des frais de configuration ou d'installation?</summary><p>Non. La configuration et l'installation de votre assistant sont gratuites. Vous payez seulement l'abonnement mensuel de votre offre.</p></details>
+      <details data-q="Langues" data-i="globe"><summary>Dans quelles langues NexBot répond-il?</summary><p>En français et en anglais. Il répond dans la langue utilisée par votre client.</p></details>
+      <details data-q="Erreurs" data-i="alert"><summary>NexBot peut-il se tromper?</summary><p>Oui, comme tout assistant virtuel. Il s'appuie sur les informations de votre entreprise, indique quand il ne sait pas et invite votre client à vous contacter directement. Il ne remplace pas votre personnel.</p></details>
+      <details data-q="Confidentialité" data-i="lock"><summary>Que deviennent les conversations de mes clients?</summary><p>Elles ne sont pas enregistrées dans une base de données et sont effacées automatiquement après la session. Seule exception : si un visiteur demande de transmettre sa demande, il donne d'abord son accord, puis un courriel est envoyé à votre équipe. Les détails sont dans notre <a href="/confidentialite">politique de confidentialité</a>.</p></details>
+      <details data-q="Demandes" data-i="mail"><summary>Comment mon équipe reçoit-elle les demandes importantes?</summary><p>Par courriel, avec le résumé de la demande, sa priorité (normale ou urgente) et les coordonnées du visiteur, seulement si celui-ci accepte d'être contacté. Cette fonction est incluse dans les plans Pro et Business.</p></details>
+      <details data-q="Annulation" data-i="x"><summary>Puis-je annuler en tout temps?</summary><p>Oui, sans pénalité ni engagement minimal. L'annulation prend effet à la fin de la période déjà payée. Les détails sont dans nos <a href="/conditions">conditions d'utilisation</a>.</p></details>
+      <details data-q="Taxes" data-i="receipt"><summary>Les prix incluent-ils les taxes?</summary><p>Non. Les prix sont en dollars canadiens, taxes en sus, et l'abonnement se paie mensuellement.</p></details>
+      <details data-q="Nous joindre" data-i="chat"><summary>Comment vous joindre?</summary><p>Écrivez-nous à <a href="mailto:nexbot.contact@gmail.com">nexbot.contact@gmail.com</a>.</p></details>
     </div>
   </section>
 
@@ -1259,6 +1308,70 @@ document.getElementById('copy').addEventListener('click', function () {
     bars.forEach(function(b){ if(b[0].duration) b[1].style.transform='scaleX('+(b[0].currentTime/b[0].duration)+')'; });
     requestAnimationFrame(tick);
   })();
+})();
+</script>
+
+<script>
+(function(){
+  var sec=document.getElementById('faq'); if(!sec) return;
+  var list=sec.querySelector('.faq'); if(!list) return;
+  var items=[].slice.call(list.querySelectorAll('details')); var N=items.length; if(!N) return;
+  var en=(document.documentElement.lang||'').toLowerCase().indexOf('en')===0;
+  var T=en?{q:'QUESTION',l:'← swipe',r:'swipe →',nx:'Next →',pv:'← Back',all:'See all answers as a list',less:'Hide the list',prev:'Previous question',next:'Next question',go:'Go to question '}
+          :{q:'QUESTION',l:'← glisser',r:'glisser →',nx:'Suivante →',pv:'← Précédente',all:'Voir toutes les réponses en liste',less:'Masquer la liste',prev:'Question précédente',next:'Question suivante',go:'Aller à la question '};
+  var COL=['139,92,246','224,64,251','91,108,255','255,79,163','34,166,242','180,92,255','255,111,181','31,199,182','124,77,255'];
+  var COL2=['236,72,153','99,102,241','34,211,238','251,146,60','139,92,246','255,111,181','168,85,247','59,130,246','236,72,153'];
+  var IC={code:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>',tag:'<path d="M3 12V4h8l10 10-8 8L3 12z"/><circle cx="7.5" cy="7.5" r="1.2"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',alert:'<path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 17h.01"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',x:'<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M9 8h6M9 12h6"/>',chat:'<path d="M4 5h16v11H9l-5 4V5z"/>'};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wrap=document.createElement('div'); wrap.className='nxs';
+  wrap.innerHTML='<div class="nxs-aura" aria-hidden="true"><i></i><i></i></div><div class="nxs-stage" tabindex="0" aria-roledescription="carrousel" aria-live="polite"></div>'
+    +'<div class="nxs-ctl"><button type="button" class="nxs-rb" data-d="-1" aria-label="'+T.prev+'"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span class="nxs-count"></span><button type="button" class="nxs-rb" data-d="1" aria-label="'+T.next+'"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>'
+    +'<div class="nxs-dots"></div><button type="button" class="nxs-all" aria-expanded="false">'+T.all+'</button>';
+  list.parentNode.insertBefore(wrap,list); sec.classList.add('nxs-on');
+  var st=wrap.querySelector('.nxs-stage'), cnt=wrap.querySelector('.nxs-count'), dotsBox=wrap.querySelector('.nxs-dots'), cards=[], dots=[], i=0;
+  items.forEach(function(d,k){
+    var c=document.createElement('article'); c.className='nxs-card'; c.style.setProperty('--c',COL[k%COL.length]); c.style.setProperty('--c2',COL2[k%COL2.length]);
+    var q=d.querySelector('summary').textContent.trim(), p=d.querySelector('p'), lab=(d.getAttribute('data-q')||'').toUpperCase(), ic=IC[d.getAttribute('data-i')]||IC.chat;
+    c.innerHTML='<span class="nxs-shine"></span><span class="nxs-big">'+(k+1<10?'0':'')+(k+1)+'</span><span class="nxs-k"><i><svg viewBox="0 0 24 24">'+ic+'</svg></i>'+lab+'</span><h3></h3><p>'+(p?p.innerHTML:'')+'</p><span class="nxs-hint"><span>'+T.l+'</span><span>'+T.r+'</span></span><span class="nxs-stamp r">'+T.nx+'</span><span class="nxs-stamp l">'+T.pv+'</span>';
+    c.querySelector('h3').textContent=q; st.appendChild(c); cards.push(c);
+    var b=document.createElement('button'); b.type='button'; b.style.setProperty('--c',COL[k%COL.length]); b.style.setProperty('--c2',COL2[k%COL2.length]); b.setAttribute('aria-label',T.go+(k+1));
+    b.addEventListener('click',function(){i=k;lay();}); dotsBox.appendChild(b); dots.push(b);
+  });
+  var sparks=[[6,18],[94,12],[-2,62],[100,70],[14,96],[88,98],[50,-4]].map(function(p,k){var s=document.createElement('span');s.className='nxs-spark';s.style.left=p[0]+'%';s.style.top=p[1]+'%';s.style.animationDelay=(-k*0.45)+'s';st.appendChild(s);return s;});
+  var FAN=[[0,1,0],[12,.95,-3],[22,.91,3.5],[30,.87,-2]];
+  function lay(){
+    cards.forEach(function(c,k){var d=(k-i+N)%N; var top=d===0; if(c.dataset.fly){ if(!top) return; delete c.dataset.fly; c.style.transition=''; c.style.pointerEvents=''; }
+      c.classList.toggle('top',top); c.setAttribute('aria-hidden',top?'false':'true');
+      if(top){c.classList.remove('top');void c.offsetWidth;c.classList.add('top');}
+      if(d>3){c.style.opacity='0';c.style.transform='translateY(40px) scale(.84)';c.style.zIndex=0;return;}
+      var f=FAN[d]; c.style.zIndex=10-d; c.style.opacity=d===3?'.5':'1';
+      c.style.transform='translateY('+f[0]+'px) scale('+f[1]+') rotate('+f[2]+'deg)';
+      c.querySelectorAll('.nxs-stamp').forEach(function(s){s.style.opacity=0;});
+    });
+    dots.forEach(function(b,k){b.setAttribute('aria-current',k===i?'true':'false');});
+    cnt.textContent=(i+1)+' / '+N; sec.style.setProperty('--nxs-g',COL[i%COL.length]); wrap.style.setProperty('--a1',COL[i%COL.length]); wrap.style.setProperty('--a2',COL2[i%COL2.length]);
+    sparks.forEach(function(s,k){s.style.setProperty('--s',k%2?COL2[i%COL2.length]:COL[i%COL.length]);});
+  }
+  function go(dir){var c=cards[i]; if(c.dataset.fly) return; c.classList.remove('wiggle','top','drag'); c.dataset.fly='1'; c.style.pointerEvents='none'; c.style.zIndex=20;
+    if(!reduce) c.style.transition='transform 1.4s cubic-bezier(.3,.6,.3,1),opacity 1.3s ease-in';
+    c.style.transform='translateX('+(-dir*130)+'%) rotate('+(-dir*18)+'deg)'; c.style.opacity='0';
+    i=(i+dir+N)%N; lay();
+    setTimeout(function(){if(!c.dataset.fly) return; delete c.dataset.fly; c.style.transition=''; c.style.pointerEvents=''; lay();},reduce?0:1450);}
+  wrap.querySelectorAll('.nxs-rb').forEach(function(b){b.addEventListener('click',function(){go(+b.getAttribute('data-d'));});});
+  st.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();go(1);}else if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}});
+  var sx=0,sy=0,dx=0,drag=null,moved=false;
+  st.addEventListener('pointerdown',function(e){var c=e.target.closest('.nxs-card.top'); if(!c||c.dataset.fly||e.target.closest('a')) return; c.classList.remove('wiggle'); drag=c; sx=e.clientX; sy=e.clientY; dx=0; moved=false;});
+  st.addEventListener('pointermove',function(e){if(!drag) return; dx=e.clientX-sx; var dy=e.clientY-sy;
+    if(!moved){ if(Math.abs(dx)<8) return; if(Math.abs(dy)>Math.abs(dx)){drag=null;return;} moved=true; drag.classList.add('drag'); try{drag.setPointerCapture(e.pointerId);}catch(_){} }
+    drag.style.transform='translateX('+dx+'px) rotate('+(dx/16)+'deg)';
+    var r=drag.querySelector('.nxs-stamp.r'), l=drag.querySelector('.nxs-stamp.l'); r.style.opacity=Math.max(0,Math.min(1,-dx/90)); l.style.opacity=Math.max(0,Math.min(1,dx/90));
+  });
+  function end(){if(!drag) return; var c=drag; drag=null; c.classList.remove('drag'); if(moved&&Math.abs(dx)>90) go(dx<0?1:-1); else lay();}
+  st.addEventListener('pointerup',end); st.addEventListener('pointercancel',end);
+  var allBtn=wrap.querySelector('.nxs-all');
+  allBtn.addEventListener('click',function(){var o=list.classList.toggle('open');allBtn.setAttribute('aria-expanded',o?'true':'false');allBtn.textContent=o?T.less:T.all;});
+  lay();
+  if(!reduce&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.disconnect();setTimeout(function(){var c=cards[i];c.classList.add('wiggle');setTimeout(function(){c.classList.remove('wiggle');},1150);},500);}});},{threshold:.6});io.observe(st);}
 })();
 </script>
 </body>
