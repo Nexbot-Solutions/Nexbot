@@ -844,16 +844,16 @@ html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::be
 @media (prefers-reduced-motion: no-preference) {
   #plan-essentiel .ico::after, #plan-pro .ico::after, #plan-business .ico::after { animation: nx-ring 3.2s ease-in-out infinite; }
   #plan-pro .ico::after { animation-delay: .5s; } #plan-business .ico::after { animation-delay: 1s; }
-  @keyframes nx-ring { 0%, 100% { box-shadow: 0 0 8px var(--ringg), inset 0 0 6px var(--ringg); } 50% { box-shadow: 0 0 20px var(--ringg), inset 0 0 12px var(--ringg); } }
+  @keyframes nx-ring { 0%, 100% { box-shadow: 0 0 16px var(--ringg), 0 0 34px var(--ringg), inset 0 0 10px var(--ringg); } 50% { box-shadow: 0 0 26px var(--ringg), 0 0 56px var(--ringg), inset 0 0 16px var(--ringg); } }
 }
 
 /* Offres : brume de couleur entre l'icône et l'anneau */
 #plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { content: ""; position: absolute; inset: -6px; border-radius: 20px; z-index: -1; pointer-events: none;
-  background: var(--ring); opacity: .7; filter: blur(5px); }
+  background: var(--ring); opacity: .9; filter: blur(6px); }
 @media (prefers-reduced-motion: no-preference) {
   #plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { animation: nx-mist 3.2s ease-in-out infinite; }
   #plan-pro .ico::before { animation-delay: .5s; } #plan-business .ico::before { animation-delay: 1s; }
-  @keyframes nx-mist { 0%, 100% { opacity: .62; } 50% { opacity: .9; } }
+  @keyframes nx-mist { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
 }
 </style>
 </head>
