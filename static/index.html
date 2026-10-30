@@ -809,7 +809,7 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
 #plan-essentiel .ico { background: linear-gradient(135deg, var(--c-tur1), var(--c-tur2)); box-shadow: 0 8px 26px rgba(30,210,200,.45); }
 #plan-pro .ico { background: linear-gradient(135deg, #c9b8ff, #7b6cf0); box-shadow: 0 8px 26px rgba(170,150,255,.5); }
 #plan-pro .ico svg { stroke: #1a1240; }
-#plan-business .ico { background: linear-gradient(135deg, var(--c-pnk1), var(--c-pnk2)); box-shadow: 0 8px 26px rgba(255,124,196,.45); }
+#plan-business .ico { background: linear-gradient(135deg, #ffa3d8, #ff4fa8); box-shadow: 0 8px 26px rgba(255,90,170,.55); }
 /* Après votre choix : chiffres de couleur */
 #apres-paiement .card:nth-child(1) .num { background-image: linear-gradient(135deg, var(--c-vio1), var(--c-pnk1)); }
 #apres-paiement .card:nth-child(2) .num { background-image: linear-gradient(135deg, var(--c-blu1), var(--c-tur1)); filter: drop-shadow(0 0 14px rgba(91,140,255,.45)); }
@@ -838,7 +838,7 @@ html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::be
 #plan-essentiel .ico, #plan-pro .ico, #plan-business .ico { position: relative; }
 #plan-essentiel .ico { --ring: #2ee6d6; --ringg: rgba(46,230,214,.55); }
 #plan-pro .ico { --ring: #c9b8ff; --ringg: rgba(185,165,255,.55); }
-#plan-business .ico { --ring: #ff8fd0; --ringg: rgba(255,124,196,.55); }
+#plan-business .ico { --ring: #ff7ac4; --ringg: rgba(255,100,180,.65); }
 #plan-essentiel .ico::after, #plan-pro .ico::after, #plan-business .ico::after { content: ""; position: absolute; inset: -6px; border-radius: 20px; pointer-events: none;
   border: 1.5px solid var(--ring); box-shadow: 0 0 12px var(--ringg), inset 0 0 10px var(--ringg); }
 @media (prefers-reduced-motion: no-preference) {
@@ -849,11 +849,11 @@ html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::be
 
 /* Offres : brume de couleur entre l'icône et l'anneau */
 #plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { content: ""; position: absolute; inset: -6px; border-radius: 20px; z-index: -1; pointer-events: none;
-  background: var(--ring); opacity: .5; filter: blur(4px); }
+  background: var(--ring); opacity: .7; filter: blur(5px); }
 @media (prefers-reduced-motion: no-preference) {
   #plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { animation: nx-mist 3.2s ease-in-out infinite; }
   #plan-pro .ico::before { animation-delay: .5s; } #plan-business .ico::before { animation-delay: 1s; }
-  @keyframes nx-mist { 0%, 100% { opacity: .42; } 50% { opacity: .7; } }
+  @keyframes nx-mist { 0%, 100% { opacity: .62; } 50% { opacity: .9; } }
 }
 </style>
 </head>
