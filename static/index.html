@@ -794,17 +794,6 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
   .nxa-card.on .nxa-phone::after { animation: nx-glare 6s ease-in-out infinite; }
   @keyframes nx-glare { 0%, 55% { background-position: 0 0, 120% 0; } 85%, 100% { background-position: 0 0, -40% 0; } }
 }
-/* Barre « Voir les offres » sur iPhone */
-.nx-sticky { display: none; }
-@media (max-width: 720px) {
-  .nx-sticky { display: flex; position: fixed; z-index: 40; left: 12px; right: 96px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); height: 60px; align-items: center; gap: 10px;
-    padding: 6px 6px 6px 18px; border-radius: 999px; background: rgba(18,12,34,.82); border: 1px solid rgba(139,92,246,.45);
-    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 14px 40px rgba(0,0,0,.55), 0 0 30px rgba(139,92,246,.25);
-    transform: translateY(140%); opacity: 0; transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s; pointer-events: none; }
-  .nx-sticky.show { transform: none; opacity: 1; pointer-events: auto; }
-  .nx-sticky small { flex: 1; min-width: 0; font-size: .82rem; color: var(--muted); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .nx-sticky .btn { flex: none; padding: 0 20px; height: 48px; display: inline-flex; align-items: center; font-size: .92rem; }
-}
 </style>
 </head>
 <body>
@@ -1624,20 +1613,5 @@ document.getElementById('copy').addEventListener('click', function () {
 })();
 </script>
 
-<div class="nx-sticky" aria-hidden="true"><small>Dès 99 $ / mois</small><a class="btn violet" href="#offres" tabindex="-1">Voir les offres</a></div>
-<script>
-/* Barre mobile « Voir les offres » : visible après le haut de page, cachée près des offres et du contact */
-(function () {
-  var bar = document.querySelector('.nx-sticky'); if (!bar || !('IntersectionObserver' in window)) return;
-  var hide = new Set(), targets = [document.querySelector('.h3 .actions'), document.getElementById('offres'), document.getElementById('contact')].filter(Boolean);
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) hide.add(e.target); else hide.delete(e.target); });
-    var past = window.scrollY > 500;
-    bar.classList.toggle('show', past && hide.size === 0);
-  }, { threshold: 0 });
-  targets.forEach(function (t) { io.observe(t); });
-  window.addEventListener('scroll', function () { if (window.scrollY <= 500) bar.classList.remove('show'); else if (hide.size === 0) bar.classList.add('show'); }, { passive: true });
-})();
-</script>
 </body>
 </html>
