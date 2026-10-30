@@ -794,6 +794,45 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
   .nxa-card.on .nxa-phone::after { animation: nx-glare 6s ease-in-out infinite; }
   @keyframes nx-glare { 0%, 55% { background-position: 0 0, 120% 0; } 85%, 100% { background-position: 0 0, -40% 0; } }
 }
+
+/* ===== Couleurs : bleu, turquoise, violet, touches de lime ===== */
+:root { --c-vio1: #a47bff; --c-vio2: #5b2fd6; --c-blu1: #5b8cff; --c-blu2: #2346d6; --c-tur1: #2ee6d6; --c-tur2: #0b8fa3; --c-lim1: #c8ff4d; --c-lim2: #5fbf1f; --c-pnk1: #ff8fd0; --c-pnk2: #b14bff; }
+/* Icônes « Pourquoi NexBot » : une couleur chacune */
+.rows .row:nth-child(1) .ico { background: linear-gradient(135deg, var(--c-vio1), var(--c-vio2)); box-shadow: 0 8px 26px rgba(139,92,246,.5); }
+.rows .row:nth-child(2) .ico { background: linear-gradient(135deg, var(--c-blu1), var(--c-blu2)); box-shadow: 0 8px 26px rgba(70,110,255,.5); }
+.rows .row:nth-child(3) .ico { background: linear-gradient(135deg, var(--c-tur1), var(--c-tur2)); box-shadow: 0 8px 26px rgba(30,210,200,.45); }
+.rows .row:nth-child(4) .ico { background: linear-gradient(135deg, var(--c-lim1), var(--c-lim2)); box-shadow: 0 8px 26px rgba(170,240,60,.4); }
+.rows .row:nth-child(4) .ico svg { stroke: #10200a; }
+.rows .row:nth-child(2)::before { background: linear-gradient(90deg, var(--c-blu1), var(--c-tur1)); }
+.rows .row:nth-child(3)::before { background: linear-gradient(90deg, var(--c-tur1), var(--c-lim1)); }
+.rows .row:nth-child(4)::before { background: linear-gradient(90deg, var(--c-lim1), var(--c-vio1)); }
+/* Étapes 1-2-3 */
+.step:nth-child(2) .dot { border-color: var(--c-blu1); color: #fff; text-shadow: 0 0 14px rgba(91,140,255,.9); background: radial-gradient(circle at 35% 30%, rgba(91,140,255,.4), rgba(35,70,214,.25) 45%, transparent 75%), var(--bg); }
+.step:nth-child(3) .dot { border-color: var(--c-tur1); color: #fff; text-shadow: 0 0 14px rgba(46,230,214,.9); background: radial-gradient(circle at 35% 30%, rgba(46,230,214,.35), rgba(11,143,163,.25) 45%, transparent 75%), var(--bg); }
+.steps::before { background: linear-gradient(90deg, var(--c-vio1), var(--c-blu1), var(--c-tur1)); }
+/* Offres : icône de couleur par forfait */
+#plan-essentiel .ico { background: linear-gradient(135deg, var(--c-tur1), var(--c-tur2)); box-shadow: 0 8px 26px rgba(30,210,200,.45); }
+#plan-pro .ico { background: linear-gradient(135deg, var(--c-blu1), var(--c-blu2)); box-shadow: 0 8px 26px rgba(70,110,255,.5); }
+#plan-business .ico { background: linear-gradient(135deg, var(--c-pnk1), var(--c-pnk2)); box-shadow: 0 8px 26px rgba(255,124,196,.45); }
+/* Après votre choix : chiffres de couleur */
+#apres-paiement .card:nth-child(1) .num { background-image: linear-gradient(135deg, var(--c-vio1), var(--c-pnk1)); }
+#apres-paiement .card:nth-child(2) .num { background-image: linear-gradient(135deg, var(--c-blu1), var(--c-tur1)); filter: drop-shadow(0 0 14px rgba(91,140,255,.45)); }
+#apres-paiement .card:nth-child(3) .num { background-image: linear-gradient(135deg, var(--c-tur1), var(--c-lim1)); filter: drop-shadow(0 0 14px rgba(46,230,214,.4)); }
+#apres-paiement .card { border-top: 1px solid transparent; background-clip: padding-box; }
+#apres-paiement .card:nth-child(1) { box-shadow: inset 0 1px 0 rgba(164,123,255,.6); }
+#apres-paiement .card:nth-child(2) { box-shadow: inset 0 1px 0 rgba(91,140,255,.6); }
+#apres-paiement .card:nth-child(3) { box-shadow: inset 0 1px 0 rgba(46,230,214,.6); }
+/* Notre objectif : icônes de couleur */
+.goals div:nth-child(1)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12M7 10l5 5 5-5'/%3E%3Cpath d='M4 20h16'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--c-vio1), var(--c-vio2)); }
+.goals div:nth-child(2)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2L4 14h7l-1 8 9-12h-7z'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--c-blu1), var(--c-blu2)); box-shadow: 0 8px 24px rgba(70,110,255,.5); }
+.goals div:nth-child(3)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='white'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--c-tur1), var(--c-tur2)); box-shadow: 0 8px 24px rgba(30,210,200,.45); }
+.goals div::after { background: linear-gradient(90deg, transparent, var(--c-blu1), var(--c-tur1), transparent); }
+/* Lueurs de couleur dans le fond */
+#avantages, #apres-paiement, #objectif { position: relative; isolation: isolate; }
+#avantages::after, #apres-paiement::after { content: ""; position: absolute; z-index: -1; pointer-events: none; width: min(620px, 90vw); aspect-ratio: 1; border-radius: 50%; filter: blur(90px); opacity: .22; }
+#avantages::after { right: -12%; top: 10%; background: radial-gradient(closest-side, var(--c-tur1), transparent); }
+#apres-paiement::after { left: -14%; top: 0; background: radial-gradient(closest-side, var(--c-blu1), transparent); }
+@media (max-width: 720px) { #avantages::after, #apres-paiement::after { opacity: .16; } }
 </style>
 </head>
 <body>
