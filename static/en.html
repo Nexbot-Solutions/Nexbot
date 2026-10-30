@@ -846,6 +846,15 @@ html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::be
   #plan-pro .ico::after { animation-delay: .5s; } #plan-business .ico::after { animation-delay: 1s; }
   @keyframes nx-ring { 0%, 100% { box-shadow: 0 0 8px var(--ringg), inset 0 0 6px var(--ringg); } 50% { box-shadow: 0 0 20px var(--ringg), inset 0 0 12px var(--ringg); } }
 }
+
+/* Offres : brume de couleur entre l'icône et l'anneau */
+#plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { content: ""; position: absolute; inset: -6px; border-radius: 20px; z-index: -1; pointer-events: none;
+  background: var(--ring); opacity: .5; filter: blur(4px); }
+@media (prefers-reduced-motion: no-preference) {
+  #plan-essentiel .ico::before, #plan-pro .ico::before, #plan-business .ico::before { animation: nx-mist 3.2s ease-in-out infinite; }
+  #plan-pro .ico::before { animation-delay: .5s; } #plan-business .ico::before { animation-delay: 1s; }
+  @keyframes nx-mist { 0%, 100% { opacity: .42; } 50% { opacity: .7; } }
+}
 </style>
 </head>
 <body>
