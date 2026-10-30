@@ -739,6 +739,36 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
 #demo-couleur .dots { gap: 18px; }
 #demo-couleur .dots button, #demo-couleur .dots label { width: 40px; height: 40px; }
 @media (max-width: 480px) { #demo-couleur .choix { width: 100%; padding: 26px 16px 22px; } #demo-couleur .dots { gap: 10px; } }
+
+/* ===== Section couleur : carte de personnalisation ===== */
+#demo-couleur .choix { width: min(400px, 100%); gap: 14px; padding: 34px 28px 28px; overflow: hidden; position: relative; }
+#demo-couleur .choix::after { content: ""; position: absolute; left: 10%; right: 10%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--clair), var(--c), transparent); }
+.dc-orb { position: relative; width: 132px; height: 132px; display: grid; place-items: center; margin-bottom: 4px; }
+.dc-orb::before { content: ""; position: absolute; inset: 0; border-radius: 50%; padding: 2px;
+  background: conic-gradient(from var(--nxa), transparent 0 40%, var(--clair) 65%, var(--c) 80%, transparent 95%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.dc-orb::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; background: radial-gradient(circle, var(--glow2), transparent 70%); filter: blur(18px); z-index: -1; }
+#demo-couleur .dc-orb .wd-bulle { width: 108px; height: 108px; margin: 0; animation: none; box-shadow: 0 0 34px var(--glow2), 0 8px 24px rgba(0,0,0,.5); }
+.dc-kicker { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--clair); font-weight: 600; }
+#demo-couleur .hint { font-family: var(--font-display); font-size: 1.12rem; line-height: 1.35; color: var(--fg); max-width: 22ch; margin-bottom: 6px; }
+#demo-couleur .dots { gap: 10px; width: 100%; flex-wrap: nowrap; }
+#demo-couleur .dots button, #demo-couleur .dots label { width: auto; height: 46px; flex: 1; min-width: 0; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 0 16px; font: 600 .9rem var(--font-body); color: var(--fg); background: rgba(255,255,255,.04); border: 1px solid var(--line); box-shadow: none; transform: none;
+  transition: border-color .25s, background-color .25s, box-shadow .25s; white-space: nowrap; }
+#demo-couleur .dots button i, #demo-couleur .dots label i { flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--d); box-shadow: 0 0 10px var(--d); }
+#demo-couleur .dots label i { background: var(--pick, conic-gradient(#e8553d, #e0a526, #2f9e6e, #2f5bea, #8b5cf6, #d4537e, #e8553d)); box-shadow: none; }
+#demo-couleur .dots label span { overflow: hidden; text-overflow: ellipsis; }
+#demo-couleur .dots button:hover, #demo-couleur .dots label:hover { transform: none; border-color: var(--clair); }
+#demo-couleur .dots button[aria-pressed="true"], #demo-couleur .dots label.on { transform: none; border-color: var(--c); background: color-mix(in srgb, var(--c) 18%, transparent); box-shadow: 0 0 0 1px var(--c), 0 0 24px var(--glow2); }
+#demo-couleur .dots label input { z-index: 1; }
+#demo-couleur .dc-name { display: none; }
+@media (max-width: 480px) { #demo-couleur .dots button, #demo-couleur .dots label { padding: 0 10px; gap: 8px; font-size: .86rem; } #demo-couleur .choix { padding: 30px 18px 24px; } }
+.dc-parts { display: grid; gap: 10px; justify-items: center; margin-top: 10px; padding-top: 18px; border-top: 1px solid var(--line); width: 100%; }
+.dc-parts small { font-size: .8rem; color: var(--muted); }
+.dc-parts div { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.dc-parts span { display: inline-flex; align-items: center; gap: 7px; font-size: .8rem; padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.3); border: 1px solid var(--line); }
+.dc-parts span i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); transition: background-color .5s, box-shadow .5s; }
+@media (prefers-reduced-motion: no-preference) { .dc-orb::before { animation: nx-spin 6s linear infinite; } .dc-orb { animation: float 5s ease-in-out infinite; } }
 </style>
 </head>
 <body>
@@ -902,13 +932,15 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
         </div>
       </div>
       <div class="choix">
-        <div class="wd-img wd-bulle"><img src="/static/IMG_7106.jpeg" alt="" draggable="false"></div>
+        <div class="dc-orb"><div class="wd-img wd-bulle"><img src="/static/IMG_7106.jpeg" alt="" draggable="false"></div></div>
+        <span class="dc-kicker">Personnalisation</span>
         <span class="hint">Choisissez la couleur de votre entreprise</span>
         <div class="dots" id="dots-couleur">
-          <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Mauve" aria-pressed="true"></button>
-          <label title="Autre couleur"><input type="color" value="#8b5cf6" aria-label="Autre couleur"></label>
+          <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Mauve" aria-pressed="true"><i></i>Mauve</button>
+          <label title="Autre couleur"><i></i><span>Votre couleur</span><input type="color" value="#8b5cf6" aria-label="Autre couleur"></label>
         </div>
-        <span class="dc-name" aria-live="polite"><i></i><span>Mauve</span></span>
+        <span class="dc-name" aria-live="polite" hidden><i></i><span>Mauve</span></span>
+        <div class="dc-parts"><small>S'adapte automatiquement</small><div><span><i></i>Bouton</span><span><i></i>En-tête</span><span><i></i>Bulles</span></div></div>
       </div>
     </div>
   </section>
@@ -1542,6 +1574,17 @@ document.getElementById('copy').addEventListener('click', function () {
   function flash() { d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
   d.querySelectorAll('.dots button').forEach(function (b) { b.addEventListener('click', function () { nom.textContent = b.getAttribute('aria-label'); flash(); }); });
   if (champ) champ.addEventListener('input', function () { nom.textContent = d.getAttribute('data-custom'); });
+})();
+</script>
+
+<script>
+/* Section couleur : la pastille « Votre couleur » prend la couleur choisie */
+(function () {
+  var d = document.getElementById('demo-couleur'); if (!d) return;
+  var lab = d.querySelector('.dots label'), champ = lab && lab.querySelector('input'), b = d.querySelector('.dots button');
+  if (!champ) return;
+  champ.addEventListener('input', function () { lab.style.setProperty('--pick', champ.value); });
+  if (b) b.addEventListener('click', function () { lab.style.removeProperty('--pick'); });
 })();
 </script>
 </body>
