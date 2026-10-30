@@ -833,6 +833,19 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
   box-shadow: 0 0 10px 1px rgba(164,123,255,.7), 0 0 24px 2px rgba(139,92,246,.35); }
 html.rv-on .rows .row:nth-child(n):not(.in)::before { width: 0; }
 html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::before { width: 60%; }
+
+/* Offres : anneau lumineux autour des icônes */
+#plan-essentiel .ico, #plan-pro .ico, #plan-business .ico { position: relative; }
+#plan-essentiel .ico { --ring: #2ee6d6; --ringg: rgba(46,230,214,.55); }
+#plan-pro .ico { --ring: #c9b8ff; --ringg: rgba(185,165,255,.55); }
+#plan-business .ico { --ring: #ff8fd0; --ringg: rgba(255,124,196,.55); }
+#plan-essentiel .ico::after, #plan-pro .ico::after, #plan-business .ico::after { content: ""; position: absolute; inset: -6px; border-radius: 20px; pointer-events: none;
+  border: 1.5px solid var(--ring); box-shadow: 0 0 12px var(--ringg), inset 0 0 10px var(--ringg); }
+@media (prefers-reduced-motion: no-preference) {
+  #plan-essentiel .ico::after, #plan-pro .ico::after, #plan-business .ico::after { animation: nx-ring 3.2s ease-in-out infinite; }
+  #plan-pro .ico::after { animation-delay: .5s; } #plan-business .ico::after { animation-delay: 1s; }
+  @keyframes nx-ring { 0%, 100% { box-shadow: 0 0 8px var(--ringg), inset 0 0 6px var(--ringg); } 50% { box-shadow: 0 0 20px var(--ringg), inset 0 0 12px var(--ringg); } }
+}
 </style>
 </head>
 <body>
