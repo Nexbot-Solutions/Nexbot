@@ -769,6 +769,42 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
 .dc-parts span { display: inline-flex; align-items: center; gap: 7px; font-size: .8rem; padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.3); border: 1px solid var(--line); }
 .dc-parts span i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); transition: background-color .5s, box-shadow .5s; }
 @media (prefers-reduced-motion: no-preference) { .dc-orb::before { animation: nx-spin 6s linear infinite; } .dc-orb { animation: float 5s ease-in-out infinite; } }
+
+/* ===== v4 : Business, vidéos, barre mobile ===== */
+/* Offre Business : contour lumineux qui tourne + lueur qui respire */
+.plan.premium::before { content: ""; position: absolute; inset: -1.5px; border-radius: inherit; padding: 2px; pointer-events: none; z-index: 3;
+  background: conic-gradient(from var(--nxa), transparent 0 50%, #fff 60%, var(--hot) 70%, var(--violet-hi) 82%, transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+@media (prefers-reduced-motion: no-preference) {
+  .plan.premium::before { animation: nx-spin 5s linear infinite; }
+  .plan.premium { animation: nx-breathe 4s ease-in-out infinite; }
+  @keyframes nx-breathe { 0%, 100% { box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 90px rgba(139,92,246,.4); }
+                          50% { box-shadow: 0 0 0 6px var(--bg), 0 0 0 7.5px var(--violet-hi), 0 0 150px rgba(189,132,255,.7); } }
+}
+/* Vidéos : téléphones plus réalistes */
+.nxa-phone { box-shadow: inset 0 0 0 1px rgba(255,255,255,.18), inset 0 0 0 2.5px rgba(0,0,0,.7), inset 0 1px 0 3px rgba(255,255,255,.06), 0 40px 80px -30px rgba(var(--g),.75), 0 0 140px -50px rgba(var(--g),.9); }
+.nxa-phone::before { content: ""; position: absolute; left: -2.5px; top: 21%; width: 3px; height: 7%; border-radius: 2px 0 0 2px; pointer-events: none;
+  background: linear-gradient(90deg, #4a3d70, #1d1630); box-shadow: 0 calc(var(--bh, 26px) * 2.2) 0 0 #2b2245, 0 calc(var(--bh, 26px) * 4.1) 0 0 #2b2245; }
+.nxa-island::after { content: ""; position: absolute; right: 18%; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #4b5b9a, #0b0d1a 70%); }
+.nxa-phone::after { background: linear-gradient(118deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 26%), linear-gradient(115deg, transparent 40%, rgba(255,255,255,.10) 48%, transparent 56%);
+  background-size: 100% 100%, 260% 100%; background-position: 0 0, 120% 0; background-repeat: no-repeat; }
+.nxa-card figcaption { position: relative; }
+.nxa-card figcaption::before { content: ""; position: absolute; left: 18%; right: 18%; top: 4px; height: 18px; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--g),.45), transparent); filter: blur(6px); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .nxa-card.on .nxa-phone::after { animation: nx-glare 6s ease-in-out infinite; }
+  @keyframes nx-glare { 0%, 55% { background-position: 0 0, 120% 0; } 85%, 100% { background-position: 0 0, -40% 0; } }
+}
+/* Barre « Voir les offres » sur iPhone */
+.nx-sticky { display: none; }
+@media (max-width: 720px) {
+  .nx-sticky { display: flex; position: fixed; z-index: 40; left: 12px; right: 96px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); height: 60px; align-items: center; gap: 10px;
+    padding: 6px 6px 6px 18px; border-radius: 999px; background: rgba(18,12,34,.82); border: 1px solid rgba(139,92,246,.45);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 14px 40px rgba(0,0,0,.55), 0 0 30px rgba(139,92,246,.25);
+    transform: translateY(140%); opacity: 0; transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s; pointer-events: none; }
+  .nx-sticky.show { transform: none; opacity: 1; pointer-events: auto; }
+  .nx-sticky small { flex: 1; min-width: 0; font-size: .82rem; color: var(--muted); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nx-sticky .btn { flex: none; padding: 0 20px; height: 48px; display: inline-flex; align-items: center; font-size: .92rem; }
+}
 </style>
 </head>
 <body>
@@ -1585,6 +1621,22 @@ document.getElementById('copy').addEventListener('click', function () {
   if (!champ) return;
   champ.addEventListener('input', function () { lab.style.setProperty('--pick', champ.value); });
   if (b) b.addEventListener('click', function () { lab.style.removeProperty('--pick'); });
+})();
+</script>
+
+<div class="nx-sticky" aria-hidden="true"><small>Dès 99 $ / mois</small><a class="btn violet" href="#offres" tabindex="-1">Voir les offres</a></div>
+<script>
+/* Barre mobile « Voir les offres » : visible après le haut de page, cachée près des offres et du contact */
+(function () {
+  var bar = document.querySelector('.nx-sticky'); if (!bar || !('IntersectionObserver' in window)) return;
+  var hide = new Set(), targets = [document.querySelector('.h3 .actions'), document.getElementById('offres'), document.getElementById('contact')].filter(Boolean);
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) hide.add(e.target); else hide.delete(e.target); });
+    var past = window.scrollY > 500;
+    bar.classList.toggle('show', past && hide.size === 0);
+  }, { threshold: 0 });
+  targets.forEach(function (t) { io.observe(t); });
+  window.addEventListener('scroll', function () { if (window.scrollY <= 500) bar.classList.remove('show'); else if (hide.size === 0) bar.classList.add('show'); }, { passive: true });
 })();
 </script>
 </body>

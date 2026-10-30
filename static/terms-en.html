@@ -40,11 +40,29 @@ a { color: var(--violet-hi); }
 .note { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; margin: 22px 0; color: var(--muted); }
 footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
 footer a { color: var(--muted); }
+
+/* ===== Look NexBot ===== */
+body { background: radial-gradient(900px 520px at 50% -120px, rgba(139,92,246,.30), transparent 70%), radial-gradient(600px 400px at 100% 10%, rgba(255,124,196,.12), transparent 70%), var(--bg); background-attachment: fixed; }
+.nx-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px;
+  background: rgba(7,5,13,.72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.nx-top .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); font-family: var(--font-display); letter-spacing: .12em; font-size: .95rem; }
+.nx-top .brand img { width: 32px; height: 32px; }
+.nx-top .back { margin: 0; display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); font-size: .85rem; text-decoration: none; }
+.nx-top .back:hover { border-color: var(--violet); text-decoration: none; }
+.wrap { padding-top: 44px; }
+h1 { background: linear-gradient(180deg, #fff 25%, var(--violet-hi)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+h1::after { content: ""; display: block; width: 44px; height: 2px; margin-top: 18px; border-radius: 2px; background: linear-gradient(90deg, var(--violet), #ff7cc4); box-shadow: 0 0 12px rgba(139,92,246,.8); }
+h2 { display: flex; align-items: center; gap: 12px; margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); color: var(--fg); font-weight: 600; }
+h2::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--violet-hi); box-shadow: 0 0 12px var(--violet); }
+li::marker { color: var(--violet-hi); }
+.note { background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(255,255,255,.02)); border-color: rgba(139,92,246,.35); box-shadow: 0 16px 40px rgba(0,0,0,.3); }
+footer { border-top: 0; position: relative; }
+footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(139,92,246,.6), rgba(255,124,196,.5), transparent); }
 </style>
 </head>
 <body>
+<header class="nx-top"><a class="brand" href="/en"><img src="/static/mascotte.png" alt="" width="32" height="32">NEXBOT</a><a class="back" href="/en">← Back to home</a></header>
 <div class="wrap">
-  <a class="back" href="/en">← Back to home</a>
   <h1>Terms of use</h1>
   <p class="maj">Last updated: October 21, 2026 · <a href="/conditions" hreflang="fr" lang="fr">Version française</a></p>
   <div class="note">In case of any discrepancy between the English and French versions, the French version prevails.</div>
