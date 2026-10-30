@@ -736,6 +736,8 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
   #demo-couleur.flash .wd-panneau { animation: dc-pop .45s cubic-bezier(.2,.8,.2,1); }
   @keyframes dc-pop { 40% { transform: scale(1.02); } }
 }
+#demo-couleur .dots { gap: 18px; }
+#demo-couleur .dots button, #demo-couleur .dots label { width: 40px; height: 40px; }
 @media (max-width: 480px) { #demo-couleur .choix { width: 100%; padding: 26px 16px 22px; } #demo-couleur .dots { gap: 10px; } }
 </style>
 </head>
@@ -902,12 +904,7 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
         <div class="wd-img wd-bulle"><img src="/static/IMG_7106.jpeg" alt="" draggable="false"></div>
         <span class="hint">Choose your business color</span>
         <div class="dots" id="dots-couleur">
-          <button type="button" style="--d:#2f9e6e" data-c="#2f9e6e" aria-label="Green" aria-pressed="false"></button>
-          <button type="button" style="--d:#e0a526" data-c="#e0a526" aria-label="Orange" aria-pressed="false"></button>
-          <button type="button" style="--d:#2f5bea" data-c="#2f5bea" aria-label="Blue" aria-pressed="false"></button>
-          <button type="button" style="--d:#d4537e" data-c="#d4537e" aria-label="Pink" aria-pressed="false"></button>
           <button type="button" style="--d:#8b5cf6" data-c="#8b5cf6" aria-label="Purple" aria-pressed="true"></button>
-          <button type="button" style="--d:#e8553d" data-c="#e8553d" aria-label="Red" aria-pressed="false"></button>
           <label title="Other color"><input type="color" value="#8b5cf6" aria-label="Other color"></label>
         </div>
         <span class="dc-name" aria-live="polite"><i></i><span>Purple</span></span>
