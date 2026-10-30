@@ -606,6 +606,52 @@ html, body { background: var(--bg); }
 .nxs-all{font:inherit;font-size:.88rem;color:var(--violet-hi);background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 @media(max-width:420px){.nxs-stage{height:480px}.nxs-card h3{font-size:1.2rem}.nxs-card p{font-size:.92rem;padding:12px 14px}.nxs-dots{gap:5px}.nxs-dots button{width:8px;height:8px}.nxs-dots button[aria-current="true"]{width:24px}}
 @media(prefers-reduced-motion:reduce){.nxs-card{transition:none}.nxs-card.top .nxs-shine,.nxs-card.wiggle,.nxs-aura i,.nxs-spark{animation:none}}
+
+/* ===== Finition visuelle v2 ===== */
+/* Apparition douce au défilement (seulement si JS actif) */
+html.rv-on .rv { opacity: 0; translate: 0 26px; transition: opacity .7s cubic-bezier(.2,.8,.2,1), translate .7s cubic-bezier(.2,.8,.2,1); transition-delay: var(--rd, 0ms); }
+html.rv-on .rv.in { opacity: 1; translate: 0 0; }
+@media (prefers-reduced-motion: reduce) { html.rv-on .rv { opacity: 1; translate: none; transition: none; } }
+
+/* Fonctionnement : pastilles lumineuses + lumière qui parcourt la ligne */
+.step .dot { background: radial-gradient(circle at 35% 30%, rgba(189,164,255,.35), rgba(91,47,214,.25) 45%, transparent 75%), var(--bg); z-index: 1; color: #fff; font-size: 1.35rem; text-shadow: 0 0 14px rgba(189,164,255,.9); }
+.steps::after { content: ""; position: absolute; top: 31px; left: 17%; width: 90px; height: 4px; border-radius: 4px; background: linear-gradient(90deg, transparent, #fff, var(--violet-hi), transparent); filter: blur(1px); opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) and (min-width: 721px) {
+  .steps::after { animation: nx-run 3.6s ease-in-out infinite; }
+  @keyframes nx-run { 0% { left: 17%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(83% - 90px); opacity: 0; } }
+  .step .dot { animation: nx-pulse 3.6s ease-in-out infinite; }
+  .step:nth-child(2) .dot { animation-delay: 1.4s; } .step:nth-child(3) .dot { animation-delay: 2.8s; }
+  @keyframes nx-pulse { 0%, 70%, 100% { box-shadow: 0 0 0 8px var(--bg), 0 0 36px rgba(139,92,246,.45); } 20% { box-shadow: 0 0 0 8px var(--bg), 0 0 60px rgba(189,164,255,.9); } }
+}
+
+/* Notre objectif : cartes en verre avec icônes */
+.goals { gap: 18px; }
+.goals div { border: 1px solid var(--line); border-radius: 22px; padding: 26px 24px; gap: 10px; position: relative; overflow: hidden;
+  background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(255,255,255,.02)); box-shadow: 0 20px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06); }
+.goals div::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--violet-hi), var(--hot), transparent); }
+.goals div::before { content: ""; width: 44px; height: 44px; border-radius: 13px; margin-bottom: 6px; box-shadow: 0 8px 24px rgba(139,92,246,.45);
+  background: center / 22px no-repeat, linear-gradient(135deg, var(--violet), var(--violet-lo)); }
+.goals div:nth-child(1)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12M7 10l5 5 5-5'/%3E%3Cpath d='M4 20h16'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--violet), var(--violet-lo)); }
+.goals div:nth-child(2)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2L4 14h7l-1 8 9-12h-7z'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--violet), var(--violet-lo)); }
+.goals div:nth-child(3)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='white'/%3E%3C/svg%3E"), linear-gradient(135deg, var(--violet), var(--violet-lo)); }
+.goals strong { font-size: 1rem; }
+
+/* Cartes « Après votre choix » : chiffres en dégradé + reflet au survol */
+.num { -webkit-text-stroke: 0; color: var(--violet-hi); }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .num { font-size: 3rem; background: linear-gradient(135deg, var(--violet-hi) 10%, var(--hot) 90%); filter: drop-shadow(0 0 14px rgba(139,92,246,.45)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+}
+#apres-paiement .card { position: relative; overflow: hidden; }
+#apres-paiement .card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(139,92,246,.18), transparent 60%); }
+#apres-paiement .card:hover::before { opacity: 1; }
+@media (hover: hover) { .goals div { transition: translate .25s, border-color .25s; } .goals div:hover { translate: 0 -4px; border-color: var(--violet); } }
+
+/* Titres de section : petite ligne lumineuse sous l'étiquette */
+.sec-head .label, .finale .label { position: relative; }
+.sec-head .label::after, .finale .label::after { content: ""; display: block; width: 36px; height: 2px; margin: 10px auto 0; border-radius: 2px; background: linear-gradient(90deg, var(--violet), var(--hot)); box-shadow: 0 0 12px rgba(139,92,246,.8); }
+.split .sec-head .label::after { margin-left: 0; }
+@media (max-width: 900px) { .split .sec-head .label::after { margin-left: auto; } }
 </style>
 </head>
 <body>
@@ -1373,6 +1419,35 @@ document.getElementById('copy').addEventListener('click', function () {
   allBtn.addEventListener('click',function(){var o=list.classList.toggle('open');allBtn.setAttribute('aria-expanded',o?'true':'false');allBtn.textContent=o?T.less:T.all;});
   lay();
   if(!reduce&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.disconnect();setTimeout(function(){var c=cards[i];c.classList.add('wiggle');setTimeout(function(){c.classList.remove('wiggle');},1150);},500);}});},{threshold:.6});io.observe(st);}
+})();
+</script>
+
+<script>
+/* Finition visuelle v2 : apparition au défilement + reflet qui suit la souris sur les cartes */
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  var sel = ['.sec-head', '.step', '.rows .row', '.nxa-track', '.plan', '#apres-paiement .card', '.goals div', '.finale h2', '.cta'];
+  var els = document.querySelectorAll(sel.join(','));
+  if (!els.length) return;
+  document.documentElement.classList.add('rv-on');
+  var groups = new Map();
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i]; el.classList.add('rv');
+    var p = el.parentNode, n = groups.get(p) || 0; groups.set(p, n + 1);
+    el.style.setProperty('--rd', Math.min(n, 4) * 110 + 'ms');
+  }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  for (var j = 0; j < els.length; j++) io.observe(els[j]);
+  /* Filet de sécurité : tout afficher si quelque chose bloque */
+  setTimeout(function () { for (var k = 0; k < els.length; k++) { var r = els[k].getBoundingClientRect(); if (r.top < innerHeight) els[k].classList.add('in'); } }, 2500);
+  document.addEventListener('pointermove', function (ev) {
+    var c = ev.target.closest && ev.target.closest('#apres-paiement .card');
+    if (!c) return;
+    var b = c.getBoundingClientRect();
+    c.style.setProperty('--mx', (ev.clientX - b.left) + 'px'); c.style.setProperty('--my', (ev.clientY - b.top) + 'px');
+  }, { passive: true });
 })();
 </script>
 </body>
