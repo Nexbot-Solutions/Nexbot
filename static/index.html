@@ -707,6 +707,36 @@ html.rv-on .rows .row.in::before { width: 100%; transition-delay: calc(var(--rd,
 /* Pied de page : filet lumineux */
 footer { position: relative; }
 footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(139,92,246,.6), rgba(255,124,196,.5), transparent); }
+
+/* ===== Section couleur : version épurée ===== */
+#demo-couleur { gap: 56px; position: relative; isolation: isolate; }
+#demo-couleur::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: min(760px, 110vw); aspect-ratio: 1.7; translate: -50% -50%; pointer-events: none;
+  background: radial-gradient(closest-side, var(--glow2), var(--glow) 50%, transparent); opacity: .5; filter: blur(24px); }
+#demo-couleur .wd { position: relative; border-radius: 22px; }
+#demo-couleur .wd::before { content: ""; position: absolute; inset: -1px; border-radius: 23px; padding: 1.5px; pointer-events: none; z-index: 2;
+  background: conic-gradient(from var(--nxa), transparent 0 55%, var(--clair) 72%, var(--c) 84%, transparent 95%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+#demo-couleur .wd-panneau { box-shadow: 0 0 70px var(--glow), 0 24px 60px rgba(0,0,0,.6); }
+#demo-couleur .wd-zone b { background: linear-gradient(135deg, var(--haut2), var(--bas)); color: var(--sur); box-shadow: 0 4px 16px var(--glow2); }
+#demo-couleur .wd-entete, #demo-couleur .wd-moi, #demo-couleur .wd-bot, #demo-couleur .wd-panneau, #demo-couleur .wd-zone, #demo-couleur .wd-pied, #demo-couleur .wd-avatar { transition: background-color .5s, border-color .5s, box-shadow .5s; }
+#demo-couleur .choix { gap: 18px; padding: 30px 28px 26px; border-radius: 28px; border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)); box-shadow: 0 20px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+#demo-couleur .wd-bulle { width: 104px; height: 104px; margin-bottom: 4px; transition: border-color .5s, box-shadow .5s; box-shadow: 0 0 0 8px rgba(255,255,255,.03), 0 0 40px var(--glow2), 0 8px 24px rgba(0,0,0,.5); }
+#demo-couleur .hint { font-size: .95rem; color: var(--fg); }
+#demo-couleur .dots { gap: 12px; }
+#demo-couleur .dots button, #demo-couleur .dots label { width: 30px; height: 30px; transition: transform .2s, box-shadow .25s; }
+#demo-couleur .dots button:hover, #demo-couleur .dots label:hover { transform: scale(1.15); }
+#demo-couleur .dots button[aria-pressed="true"] { transform: scale(1.1); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--d), 0 0 18px var(--d); }
+.dc-name { display: inline-flex; align-items: center; gap: 8px; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.dc-name i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); transition: background-color .5s, box-shadow .5s; }
+@media (prefers-reduced-motion: no-preference) {
+  #demo-couleur .wd::before { animation: nx-spin 7s linear infinite; }
+  #demo-couleur .wd-bulle { animation: float 5s ease-in-out infinite; }
+  #demo-couleur.flash .wd-panneau { animation: dc-pop .45s cubic-bezier(.2,.8,.2,1); }
+  @keyframes dc-pop { 40% { transform: scale(1.02); } }
+}
+@media (max-width: 480px) { #demo-couleur .choix { width: 100%; padding: 26px 16px 22px; } #demo-couleur .dots { gap: 10px; } }
 </style>
 </head>
 <body>
@@ -853,7 +883,7 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
       <h2><span class="grad">Un assistant qui ressemble à votre site.</span></h2>
       <p>Le widget NexBot prend la couleur principale de votre site : le bouton, l'en-tête et les bulles de conversation s'y accordent. Vos clients voient un assistant qui fait partie de votre entreprise. Vous préférez une couleur précise? Dites-nous laquelle et nous l'appliquons.</p>
     </div>
-    <div class="demo-couleur" id="demo-couleur">
+    <div class="demo-couleur" id="demo-couleur" data-custom="Personnalisée">
       <div class="wd" role="img" aria-label="Aperçu de l'assistant NexBot dont on peut changer la couleur">
         <div class="wd-panneau">
           <div class="wd-entete">
@@ -881,6 +911,7 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
           <button type="button" style="--d:#e8553d" data-c="#e8553d" aria-label="Rouge" aria-pressed="false"></button>
           <label title="Autre couleur"><input type="color" value="#8b5cf6" aria-label="Autre couleur"></label>
         </div>
+        <span class="dc-name" aria-live="polite"><i></i><span>Mauve</span></span>
       </div>
     </div>
   </section>
@@ -1503,6 +1534,17 @@ document.getElementById('copy').addEventListener('click', function () {
     var b = c.getBoundingClientRect();
     c.style.setProperty('--mx', (ev.clientX - b.left) + 'px'); c.style.setProperty('--my', (ev.clientY - b.top) + 'px');
   }, { passive: true });
+})();
+</script>
+
+<script>
+/* Section couleur : nom de la couleur + petit effet au changement */
+(function () {
+  var d = document.getElementById('demo-couleur'); if (!d) return;
+  var nom = d.querySelector('.dc-name span'), champ = d.querySelector('.dots input');
+  function flash() { d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
+  d.querySelectorAll('.dots button').forEach(function (b) { b.addEventListener('click', function () { nom.textContent = b.getAttribute('aria-label'); flash(); }); });
+  if (champ) champ.addEventListener('input', function () { nom.textContent = d.getAttribute('data-custom'); });
 })();
 </script>
 </body>
