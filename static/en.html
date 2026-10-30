@@ -826,6 +826,13 @@ footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; hei
 #avantages::after { right: -12%; top: 10%; background: radial-gradient(closest-side, var(--c-tur1), transparent); }
 #apres-paiement::after { left: -14%; top: 0; background: radial-gradient(closest-side, var(--c-blu1), transparent); }
 @media (max-width: 720px) { #avantages::after, #apres-paiement::after { opacity: .16; } }
+
+/* Pourquoi NexBot : lignes néon depuis la gauche */
+.rows .row, .rows .row:last-child { border-color: transparent; }
+.rows .row:nth-child(n)::before { left: 0; width: 60%; height: 1px; background: linear-gradient(90deg, #a47bff 0%, #a47bff 55%, transparent);
+  box-shadow: 0 0 10px 1px rgba(164,123,255,.7), 0 0 24px 2px rgba(139,92,246,.35); }
+html.rv-on .rows .row:nth-child(n):not(.in)::before { width: 0; }
+html.rv-on .rows .row.in:nth-child(n)::before, .rows .row:hover:nth-child(n)::before { width: 60%; }
 </style>
 </head>
 <body>
